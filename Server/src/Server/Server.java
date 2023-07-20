@@ -1,120 +1,67 @@
 package Server;
 
-import Domain.User;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*@author reych
- * Este código define una clase llamada "Server" que extiende de la clase Thread 
- *  lo que significa que se puede ejecutar como un hilo separado en un programa.
  * Esta clase representa un servidor que será utilizado como comunicación entre 
  *  los diversos usuarios.
- */
+ *Atributos necesarios:
+ * socketPortNumber: Almacena el número de puerto en el que el servidor escucha
+ *  las conexiones entrantes.
+ * serverSocket: Representa el socket del servidor que escucha las conexiones 
+ *  entrantes.
+ * address: Almacena la dirección IP local del servidor.
+ */   
 
-public class Server extends Thread{
- /*Atributos necesarios:
-  * socketPortNumber: Almacena el número de puerto en el que el servidor escucha
-  *  las conexiones entrantes.
-  * serverSocket: Representa el socket del servidor que escucha las conexiones 
-  *  entrantes.
-  * address: Almacena la dirección IP local del servidor.
-  */   
-    private int socketPortNumber;
-    private ServerSocket serverSocket;	
-    private InetAddress address;
+public class Server {
+        
+    private static final int PORT = 5025;
+    private boolean running;
+    private ServerSocket serverSocket;
 
-    
-   /*Constructor:
-    *  El constructor recibe el número de puerto como parámetro y lo asigna a la
-    *       variable socketPortNumber.
-    *  Crea un nuevo objeto ServerSocket en el número de puerto especificado.
+    public Server() {
+        running = false;
+    }
+
+    /*Crea un nuevo objeto ServerSocket en el número de puerto especificado.
     *  Obtiene la dirección IP local del servidor y la asigna a la variable 
     *       address.
     */
-	public Server(int socketPortNumber) throws IOException {
-		this.socketPortNumber=socketPortNumber;
-		this.serverSocket=new ServerSocket(this.socketPortNumber);
-		this.address=InetAddress.getLocalHost();
-	} // fin de constructor
-        
-        
-   /*Método run():
-    *Este método se ejecuta cuando se inicia el hilo del servidor.
-    *Dentro de un bucle infinito, espera y acepta las conexiones entrantes 
-    *    utilizando el método accept() de ServerSocket.
-    *Por cada conexión entrante, crea un nuevo objeto Handler y lo inicia como 
-    *    un nuevo hilo para manejar la comunicación con el cliente.
-    */     
-    @Override
-	public void run() {
-		while(true) {
-		/*	try {
-				Socket socket=this.serverSocket.accept();
-				Handler client=new Handler(socket);
-				client.start();
-                                
-			} catch (IOException e) {
-                            //controlar en caso de error
-                            System.out.println("Error");
-                          
-                        } */
-                        
-                   try (Socket clientSocket = serverSocket.accept();
-                     ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream())) {
+    public void start() {
+        try {
+            serverSocket = new ServerSocket(PORT);
+            System.out.println("Servidor escuchando en el puerto " + PORT);
+            running = true;
 
-                    // Recibir el objeto enviado por el cliente
-                    Object receivedObject = objectInputStream.readObject();
+            while (running) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Cliente conectado desde " + clientSocket.getInetAddress().getHostAddress());
 
-                    if (receivedObject instanceof User) {
-                        User userRegister = (User) receivedObject;
-                        System.out.println("Objeto recibido del cliente: " + userRegister.toString());
-                        // Aquí puedes procesar el objeto recibido según tus necesidades
-                        System.out.println("Objeto no reconocido recibido del cliente.");
-                    }
+                // Manejo de clientes en subprocesos para permitir múltiples clientes
+                Handler handler = new Handler(clientSocket);
+                handler.start();
+            }
 
-                } catch (ClassNotFoundException ex) {
-                       System.out.println("ex="+ex.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            stop();
+        }
+    }
 
-                }   catch (IOException ex) {
-                       System.out.println("ex="+ex.getMessage());
-                }
-                        
-                        
-		} // while true
-	} // run
-	
-        
-      /*Metodos gets and sets
-       *Estos métodos permiten acceder y modificar las variables de instancia 
-       * del servidor
-       */
-	public int getSocketPortNumber() {
-		return socketPortNumber;
-	}
+    /*Detiene el server*/
+    public void stop() {
+        try {
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+            running = false;
+            System.out.println("Servidor detenido");
+        } catch (IOException e) {
+            System.out.println("Clase Server. Error al detener el server");
+        }
+    }
 
-	public void setSocketPortNumber(int socketPortNumber) {
-		this.socketPortNumber = socketPortNumber;
-	}
-
-	public ServerSocket getServerSocket() {
-		return serverSocket;
-	}
-
-	public void setServerSocket(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
-	}
-
-	public InetAddress getAddress() {
-		return address;
-	}
-
-	public void setAddress(InetAddress address) {
-		this.address = address;
-	}
-	    
 }
