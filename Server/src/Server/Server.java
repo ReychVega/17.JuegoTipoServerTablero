@@ -1,9 +1,13 @@
 package Server;
 
+import Domain.User;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*@author reych
  * Este código define una clase llamada "Server" que extiende de la clase Thread 
@@ -49,7 +53,7 @@ public class Server extends Thread{
     @Override
 	public void run() {
 		while(true) {
-			try {
+		/*	try {
 				Socket socket=this.serverSocket.accept();
 				Handler client=new Handler(socket);
 				client.start();
@@ -58,7 +62,29 @@ public class Server extends Thread{
                             //controlar en caso de error
                             System.out.println("Error");
                           
-                        } 
+                        } */
+                        
+                   try (Socket clientSocket = serverSocket.accept();
+                     ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream())) {
+
+                    // Recibir el objeto enviado por el cliente
+                    Object receivedObject = objectInputStream.readObject();
+
+                    if (receivedObject instanceof User) {
+                        User userRegister = (User) receivedObject;
+                        System.out.println("Objeto recibido del cliente: " + userRegister.toString());
+                        // Aquí puedes procesar el objeto recibido según tus necesidades
+                        System.out.println("Objeto no reconocido recibido del cliente.");
+                    }
+
+                } catch (ClassNotFoundException ex) {
+                       System.out.println("ex="+ex.getMessage());
+
+                }   catch (IOException ex) {
+                       System.out.println("ex="+ex.getMessage());
+                }
+                        
+                        
 		} // while true
 	} // run
 	

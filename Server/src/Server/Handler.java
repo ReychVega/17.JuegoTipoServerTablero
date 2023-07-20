@@ -29,8 +29,8 @@ public class Handler extends Thread {
     private Socket socket;
     private String lectura;
     private boolean sesionIniciada;
-    public static ObjectOutputStream salida;
-    public static ObjectInputStream entrada;
+    public ObjectOutputStream salida;
+    public ObjectInputStream entrada;
     private String [] mensaje;
  
     /*El constructor recibe un objeto Socket como parámetro, que representa la conexión establecida con el cliente.

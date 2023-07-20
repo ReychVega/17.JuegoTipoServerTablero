@@ -22,13 +22,13 @@ public class main {
             e.printStackTrace();
         }
 
-       
-       /* //testing connection to dataBase mySql web 
+      /* 
+       //testing connection to dataBase mySql web 
         Connection con= DBconnection.DBconnection.getConnection();
         if (con!=null) {
             System.out.println("Successful");
         }
-        */
+       */
     }
 
 }
