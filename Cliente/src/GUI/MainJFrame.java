@@ -18,6 +18,7 @@ public class MainJFrame extends javax.swing.JFrame {
         try {
             clienteSocket= new Client("localhost",5025);
         } catch (IOException ex) {
+            System.out.println("error de conexion con el server");
             Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -34,107 +35,122 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        button1 = new java.awt.Button();
+        gameTittle = new javax.swing.JLabel();
+        passwordTittle = new javax.swing.JLabel();
+        loggin = new java.awt.Button();
         jTextField3 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
-        button2 = new java.awt.Button();
+        userTittle = new javax.swing.JLabel();
+        register = new java.awt.Button();
+        image = new javax.swing.JLabel();
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Class Royale Game");
+        setLocation(new java.awt.Point(0, 0));
         setMaximumSize(new java.awt.Dimension(700, 900));
         setPreferredSize(new java.awt.Dimension(700, 900));
         setResizable(false);
-        getContentPane().setLayout(null);
 
         jDesktopPane1.setBackground(new java.awt.Color(0, 0, 0));
         jDesktopPane1.setMaximumSize(new java.awt.Dimension(700, 900));
         jDesktopPane1.setPreferredSize(new java.awt.Dimension(700, 900));
         jDesktopPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 153, 153));
-        jLabel5.setText("Clash Royale");
-        jDesktopPane1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 221, 40));
+        gameTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
+        gameTittle.setForeground(new java.awt.Color(0, 153, 153));
+        gameTittle.setText("Clash Royale");
+        jDesktopPane1.add(gameTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 221, 40));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Light", 0, 16)); // NOI18N
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
-        jLabel4.setText("user");
-        jLabel4.setAutoscrolls(true);
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel4.setIconTextGap(0);
-        jDesktopPane1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 460, 700, 430));
+        passwordTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
+        passwordTittle.setForeground(new java.awt.Color(255, 255, 255));
+        passwordTittle.setText("Password:");
+        jDesktopPane1.add(passwordTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 150, 40));
 
-        jLabel1.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Password:");
-        jDesktopPane1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 150, 40));
-
-        button1.setBackground(new java.awt.Color(0, 102, 102));
-        button1.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
-        button1.setForeground(new java.awt.Color(255, 255, 255));
-        button1.setLabel("Log in");
-        button1.addMouseListener(new java.awt.event.MouseAdapter() {
+        loggin.setBackground(new java.awt.Color(0, 102, 102));
+        loggin.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        loggin.setForeground(new java.awt.Color(255, 255, 255));
+        loggin.setLabel("Log in");
+        loggin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logInMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 190, 30));
+        jDesktopPane1.add(loggin, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 190, 30));
 
         jTextField3.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jTextField3.setText("user");
         jDesktopPane1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 190, 30));
 
         jPasswordField1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         jDesktopPane1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 190, 30));
 
-        jLabel3.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("User:");
-        jDesktopPane1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 70, 40));
+        userTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
+        userTittle.setForeground(new java.awt.Color(255, 255, 255));
+        userTittle.setText("User:");
+        jDesktopPane1.add(userTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 70, 40));
 
-        button2.setBackground(new java.awt.Color(51, 0, 51));
-        button2.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setLabel("Create new account");
-        button2.addMouseListener(new java.awt.event.MouseAdapter() {
+        register.setBackground(new java.awt.Color(51, 0, 51));
+        register.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        register.setForeground(new java.awt.Color(255, 255, 255));
+        register.setLabel("Create new account");
+        register.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 newAccountMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 190, 30));
+        jDesktopPane1.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 190, 30));
 
-        getContentPane().add(jDesktopPane1);
-        jDesktopPane1.setBounds(0, 0, 700, 900);
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
+        jDesktopPane1.add(image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 700, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        getAccessibleContext().setAccessibleName("Class Royale.");
+        getAccessibleContext().setAccessibleDescription("Game.");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInMouseClicked
-        // TODO add your handling code here:
+/*  Display the console game*/
         
     }//GEN-LAST:event_logInMouseClicked
 
     private void newAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newAccountMouseClicked
-        // TODO add your handling code here:
-        
+/* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new RegistrationJFrame().setVisible(true);
+            }
+        });
+               
+        this.dispose();
     }//GEN-LAST:event_newAccountMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Button button1;
-    private java.awt.Button button2;
+    private javax.swing.JLabel gameTittle;
+    private javax.swing.JLabel image;
     private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField3;
+    private java.awt.Button loggin;
+    private javax.swing.JLabel passwordTittle;
+    private java.awt.Button register;
+    private javax.swing.JLabel userTittle;
     // End of variables declaration//GEN-END:variables
 }
+

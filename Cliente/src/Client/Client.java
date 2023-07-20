@@ -74,7 +74,7 @@ public class Client extends Thread {
     }
 
     public void setSalida(ObjectOutputStream salida) {
-        salida = salida;
+        this.salida = salida;
     }
 
     public ObjectInputStream getEntrada() {
