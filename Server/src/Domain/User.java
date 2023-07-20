@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class User implements Serializable{
    private String user;
    private String password;
+   private String action;
    private static final long serialVersionUID=1L;
 
     public User() {
@@ -35,6 +36,14 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+    
     @Override
     public String toString() {
         return "User{" + "user=" + user + ", password=" + password + '}';

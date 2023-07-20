@@ -26,9 +26,8 @@ import java.util.ArrayList;
  *salida: Un objeto ObjectOutputStream utilizado para enviar objetos al cliente a través del socket.
  *entrada: Un objeto ObjectInputStream utilizado para recibir objetos del cliente a través del socket.
  *mensaje: Un arreglo de cadenas utilizado para almacenar los mensajes recibidos del cliente.*/
-
 public class Handler extends Thread {
-
+    
     private PrintStream send;
     private BufferedReader receive;
     private Socket socket;
@@ -72,25 +71,43 @@ public class Handler extends Thread {
 
             while (sesionIniciada) {
                 Object receivedObject = entrada.readObject();
-
-                //Registro
+                
                 if (receivedObject instanceof User) {
                     User userRegister = (User) receivedObject;
 
-                    //verificamos que no exista un usuario igual
-                    if (utility.search(usersList, userRegister.getUser()) == false) {
-
-                        DBsave.DBsave.addUser("user, password",
-                                ("'" + userRegister.getUser() + "', '" + userRegister.getPassword() + "'"));
-
-                        sendMessageToClient("Registered User.");
-                    } else {
-                        sendMessageToClient("Existing user");
+                    //Caso 1. Registro
+                    if (userRegister.getAction().equals("registration")) {
+                        //verificamos que no exista un usuario igual
+                        if (utility.search(usersList, userRegister.getUser()) == false) {
+                            
+                            DBsave.DBsave.addUser("user, password",
+                                    ("'" + userRegister.getUser() + "', '" + userRegister.getPassword() + "'"));
+                            
+                            sendMessageToClient("Registered User.");
+                        } else {
+                            sendMessageToClient("Existing user");
+                        }                        
+                    }
+                    //Caso 2. Log in
+                    if (userRegister.getAction().equals("loggin")) {
+                        if (utility.search(usersList, userRegister.getUser()) == true
+                                && utility.search(usersList, userRegister.getPassword())==true) {
+                         sendMessageToClient("init");
+                        } else if(utility.search(usersList, userRegister.getUser()) == true
+                                && utility.search(usersList, userRegister.getPassword())==false){
+                            sendMessageToClient("Incorrect password");
+                        }else if(utility.search(usersList, userRegister.getUser()) == false
+                                && utility.search(usersList, userRegister.getPassword())==true){
+                            sendMessageToClient("Incorrect User");
+                        }else if(utility.search(usersList, userRegister.getUser()) == false
+                                && utility.search(usersList, userRegister.getPassword())==false){
+                            sendMessageToClient("User does not exist");                            
+                        }   
                     }
                 }
-
+                
             }
-
+            
         } catch (IOException e) {
             System.out.println("Cliente cierra el programa");
         } catch (ClassNotFoundException ex) {
@@ -109,14 +126,14 @@ public class Handler extends Thread {
             }
         }
     }
-
-   private void sendMessageToClient(String message) {
-    try {
-        this.salida.writeObject(message);
-        this.salida.flush();
-    } catch (IOException ex) {
-        System.out.println("Error al enviar el mensaje al cliente: " + ex.getMessage());
+    
+    private void sendMessageToClient(String message) {
+        try {
+            this.salida.writeObject(message);
+            this.salida.flush();
+        } catch (IOException ex) {
+            System.out.println("Error al enviar el mensaje al cliente: " + ex.getMessage());
+        }
     }
-}
     
 } // fin clase 

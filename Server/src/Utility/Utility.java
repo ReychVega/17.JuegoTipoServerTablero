@@ -20,4 +20,13 @@ public class Utility {
         }
         return false;
     }
+    
+    public boolean verifyPassword(ArrayList<User> list, String password){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getPassword().equalsIgnoreCase(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
