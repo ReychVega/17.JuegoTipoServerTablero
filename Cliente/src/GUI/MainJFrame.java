@@ -1,10 +1,5 @@
 package GUI;
 
-import Client.Client;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author reych
@@ -13,7 +8,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-
+        this.setLocationRelativeTo(null);
     }
 
     /*
@@ -48,17 +43,18 @@ public class MainJFrame extends javax.swing.JFrame {
         jDesktopPane1.setBackground(new java.awt.Color(0, 0, 0));
         jDesktopPane1.setMaximumSize(new java.awt.Dimension(700, 900));
         jDesktopPane1.setPreferredSize(new java.awt.Dimension(700, 900));
-        jDesktopPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         gameTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         gameTittle.setForeground(new java.awt.Color(0, 153, 153));
         gameTittle.setText("Clash Royale");
-        jDesktopPane1.add(gameTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 221, 40));
+        jDesktopPane1.add(gameTittle);
+        gameTittle.setBounds(30, 20, 221, 40);
 
         passwordTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         passwordTittle.setForeground(new java.awt.Color(255, 255, 255));
         passwordTittle.setText("Password:");
-        jDesktopPane1.add(passwordTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 150, 40));
+        jDesktopPane1.add(passwordTittle);
+        passwordTittle.setBounds(120, 170, 150, 40);
 
         loggin.setBackground(new java.awt.Color(0, 102, 102));
         loggin.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
@@ -69,18 +65,22 @@ public class MainJFrame extends javax.swing.JFrame {
                 logInMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(loggin, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 190, 30));
+        jDesktopPane1.add(loggin);
+        loggin.setBounds(290, 220, 190, 30);
 
         jTextField3.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jDesktopPane1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 120, 190, 30));
+        jDesktopPane1.add(jTextField3);
+        jTextField3.setBounds(290, 120, 190, 30);
 
         jPasswordField1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jDesktopPane1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 170, 190, 30));
+        jDesktopPane1.add(jPasswordField1);
+        jPasswordField1.setBounds(290, 170, 190, 30);
 
         userTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         userTittle.setForeground(new java.awt.Color(255, 255, 255));
         userTittle.setText("User:");
-        jDesktopPane1.add(userTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 70, 40));
+        jDesktopPane1.add(userTittle);
+        userTittle.setBounds(130, 110, 70, 40);
 
         register.setBackground(new java.awt.Color(51, 0, 51));
         register.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
@@ -91,10 +91,12 @@ public class MainJFrame extends javax.swing.JFrame {
                 newAccountMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 190, 30));
+        jDesktopPane1.add(register);
+        register.setBounds(290, 270, 190, 30);
 
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
-        jDesktopPane1.add(image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 700, -1));
+        jDesktopPane1.add(image);
+        image.setBounds(0, 480, 700, 400);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,8 +107,8 @@ public class MainJFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("Class Royale.");
@@ -116,21 +118,42 @@ public class MainJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInMouseClicked
-/*  Display the console game*/
-        
+        /*  Display the console game*/
+
     }//GEN-LAST:event_logInMouseClicked
 
+    //visualizar el JFrameInternal
     private void newAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newAccountMouseClicked
-/* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new RegistrationJFrame().setVisible(true);
-            }
-        });
-               
-        this.dispose();
+        /* Create and display the form */
+        disableComponents();
+        RegistrationJInternalFrame registration = new RegistrationJInternalFrame(this);
+        registration.setVisible(true);
+        this.jDesktopPane1.add(registration);
     }//GEN-LAST:event_newAccountMouseClicked
+
+    //desabilitar los componentes
+    private void disableComponents() {
+        // Ocultar los componentes que deseas
+        gameTittle.setVisible(false);
+        passwordTittle.setVisible(false);
+        loggin.setVisible(false);
+        jTextField3.setVisible(false);
+        jPasswordField1.setVisible(false);
+        userTittle.setVisible(false);
+        register.setVisible(false);
+    }
+    
+    // Método para mostrar los componentes ocultos
+    public void enableComponents() {
+        gameTittle.setVisible(true);
+        passwordTittle.setVisible(true);
+        loggin.setVisible(true);
+        jTextField3.setVisible(true);
+        jPasswordField1.setVisible(true);
+        userTittle.setVisible(true);
+        register.setVisible(true);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel gameTittle;
@@ -145,4 +168,3 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel userTittle;
     // End of variables declaration//GEN-END:variables
 }
-

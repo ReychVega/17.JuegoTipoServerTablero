@@ -5,20 +5,24 @@ import Domain.User;
 import java.io.IOException;
 
 /*
- * La clase RegistrationJFrame representa una interfaz gráfica para el registro de usuarios.
- * Esta clase extiende javax.swing.JFrame para crear la ventana de registro.
+ * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
+ * Esta clase extiende javax.swing.JInternalFrame para crear la ventana de registro.
  * Contiene atributos como el usuario (User) y una instancia de Client (clientSocket) para manejar la comunicación con el servidor.
  * @author reych
  */
-public class RegistrationJFrame extends javax.swing.JFrame {
-    private User user;
+public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
+ private User user;
     private Client clientSocket;
+        private final MainJFrame mainFrame; // Agrega este atributo
 
     /**
-     * Creates new form RegistrationJFrame
+     * Creates new form RegistrationJInternalFrame
+     * @param mainFrame
      */
-    public RegistrationJFrame() {
+    public RegistrationJInternalFrame(MainJFrame mainFrame) {
         initComponents();
+        this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
+
     }
 
     /**
@@ -43,11 +47,14 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         button2 = new java.awt.Button();
         jLabel7 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         setTitle("Registration");
-        setBackground(new java.awt.Color(0, 0, 0));
-        setMaximumSize(new java.awt.Dimension(700, 900));
-        setResizable(false);
+        setMaximumSize(new java.awt.Dimension(680, 380));
+        setMinimumSize(new java.awt.Dimension(680, 380));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 680, 380));
+        setPreferredSize(new java.awt.Dimension(680, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
         jDesktopPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -78,7 +85,7 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 153, 153));
         jLabel6.setText("Registration");
-        jDesktopPane2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 221, 40));
+        jDesktopPane2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 221, 40));
 
         button1.setBackground(new java.awt.Color(0, 102, 102));
         button1.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
@@ -86,7 +93,7 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         button1.setLabel("Register");
         button1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                registerMouseClicked(evt);
+                button1registerMouseClicked(evt);
             }
         });
         jDesktopPane2.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, 120, 30));
@@ -98,41 +105,31 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         button2.setLabel("Back");
         button2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
+                button2backMouseClicked(evt);
             }
         });
-        jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 10, 100, 30));
+        jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 100, 30));
 
         jLabel7.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Confirm Password");
         jDesktopPane2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane2)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
+        getContentPane().add(jDesktopPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 680, 517));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    /*
+     /*
      * Evento que se dispara cuando se hace clic en el botón de registro.
      * Recolecta los datos ingresados por el usuario, crea una instancia de User y la envía al servidor a través del cliente.
      * Luego, muestra el mensaje de respuesta del servidor en la interfaz gráfica.
      */
-    private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
-  
-// Caso 1. Que todos los campos estén llenos
+    private void button1registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button1registerMouseClicked
+
+        // Caso 1. Que todos los campos estén llenos
         if (!jTextField1.getText().isEmpty() && !jPasswordField1.getText().isEmpty()
-                && !jPasswordField2.getText().isEmpty()) {
+            && !jPasswordField2.getText().isEmpty()) {
 
             //1.2 Revisamos que las contraseñas coincidan
             if (jPasswordField1.getText().equals(jPasswordField2.getText())) {
@@ -157,29 +154,19 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         } else {  //Caso 2. Indicamos que hay datos incompletos
             alert.setText("Incomplete data");
         }
+    }//GEN-LAST:event_button1registerMouseClicked
 
-    }//GEN-LAST:event_registerMouseClicked
-
-    /*
-     * Evento que se dispara cuando se hace clic en el botón "Back" (Volver).
-     * Cierra la conexión con el servidor y muestra la ventana principal (MainJFrame).
-     */
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
+    private void button2backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2backMouseClicked
         if (clientSocket!=null) {
-        clientSocket.closeConnection();            
+            clientSocket.closeConnection();
         }
-        /* Create and display the main form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new MainJFrame().setVisible(true);
-
-            }
-        });
+        if (this.mainFrame!=null) {
+            mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
+        }
         dispose();
-    }//GEN-LAST:event_backMouseClicked
-    
-    
+    }//GEN-LAST:event_button2backMouseClicked
+
+        
      /*
      * Método para conectarse al servidor.
      * Crea una instancia de Client para establecer la conexión con el servidor.
@@ -191,7 +178,7 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         } catch (IOException ex) {
             alert.setText("Internal error");
         }
-    }
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alert;
