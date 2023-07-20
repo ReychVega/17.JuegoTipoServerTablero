@@ -7,7 +7,7 @@ import GUI.MainJFrame;
  * @author reych
  */
 public class main {
-
+public static String USER;
     /**
      * @param args the command line arguments
      */

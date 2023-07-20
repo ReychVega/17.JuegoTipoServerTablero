@@ -136,7 +136,8 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
 
                 // Creamos una nueva instancia de User con los datos del formulario
                 user = new User(jTextField1.getText(), jPasswordField1.getText());
-
+                user.setAction("registration");
+                
                 if (clientSocket == null) {
                     connectToServer();
                 }
@@ -154,6 +155,9 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         } else {  //Caso 2. Indicamos que hay datos incompletos
             alert.setText("Incomplete data");
         }
+        jTextField1.setText("");
+        jPasswordField1.setText("");
+        jPasswordField2.setText("");
     }//GEN-LAST:event_button1registerMouseClicked
 
     private void button2backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2backMouseClicked

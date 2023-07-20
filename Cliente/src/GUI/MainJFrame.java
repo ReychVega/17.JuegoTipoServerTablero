@@ -1,10 +1,17 @@
 package GUI;
 
+import Client.Client;
+import Domain.User;
+import java.io.IOException;
+
 /**
  *
  * @author reych
  */
 public class MainJFrame extends javax.swing.JFrame {
+
+    private User user;
+    private Client clientSocket;
 
     public MainJFrame() {
         initComponents();
@@ -20,18 +27,19 @@ public class MainJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
+        label = new javax.swing.JLabel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         gameTittle = new javax.swing.JLabel();
         passwordTittle = new javax.swing.JLabel();
         loggin = new java.awt.Button();
-        jTextField3 = new javax.swing.JTextField();
+        userTextField = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         userTittle = new javax.swing.JLabel();
         register = new java.awt.Button();
         image = new javax.swing.JLabel();
+        alert = new javax.swing.JLabel();
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
+        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Class Royale Game");
@@ -68,9 +76,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jDesktopPane1.add(loggin);
         loggin.setBounds(290, 220, 190, 30);
 
-        jTextField3.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jDesktopPane1.add(jTextField3);
-        jTextField3.setBounds(290, 120, 190, 30);
+        userTextField.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        jDesktopPane1.add(userTextField);
+        userTextField.setBounds(290, 120, 190, 30);
 
         jPasswordField1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         jDesktopPane1.add(jPasswordField1);
@@ -98,6 +106,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jDesktopPane1.add(image);
         image.setBounds(0, 480, 700, 400);
 
+        alert.setForeground(new java.awt.Color(255, 255, 255));
+        alert.setText(" ");
+        jDesktopPane1.add(alert);
+        alert.setBounds(290, 70, 190, 22);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,7 +121,7 @@ public class MainJFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleName("Class Royale.");
@@ -120,9 +133,35 @@ public class MainJFrame extends javax.swing.JFrame {
     private void logInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInMouseClicked
         /*  Display the console game*/
 
+        //Case 1. Verificamos la informacion
+        if (!this.jPasswordField1.getText().isEmpty() & !this.userTextField.getText().isEmpty()) {
+
+            user = new User(this.userTextField.getText(), jPasswordField1.getText());
+            user.setAction("loggin");
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            // Enviamos el objeto User al servidor a través del socket
+            clientSocket.sendUserToServer(user);
+
+            // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
+              String message = clientSocket.receiveMessageFromServer();
+              this.alert.setText(message);
+              
+              
+              //Cargamos el juego
+              if (message.equalsIgnoreCase("init")) {
+              
+              
+              }
+           
+        } else {
+            alert.setText("Incomplete data");
+        }
+
     }//GEN-LAST:event_logInMouseClicked
 
-    //visualizar el JFrameInternal
+    //visualizar el JFrameInternal para el registro
     private void newAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newAccountMouseClicked
         /* Create and display the form */
         disableComponents();
@@ -131,40 +170,58 @@ public class MainJFrame extends javax.swing.JFrame {
         this.jDesktopPane1.add(registration);
     }//GEN-LAST:event_newAccountMouseClicked
 
+    /*
+     * Método para conectarse al servidor.
+     * Crea una instancia de Client para establecer la conexión con el servidor.
+     * Si ocurre algún error, se mostrará un mensaje en la interfaz gráfica.
+     */
+    private void connectToServer() {
+        try {
+            clientSocket = new Client("localhost", 5025);
+        } catch (IOException ex) {
+            this.alert.setText("Internal error");
+        }
+    }
+
     //desabilitar los componentes
     private void disableComponents() {
         // Ocultar los componentes que deseas
         gameTittle.setVisible(false);
         passwordTittle.setVisible(false);
         loggin.setVisible(false);
-        jTextField3.setVisible(false);
+        userTextField.setVisible(false);
         jPasswordField1.setVisible(false);
         userTittle.setVisible(false);
         register.setVisible(false);
+        alert.setVisible(false);
     }
-    
+
     // Método para mostrar los componentes ocultos
     public void enableComponents() {
         gameTittle.setVisible(true);
         passwordTittle.setVisible(true);
         loggin.setVisible(true);
-        jTextField3.setVisible(true);
+        userTextField.setText("");
+        userTextField.setVisible(true);
+        jPasswordField1.setText("");
         jPasswordField1.setVisible(true);
         userTittle.setVisible(true);
         register.setVisible(true);
+        alert.setText("");
+        alert.setVisible(true);
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel alert;
     private javax.swing.JLabel gameTittle;
     private javax.swing.JLabel image;
     private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel label;
     private java.awt.Button loggin;
     private javax.swing.JLabel passwordTittle;
     private java.awt.Button register;
+    private javax.swing.JTextField userTextField;
     private javax.swing.JLabel userTittle;
     // End of variables declaration//GEN-END:variables
 }
