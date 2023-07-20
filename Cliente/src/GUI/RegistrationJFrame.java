@@ -3,18 +3,17 @@ package GUI;
 import Client.Client;
 import Domain.User;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 
-/**
- *
+/*
+ * La clase RegistrationJFrame representa una interfaz gráfica para el registro de usuarios.
+ * Esta clase extiende javax.swing.JFrame para crear la ventana de registro.
+ * Contiene atributos como el usuario (User) y una instancia de Client (clientSocket) para manejar la comunicación con el servidor.
  * @author reych
  */
 public class RegistrationJFrame extends javax.swing.JFrame {
-//attributes
     private User user;
-    
-    
+    private Client clientSocket;
+
     /**
      * Creates new form RegistrationJFrame
      */
@@ -65,7 +64,7 @@ public class RegistrationJFrame extends javax.swing.JFrame {
 
         alert.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
         alert.setForeground(new java.awt.Color(255, 0, 0));
-        jDesktopPane2.add(alert, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 170, 20));
+        jDesktopPane2.add(alert, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 210, 20));
 
         jTextField1.setToolTipText("");
         jDesktopPane2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 120, -1));
@@ -123,50 +122,76 @@ public class RegistrationJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /*
+     * Evento que se dispara cuando se hace clic en el botón de registro.
+     * Recolecta los datos ingresados por el usuario, crea una instancia de User y la envía al servidor a través del cliente.
+     * Luego, muestra el mensaje de respuesta del servidor en la interfaz gráfica.
+     */
     private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
-        // 1. Que todos los campos estén llenos
+  
+// Caso 1. Que todos los campos estén llenos
         if (!jTextField1.getText().isEmpty() && !jPasswordField1.getText().isEmpty()
                 && !jPasswordField2.getText().isEmpty()) {
 
             //1.2 Revisamos que las contraseñas coincidan
             if (jPasswordField1.getText().equals(jPasswordField2.getText())) {
+
                 // Creamos una nueva instancia de User con los datos del formulario
                 user = new User(jTextField1.getText(), jPasswordField1.getText());
 
-                
-                try {// Enviamos el objeto User al servidor a través del socket
-                    Client clientSocket = new Client("localhost", 5025);
-                    clientSocket.setSalida(new ObjectOutputStream(clientSocket.getSocket().getOutputStream()));
-
-                    // Cierra el socket después de enviar el objeto
-                   // clientSocket.getSocket().close();
-
-                } catch (IOException ex) {
-                    System.out.println("*"+ex.getMessage());
+                if (clientSocket == null) {
+                    connectToServer();
                 }
-            } else {
-                // Indicamos que las contraseñas no coinciden
+
+                // Enviamos el objeto User al servidor a través del socket
+                clientSocket.sendUserToServer(user);
+
+                // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
+                String message = clientSocket.receiveMessageFromServer();
+                this.alert.setText(message);
+
+            } else {// Indicamos que las contraseñas no coinciden
                 alert.setText("Passwords do not match");
             }
-        } else {
-            // Indicamos que hay datos incompletos
+        } else {  //Caso 2. Indicamos que hay datos incompletos
             alert.setText("Incomplete data");
         }
 
     }//GEN-LAST:event_registerMouseClicked
 
+    /*
+     * Evento que se dispara cuando se hace clic en el botón "Back" (Volver).
+     * Cierra la conexión con el servidor y muestra la ventana principal (MainJFrame).
+     */
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-     /* Create and display the main form */
+        if (clientSocket!=null) {
+        clientSocket.closeConnection();            
+        }
+        /* Create and display the main form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new MainJFrame().setVisible(true);
-                          
+
             }
         });
         dispose();
     }//GEN-LAST:event_backMouseClicked
-
+    
+    
+     /*
+     * Método para conectarse al servidor.
+     * Crea una instancia de Client para establecer la conexión con el servidor.
+     * Si ocurre algún error, se mostrará un mensaje en la interfaz gráfica.
+     */
+    private void connectToServer() {
+        try {
+            clientSocket = new Client("localhost", 5025);
+        } catch (IOException ex) {
+            alert.setText("Internal error");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alert;

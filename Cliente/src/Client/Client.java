@@ -1,8 +1,8 @@
 package Client;
 
-import java.io.BufferedReader;
+import Domain.User;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
@@ -11,74 +11,75 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*@author reych
- *Esta clase llamada Client extiende de la clase Thread 
- *  y se utiliza para representar un cliente que se conecta al servidor
+/*
+ *@author reych
+ *Atributos
+ *socket: El socket utilizado para la conexión con el servidor
+ *salida: Flujo de salida de objetos hacia el servidor
+ *entrada: Flujo de entrada de objetos desde el servidor
+ *send: Flujo de salida de texto hacia el servidor
  */
-public class Client extends Thread {
-/*Atributos de clase
- *receive: Un objeto BufferedReader utilizado para recibir datos del servidor a través del socket.
- *send: Un objeto PrintStream utilizado para enviar datos al servidor a través del socket.
- *socket: El socket utilizado para la comunicación con el servidor.
- *salida: Un objeto ObjectOutputStream utilizado para enviar objetos al servidor a través del socket.
- *entrada: Un objeto ObjectInputStream utilizado para recibir objetos del servidor a través del socket.
- *mensaje: Un arreglo de cadenas utilizado para almacenar mensajes del servidor.
- *smsCliente: Una cadena que almacena el mensaje del cliente.*/
-    private BufferedReader receive;
-    private PrintStream send;
-    private Socket socket;
-    private ObjectOutputStream salida;
-    private ObjectInputStream entrada;
-    private String[] mensaje;
-    private String smsCliente;
-
+public class Client {
     
-   /*Constructor:
-    *El constructor recibe una dirección IP y el número de puerto del servidor al que se desea conectar.
-    *Crea un nuevo objeto Socket y se conecta al servidor utilizando la dirección IP y el número de puerto proporcionados.
-    *Inicializa los objetos receive y send con los objetos BufferedReader y PrintStream, respectivamente, obtenidos del socket.
-    *Llama al método start() para iniciar el hilo del cliente.*/
+    private Socket socket;
+    private ObjectOutputStream salida; 
+    private ObjectInputStream entrada; 
+    private String smsCliente; 
+    private PrintStream send;
+
+
     public Client(String ip, int socketPortNumber) throws UnknownHostException, IOException {
+        // Se crea el socket y se establece la conexión con el servidor
         this.socket = new Socket(ip, socketPortNumber);
-        this.receive = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+       
+        this.salida = new ObjectOutputStream(this.socket.getOutputStream());
+       
+        // Se inicializa el flujo de salida de texto hacia el servidor
         this.send = new PrintStream(this.socket.getOutputStream());
-        this.start();
-    } // constructor
 
-    public BufferedReader getReceive() {
-        return receive;
+        this.entrada = new ObjectInputStream(this.socket.getInputStream());
     }
 
-    public void setReceive(BufferedReader receive) {
-        this.receive = receive;
+    // Método para enviar un objeto User al servidor
+    public void sendUserToServer(User user) {
+        try {
+            this.salida.writeObject(user);
+        } catch (IOException ex) {
+            System.out.println("Internal error");
+        }
     }
 
-    public PrintStream getSend() {
-        return send;
+    // Método para recibir un mensaje del servidor como texto
+    public String receiveMessageFromServer() {
+        try {
+            String s=null;
+            Object sms=this.entrada.readObject();
+            if (sms!=null) {
+                s=(String)sms;
+            }
+            return s;
+        } catch (IOException ex) {
+            System.out.println("Clase Client. Error de lectura "+ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Clase Client. Error de conversion "+ex.getMessage());
+        }
+    return null;
     }
 
-    public void setSend(PrintStream send) {
-        this.send = send;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    public ObjectOutputStream getSalida() {
-        return salida;
-    }
-
-    public void setSalida(ObjectOutputStream salida) {
-        this.salida = salida;
-    }
-
-    public ObjectInputStream getEntrada() {
-        return entrada;
+    public void closeConnection() {
+        try {
+            if (this.entrada != null) {
+                this.entrada.close();
+            }
+            if (this.salida != null) {
+                this.salida.close();
+            }
+            if (this.socket != null) {
+                this.socket.close();
+            }
+        } catch (IOException e) {
+            // Si ocurre un error al cerrar la conexión, se captura y no se hace nada
+        }
     }
 
     public String getSmsCliente() {
@@ -88,32 +89,4 @@ public class Client extends Thread {
     public void setSmsCliente(String smsCliente) {
         this.smsCliente = smsCliente;
     }
-
-    
-    /*Método run():
-     *Este método se ejecuta cuando se inicia el hilo del cliente.
-     *Dentro de un bucle while, se lee una línea de texto del servidor utilizando el BufferedReader receive y se almacena en la variable lectura.
-     *Puede agregar lógica adicional para procesar y responder a los mensajes recibidos del servidor.
-     *El bucle se ejecuta de forma indefinida hasta que se interrumpa el hilo.*/
-    @Override
-    public void run() {
-        System.out.println("Cliente Escuchando");
-        while (true) {
-            try {
-
-                String lectura = this.receive.readLine();
-
-                //cerramos conexiones
-                salida.close();
-                entrada.close();
-                socket.close();
-
-            } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } // while
-    } // run
-
-} // fin clase
-
+}

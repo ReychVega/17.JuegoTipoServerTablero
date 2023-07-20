@@ -10,17 +10,9 @@ import java.util.logging.Logger;
  * @author reych
  */
 public class MainJFrame extends javax.swing.JFrame {
-    public static Client clienteSocket;
 
     public MainJFrame() {
         initComponents();
-
-        try {
-            clienteSocket= new Client("localhost",5025);
-        } catch (IOException ex) {
-            System.out.println("error de conexion con el server");
-            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }
 

@@ -11,6 +11,9 @@ public class User implements Serializable{
    private String password;
    private static final long serialVersionUID=1L;
 
+    public User() {
+    }
+
 
     public User(String user, String password) {
         this.user = user;
@@ -33,5 +36,8 @@ public class User implements Serializable{
         this.password = password;
     }
    
-    
+       @Override
+    public String toString() {
+        return "User{" + "user=" + user + ", password=" + password + '}';
+    }
 }
