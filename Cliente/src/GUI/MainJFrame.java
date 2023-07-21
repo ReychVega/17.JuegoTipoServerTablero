@@ -2,14 +2,18 @@ package GUI;
 
 import Client.Client;
 import Domain.User;
+import java.awt.Component;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import javax.swing.JInternalFrame;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
  *
  * @author reych
  */
 public class MainJFrame extends javax.swing.JFrame {
-
+    
     private User user;
     private Client clientSocket;
 
@@ -141,24 +145,23 @@ public class MainJFrame extends javax.swing.JFrame {
             if (clientSocket == null) {
                 connectToServer();
             }
+            
             // Enviamos el objeto User al servidor a través del socket
             clientSocket.sendUserToServer(user);
 
             // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
               String message = clientSocket.receiveMessageFromServer();
               this.alert.setText(message);
-              
-              
+                            
               //Cargamos el juego
               if (message.equalsIgnoreCase("init")) {
-              
-              
+                  disableComponents();
+                                                
               }
            
         } else {
             alert.setText("Incomplete data");
         }
-
     }//GEN-LAST:event_logInMouseClicked
 
     //visualizar el JFrameInternal para el registro
@@ -167,9 +170,21 @@ public class MainJFrame extends javax.swing.JFrame {
         disableComponents();
         RegistrationJInternalFrame registration = new RegistrationJInternalFrame(this);
         registration.setVisible(true);
+        
         this.jDesktopPane1.add(registration);
+
+        // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
+        registration.setBorder(null);
+        BasicInternalFrameUI ui = (BasicInternalFrameUI) registration.getUI();
+        Component northPane = ui.getNorthPane();
+        MouseMotionListener[] motionListeners = (MouseMotionListener[]) northPane.getListeners(MouseMotionListener.class);
+        for (MouseMotionListener listener : motionListeners) {
+            northPane.removeMouseMotionListener(listener);
+    }
+        
     }//GEN-LAST:event_newAccountMouseClicked
 
+    
     /*
      * Método para conectarse al servidor.
      * Crea una instancia de Client para establecer la conexión con el servidor.

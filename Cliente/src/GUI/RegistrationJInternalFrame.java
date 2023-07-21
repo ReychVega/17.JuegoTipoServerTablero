@@ -22,7 +22,6 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
     public RegistrationJInternalFrame(MainJFrame mainFrame) {
         initComponents();
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
-
     }
 
     /**
@@ -47,13 +46,15 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         button2 = new java.awt.Button();
         jLabel7 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         setTitle("Registration");
-        setMaximumSize(new java.awt.Dimension(680, 380));
-        setMinimumSize(new java.awt.Dimension(680, 380));
-        setNormalBounds(new java.awt.Rectangle(0, 0, 680, 380));
-        setPreferredSize(new java.awt.Dimension(680, 380));
+        setAlignmentX(0.0F);
+        setAlignmentY(0.0F);
+        setMaximumSize(new java.awt.Dimension(700, 380));
+        setMinimumSize(new java.awt.Dimension(700, 380));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 690, 380));
+        setPreferredSize(new java.awt.Dimension(700, 380));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
@@ -108,7 +109,7 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
                 button2backMouseClicked(evt);
             }
         });
-        jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 100, 30));
+        jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 100, 30));
 
         jLabel7.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -183,7 +184,9 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
             alert.setText("Internal error");
         }
     }    
-
+    
+ 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alert;
     private java.awt.Button button1;

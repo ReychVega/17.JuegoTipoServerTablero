@@ -8,8 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  *@author reych
@@ -40,6 +38,16 @@ public class Client {
         this.entrada = new ObjectInputStream(this.socket.getInputStream());
     }
 
+    
+    public String getSmsCliente() {
+        return smsCliente;
+    }
+
+    public void setSmsCliente(String smsCliente) {
+        this.smsCliente = smsCliente;
+    }
+    
+    
     // Método para enviar un objeto User al servidor
     public void sendUserToServer(User user) {
         try {
@@ -59,9 +67,9 @@ public class Client {
             }
             return s;
         } catch (IOException ex) {
-            System.out.println("Clase Client. Error de lectura "+ex.getMessage());
+            System.out.println("Clase Client. Error. Conexion cerrada o internet."+ex.getMessage());
         } catch (ClassNotFoundException ex) {
-            System.out.println("Clase Client. Error de conversion "+ex.getMessage());
+            System.out.println("Clase Client. Error de conversion de objeto. No es string o es nulo "+ex.getMessage());
         }
     return null;
     }
@@ -78,15 +86,10 @@ public class Client {
                 this.socket.close();
             }
         } catch (IOException e) {
-            // Si ocurre un error al cerrar la conexión, se captura y no se hace nada
+            // Si ocurre un error al cerrar la conexión, se captura
+            System.out.println("Clase Client. Error al cerrar la conexion");
+            
         }
-    }
+    }  
 
-    public String getSmsCliente() {
-        return smsCliente;
-    }
-
-    public void setSmsCliente(String smsCliente) {
-        this.smsCliente = smsCliente;
-    }
 }
