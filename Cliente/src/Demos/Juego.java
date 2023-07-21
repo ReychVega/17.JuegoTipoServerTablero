@@ -1,6 +1,7 @@
 package Demos;
 
 import Characters.Caballero;
+import Characters.Duende;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -14,6 +15,7 @@ import javax.imageio.ImageIO;
 
 public class Juego extends JFrame {
     private Caballero caballero;
+    private Duende duende;
     private JuegoPanel juegoPanel;
 
     public Juego() {
@@ -23,6 +25,7 @@ public class Juego extends JFrame {
 
         try {
             caballero = new Caballero();
+            duende = new Duende();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,6 +35,7 @@ public class Juego extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 caballero.actualizar();
+                duende.actualizar();
                 juegoPanel.repaint(); // Volver a dibujar para reflejar el movimiento
             }
         });
@@ -55,12 +59,16 @@ public class Juego extends JFrame {
                 // Mover al caballero según la tecla presionada
                 if (key == KeyEvent.VK_UP) {
                     caballero.moveUp();
+                    duende.moveUp();
                 } else if (key == KeyEvent.VK_DOWN) {
                     caballero.moveDown();
+                    duende.moveDown();
                 } else if (key == KeyEvent.VK_LEFT) {
                     caballero.moveLeft();
+                    duende.moveLeft();
                 } else if (key == KeyEvent.VK_RIGHT) {
                     caballero.moveRight();
+                    duende.moveRight();
                 }
             }
 
@@ -94,6 +102,7 @@ public class Juego extends JFrame {
             g.drawImage(fondoImagen, 0, 0, getWidth(), getHeight(), this);
             // Dibujar el caballero
             caballero.paintComponent(g);
+            duende.paintComponent(g);
         }
     }
 
