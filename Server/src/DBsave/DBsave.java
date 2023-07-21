@@ -1,8 +1,6 @@
 package DBsave;
 import DBconnection.DBconnection;
-import Domain.User;
 import java.sql.*;
-import java.util.ArrayList;
 /**
  *
  * @author reych

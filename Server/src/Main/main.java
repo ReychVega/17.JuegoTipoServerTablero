@@ -1,8 +1,6 @@
 package Main;
 
 import Server.Server;
-import java.io.IOException;
-import java.sql.*;
 /**
  *
  * @author reych

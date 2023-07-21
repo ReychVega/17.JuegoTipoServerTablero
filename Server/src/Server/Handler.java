@@ -75,20 +75,22 @@ public class Handler extends Thread {
                 if (receivedObject instanceof User) {
                     User userRegister = (User) receivedObject;
 
-                    //Caso 1. Registro
+            //Caso 1. Registro
                     if (userRegister.getAction().equals("registration")) {
                         //verificamos que no exista un usuario igual
                         if (utility.search(usersList, userRegister.getUser()) == false) {
-                            
+
                             DBsave.DBsave.addUser("user, password",
-                                    ("'" + userRegister.getUser() + "', '" + userRegister.getPassword() + "'"));
-                            
+                                    ("'" + userRegister.getUser() + "', '" 
+                                            + userRegister.getPassword() + "'"));
+
                             sendMessageToClient("Registered User.");
-                        } else {
+                        } else if (utility.search(usersList, userRegister.getUser()) == true) {
                             sendMessageToClient("Existing user");
-                        }                        
+                        }
                     }
-                    //Caso 2. Log in
+                    
+            //Caso 2. Log in
                     if (userRegister.getAction().equals("loggin")) {
                         if (utility.search(usersList, userRegister.getUser()) == true
                                 && utility.search(usersList, userRegister.getPassword())==true) {
