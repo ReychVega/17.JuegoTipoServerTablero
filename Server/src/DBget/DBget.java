@@ -24,7 +24,6 @@ public class DBget {
             if (!searchCode.isEmpty()) {
                 query = "select * from users"
                         + " where user='" + searchCode
-                        + "' or password='" + searchCode
                         + "';";
             } else {
                 query = "select * from users";

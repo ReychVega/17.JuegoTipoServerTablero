@@ -20,8 +20,7 @@ public class DBconnection {
     private static final String dbServer = "jdbc:mysql://aws.connect.psdb.cloud/users";
     private static final String sslOptions = "?sslMode=VERIFY_IDENTITY&sslCa=/etc/ssl/certs/ca-certificates.crt";
    
- private String Connection;
-        
+           
     /*
     *getConnection() is method to create a connection between jsp and a dataBase
     *return=Connection.

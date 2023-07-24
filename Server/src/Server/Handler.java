@@ -1,6 +1,8 @@
 package Server;
 
+import Domain.Request;
 import Domain.User;
+import FileControl.UserFile;
 import Utility.Utility;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,6 +43,15 @@ public class Handler extends Thread {
     private ArrayList<User> usersList;
     private Utility utility;
 
+    //atributos para manejo de archivos
+    private ArrayList<User>usersData;
+    private UserFile file;
+    
+    //atributos auxiliares
+    private User user;
+    private User userRegister;
+    private Request request;
+    
     /*El constructor recibe un objeto Socket como parámetro, que representa la conexión establecida con el cliente.
      *Inicializa las variables de instancia socket, send y receive con los objetos proporcionados por el socket.
      *Establece sesionIniciada como true para indicar que la sesión está iniciada.
@@ -54,9 +65,14 @@ public class Handler extends Thread {
         initInstances();
     } // constructor
 
-    private void initInstances() {
+    
+    private void initInstances() throws IOException {
         utility = new Utility();
+        
         usersList = DBget.DBget.getUsers("");
+        
+        file=new UserFile();
+        usersData = file.getUsers();
     }
 
     /*Método run():
@@ -70,21 +86,36 @@ public class Handler extends Thread {
             entrada = new ObjectInputStream(socket.getInputStream()); // Inicializar el ObjectInputStream
 
             while (sesionIniciada) {
+
                 Object receivedObject = entrada.readObject();
-                
+        //Register/log in        
                 if (receivedObject instanceof User) {
-                    User userRegister = (User) receivedObject;
+                   //actualizamos por si hay otro usuario
+                    usersList = DBget.DBget.getUsers("");
+                    
+                    userRegister = (User) receivedObject;
 
             //Caso 1. Registro
                     if (userRegister.getAction().equals("registration")) {
-                        //verificamos que no exista un usuario igual
+                    //actualizamos por si hay otro usuario
+                    usersList = DBget.DBget.getUsers("");                       
+                        
+                    //verificamos que no exista un usuario igual
+                        
+                        //caso 1.1 guardamos
                         if (utility.search(usersList, userRegister.getUser()) == false) {
-
+                            
+                                                      
                             DBsave.DBsave.addUser("user, password",
                                     ("'" + userRegister.getUser() + "', '" 
                                             + userRegister.getPassword() + "'"));
 
-                            sendMessageToClient("Registered User.");
+                            sendMessageToClient("Successful process.");
+
+                            file.saveUser(userRegister);
+                            
+                            
+                         //caso 1.2 no guardamos   
                         } else if (utility.search(usersList, userRegister.getUser()) == true) {
                             sendMessageToClient("Existing user");
                         }
@@ -92,26 +123,90 @@ public class Handler extends Thread {
                     
             //Caso 2. Log in
                     if (userRegister.getAction().equals("loggin")) {
+                        //actualizamos en caso de ser necesario por si hay user nuevo
+                        usersList = DBget.DBget.getUsers("");
+
                         if (utility.search(usersList, userRegister.getUser()) == true
-                                && utility.search(usersList, userRegister.getPassword())==true) {
-                         sendMessageToClient("init");
+                                && utility.verifyPassword(usersList, userRegister.getPassword())==true) {
+                            if (utility.search(Server.onlineUsers, userRegister.getUser())==false) {
+                                Server.onlineUsers.add(userRegister);
+                                sendMessageToClient("init");
+                            }else{
+                                sendMessageToClient("You are already online");                                
+                            }
+                         
+                          // System.out.println(onlineUsers.toString());
                         } else if(utility.search(usersList, userRegister.getUser()) == true
-                                && utility.search(usersList, userRegister.getPassword())==false){
+                                && utility.verifyPassword(usersList, userRegister.getPassword())==false){
                             sendMessageToClient("Incorrect password");
                         }else if(utility.search(usersList, userRegister.getUser()) == false
-                                && utility.search(usersList, userRegister.getPassword())==true){
+                                && utility.verifyPassword(usersList, userRegister.getPassword())==true){
                             sendMessageToClient("Incorrect User");
                         }else if(utility.search(usersList, userRegister.getUser()) == false
-                                && utility.search(usersList, userRegister.getPassword())==false){
+                                && utility.verifyPassword(usersList, userRegister.getPassword())==false){
                             sendMessageToClient("User does not exist");                            
-                        }   
+                        }
+                        
                     }
-                }
+                }//fin if if(object instanceof User
+             
+        //User data        
+                if (receivedObject instanceof Request) {
+                    request=(Request)receivedObject;
+                 //   System.out.println(request.getUser());
+                //Caso 1. Profile data    
+                    if (request.getAction().equalsIgnoreCase("Get user data")) {
+                        user=file.getUser(request.getUser());
+                        sendUserToServer(user); 
+                    }
+                //Caso 2. Online users
+                    if (request.getAction().equalsIgnoreCase("Get online users")) {
+                        user=file.getUser(request.getUser());
+                        request.setOnlineUsers(utility.getOnlineFriends(Server.onlineUsers, user));
+                        sendOnlineUserToServer(request); 
+                    }                   
+                //Caso 3. Log out
+                    if (request.getAction().equalsIgnoreCase("log out")) {
+                        utility.logOut(Server.onlineUsers, request.getUser());
+                     //   System.out.println("successful log out");
+                    }
                 
+                //Caso 4. Search users
+                    if (request.getAction().equalsIgnoreCase("search users")) {
+                     request.setFoundUsers(utility.getFoundUsers(DBget.DBget.getUsers(request.getUser())));
+                     sendFoundUsersToServer(request);
+                   //  System.out.println(request.getUser()+"  *");
+                    }
+                //Caso 5.  Enviar solicitud
+                    if (request.getAction().equalsIgnoreCase("requestSent")) {
+                        //actualizamos
+                        file.actualizaLista();
+                        //guardamos en el archivo
+                        if (utility.verifyFriendRequestSent(
+                                file.getUser(request.getUser()), 
+                                new User(request.getRequest().getRequestFor().getUser(),""),
+                                request.getRequest())==false) {
+                            
+                            System.out.println("false");
+                            file.updateUser(
+                                   new User(request.getRequest().getRequestBy().getUser(),""), 
+                                    new User(request.getRequest().getRequestFor().getUser(),""),
+                                    request.getRequest());
+                        //enviamos mensaje
+                        sendMessageToClient("Friend request sent successfully");
+                        }else{
+                        sendMessageToClient("Error, previously sent friend request");       
+                        }                                            
+                    }
+                                                       
+                }             
+              
             }
+            
             
         } catch (IOException e) {
             System.out.println("Cliente cierra el programa");
+            
         } catch (ClassNotFoundException ex) {
             System.out.println("ex=" + ex.getMessage());
         } finally {
@@ -124,11 +219,12 @@ public class Handler extends Thread {
                 }
                 socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Error clase handler al cerrar conexion");
             }
         }
     }
     
+    //Metodo para enviar string
     private void sendMessageToClient(String message) {
         try {
             this.salida.writeObject(message);
@@ -137,5 +233,35 @@ public class Handler extends Thread {
             System.out.println("Error al enviar el mensaje al cliente: " + ex.getMessage());
         }
     }
+     
+   // Método para enviar un objeto User al servidor
+    public void sendUserToServer(User user) {
+        try {
+            this.salida.writeObject(user);
+        } catch (IOException ex) {
+            System.out.println("Internal error");
+        }
+    }
+
+    // Método para enviar un objeto tipo lista al servidor
+    public void sendOnlineUserToServer(Request request) {         
+        try {
+            this.salida.writeObject(request);
+            
+        } catch (IOException ex) {
+            System.out.println("Internal error");
+        }
+    }
+ 
+    // Método para enviar un objeto tipo lista al servidor
+    public void sendFoundUsersToServer(Request request) {         
+        try {
+            this.salida.writeObject(request);
+            
+        } catch (IOException ex) {
+            System.out.println("Internal error");
+        }
+    }
+    
     
 } // fin clase 
