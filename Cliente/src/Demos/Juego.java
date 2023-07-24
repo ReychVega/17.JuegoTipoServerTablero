@@ -109,6 +109,7 @@ public class Juego extends JFrame {
     public static void main(String[] args) {
         // Crear y mostrar el JFrame del juego
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 Juego juegoFrame = new Juego();
                 juegoFrame.setVisible(true);

@@ -135,7 +135,7 @@ public class Client {
     return null;
     }
 
-    public void closeConnection() {
+    public void closeConnection(){
         try {
             if (this.entrada != null) {
                 this.entrada.close();

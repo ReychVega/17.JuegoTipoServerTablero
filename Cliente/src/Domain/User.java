@@ -16,7 +16,6 @@ public class User implements Serializable{
    //profile data
    private int copas;
    
-   
    //friendship
    private ArrayList<User> friends;
    private ArrayList<FriendRequest> requestRecieved;
@@ -28,6 +27,7 @@ public class User implements Serializable{
         this.copas=0;
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
+        this.requestRecieved=new ArrayList<>();
     }
 
 
@@ -37,6 +37,7 @@ public class User implements Serializable{
          this.copas=0;
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
+        this.requestRecieved=new ArrayList<>();
     }
     
     public String getUser() {
@@ -99,7 +100,7 @@ public class User implements Serializable{
     
    @Override
     public String toString() {
-        return "User{" + "user=" + '}';
+        return "User{" + "user=" + user+'}';
     }
     
     

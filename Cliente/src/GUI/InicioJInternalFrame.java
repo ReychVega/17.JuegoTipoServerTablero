@@ -1,19 +1,13 @@
 package GUI;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import Client.Client;
 import Domain.FriendRequest;
 import Domain.Request;
 import Domain.User;
-import static GUI.MainJFrame.clientSocket;
-import java.awt.Panel;
-import java.io.IOException;
-import java.lang.System.Logger;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+
 
 /*
  * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
@@ -24,7 +18,7 @@ import javax.swing.SwingUtilities;
 public class InicioJInternalFrame extends javax.swing.JInternalFrame implements Runnable {
 
     private User user;
-    private Request request;
+    private Request newRequest;
     private Client clientSocket;
     private final MainJFrame mainFrame; // Agrega este atributo
     private ArrayList<User> onlineFriends;
@@ -40,11 +34,12 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
      * Creates new form RegistrationJInternalFrame
      *
      * @param mainFrame
+     * @param userName
      */
-    public InicioJInternalFrame(MainJFrame mainFrame, String user) {
+    public InicioJInternalFrame(MainJFrame mainFrame, String userName) {
         initComponents();
         disableComponents();
-        this.getUserData(user);
+        this.getUserData(userName);
 
         this.search = false;
         this.foundUsers = false;
@@ -54,7 +49,6 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -84,10 +78,10 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         setTitle("Profile");
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
-        setMaximumSize(new java.awt.Dimension(700, 700));
-        setMinimumSize(new java.awt.Dimension(700, 700));
-        setNormalBounds(new java.awt.Rectangle(0, 0, 700, 700));
-        setPreferredSize(new java.awt.Dimension(700, 700));
+        setMaximumSize(new java.awt.Dimension(700, 500));
+        setMinimumSize(new java.awt.Dimension(700, 500));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 700, 500));
+        setPreferredSize(new java.awt.Dimension(700, 500));
 
         jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -187,19 +181,19 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23)
+                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(list, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(262, 262, 262)
-                        .addComponent(list, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(6, 6, 6)
+                                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10))
         );
         jDesktopPane2Layout.setVerticalGroup(
@@ -217,7 +211,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(tittle)
-                        .addGap(18, 18, 18)
+                        .addGap(20, 20, 20)
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -310,6 +304,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.disableComponents();
     }//GEN-LAST:event_inicioUserNameMouseClicked
 
+    //
     private void gameRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameRequestActionPerformed
         activeComponents(0);
         this.tittle.setText("Online friends");
@@ -325,15 +320,16 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.foundUsers = true;
     }//GEN-LAST:event_friendRequestBtnActionPerformed
 
+    //visualizamos las solicitudes y aceptamos o borramos
     private void AceptDeleteRequestesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptDeleteRequestesActionPerformed
         activeComponents(2);
         this.tittle.setText("Friend requests");
         this.instruccion.setText("Received requests:");
         this.instruccion1.setText("Sent requests:");
         this.viewRequests=true;
-
     }//GEN-LAST:event_AceptDeleteRequestesActionPerformed
 
+    //control de envio, aceptacion y eliminacion de solicitudes de amistad.
     private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
         String selectedValue = list.getSelectedValue();
         //Caso 1. send a Friend request
@@ -341,7 +337,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
 
             //verificamos que el usuario este seguro
             int response = JOptionPane.showConfirmDialog(this, "Send request to "+selectedValue+"?",
-            "Confirmation", // Título del diálogo
+            "Confirmation", 
             JOptionPane.YES_NO_OPTION);
 
             if (response == JOptionPane.YES_OPTION) {
@@ -352,6 +348,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                 
                 Request request =new Request(user.getUser(), "requestSent");
                 request.setRequest(new FriendRequest(user,new User(selectedValue,"")));
+                 System.out.println(request.getRequest().showData(1));
                 //Enviamos el obj. request al servidor a través del socket
                 clientSocket.sendRequestToServer(request);
                 String message = clientSocket.receiveMessageFromServer();
@@ -360,11 +357,31 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             
             }
 
-            //Caso 2. send a game request  
-            } else if (selectedValue != null & online==true) {
+        //Caso 2. view data 
+        } else if (selectedValue != null & viewRequests==true) {
+                  //verificamos decision
+            Object[] opciones = {"Accept", "Delete", "Cancel"}; 
+            String [] aux=selectedValue.split(":");
+            int seleccion = JOptionPane.showOptionDialog(null, "Choose an option.", "Friend Request", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            switch(seleccion){
+              case 0:
+                // Aceptar
+                    if (clientSocket == null) {
+                    connectToServer();
+                }
+                
+                Request request =new Request(user.getUser(), "AcceptRequest");
+                request.setRequest(new FriendRequest(user,new User(aux[1].trim(),"")));
+                //Enviamos el obj. request al servidor a través del socket
+                clientSocket.sendRequestToServer(request);
+                  
+                break;
+            case 1:
+                // Borrar
+                break;
+             }            
             
-            }
-            
+        }           
     }//GEN-LAST:event_listMouseClicked
  
     private void activeComponents(int caso) {
@@ -401,6 +418,11 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     /*
      *solicita cada 10 seg para refrescar pantalla
      */
+
+    /**
+     *
+     */
+
     @Override
     public void run() {
         long start;
@@ -449,6 +471,11 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             getFoundUsers();
             search = false;
         }
+        //Caso 2.
+        if (viewRequests==true) {
+            getRequestData();
+            //actualiza cada 10 seg en el hilo
+        }
        /* //if (friends == true) {
             getFriendsData();
        // }
@@ -456,10 +483,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             getOnlineFriendsData();
             online=false;
         }
-        if (viewRequests==true) {
-            getRequestData();
-            viewRequests=false;
-        } */ 
+        */ 
      
         
     }
@@ -470,13 +494,13 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         try {
 
             //solicitamos los datos de usuario
-            request = new Request(user, "Get user data");
+            newRequest = new Request(user, "Get user data");
             if (clientSocket == null) {
                 connectToServer();
             }
 
             //Enviamos el obj. request al servidor a través del socket
-            clientSocket.sendRequestToServer(request);
+            clientSocket.sendRequestToServer(newRequest);
 
             //recibimos el objeto del usuario
             Object receivedObject = clientSocket.getEntrada().readObject();
@@ -511,12 +535,12 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     private void getOnlineFriendsData() {
         try {
             //solicitamos los datos de usuario
-            request = new Request(user.getUser(), "Get online users");
+            newRequest = new Request(user.getUser(), "Get online users");
             if (clientSocket == null) {
                 connectToServer();
             }
             //Enviamos el obj. request al servidor a través del socket
-            clientSocket.sendRequestToServer(request);
+            clientSocket.sendRequestToServer(newRequest);
 
             //recibimos el objeto del usuario
             Object receivedObject = clientSocket.getEntrada().readObject();
@@ -595,7 +619,6 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             this.list1.setModel(requestList);
         }
     }
-    
     
     // Método para conectarse al servidor.
     private void connectToServer() {

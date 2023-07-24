@@ -165,6 +165,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
             user = new User(this.userTextField.getText(), jPasswordField1.getText());
             user.setAction("loggin");
+          
             if (clientSocket == null) {
                 connectToServer();
             }
@@ -202,7 +203,6 @@ public class MainJFrame extends javax.swing.JFrame {
         disableInternalFrameMove(registration);
         this.jDesktopPanel.add(registration);
 
-       
     }//GEN-LAST:event_newAccountMouseClicked
 
     private void disableInternalFrameMove(JInternalFrame frame){

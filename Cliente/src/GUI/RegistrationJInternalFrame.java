@@ -4,6 +4,8 @@ import Client.Client;
 import Domain.User;
 import static GUI.MainJFrame.clientSocket;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
@@ -129,10 +131,19 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
     private void button1registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button1registerMouseClicked
         this.button1.setEnabled(false);
         this.button2.setEnabled(false);
+        
+        
         // Caso 1. Que todos los campos estén llenos
         if (!jTextField1.getText().isEmpty() && !jPasswordField1.getText().isEmpty()
             && !jPasswordField2.getText().isEmpty()) {
 
+            String patron = ".*[:].*";
+            Pattern pattern = Pattern.compile(patron);
+            Matcher matcher = pattern.matcher(jTextField1.getText());
+            boolean contieneCaracterEspecial = matcher.matches();
+            //Caso1.1
+            if(!contieneCaracterEspecial){
+            
             //1.2 Revisamos que las contraseñas coincidan
             if (jPasswordField1.getText().equals(jPasswordField2.getText())) {
 
@@ -154,6 +165,11 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
             } else {// Indicamos que las contraseñas no coinciden
                 alert.setText("Passwords do not match");
             }
+            
+            }else{
+                alert.setText("Do not use special characters");
+            }
+            
         } else {  //Caso 2. Indicamos que hay datos incompletos
             alert.setText("Incomplete data");
         }
