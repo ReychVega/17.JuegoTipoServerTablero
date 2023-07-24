@@ -44,7 +44,7 @@ public class Utility {
        
         for (int i = 0; i < onlineUsers.size(); i++) {
             for (int j = 0; j < user.getFriends().size(); j++) {
-                if (onlineUsers.get(i).getUser().equalsIgnoreCase(user.getFriends().get(i).getUser())
+                if (onlineUsers.get(i).getUser().equalsIgnoreCase(user.getFriends().get(j).getUser())
                         & !onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
                         onlineFriends.add(new User(onlineUsers.get(i).getUser(),""));
                 }
@@ -53,6 +53,7 @@ public class Utility {
         return onlineFriends;
     }
     
+    //procesa el log out    
     public void logOut(ArrayList<User> onlineUsers, String user){
             for (int i = 0; i < onlineUsers.size(); i++) {
                 if (onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
@@ -61,10 +62,19 @@ public class Utility {
             }
     }
     
-    public ArrayList<User>getFoundUsers(ArrayList<User> list){
+    //procesa busqueda de usuarios
+    public ArrayList<User>getFoundUsers(ArrayList<User> list, User user){
       ArrayList<User> users=new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            users.add(new User(list.get(i).getUser(),""));
+            for (int j = 0; j < user.getFriends().size(); j++) {
+                //si no son amigos
+               /* if (!user.getFriends().get(j).getUser().equalsIgnoreCase(list.get(i).getUser())) {
+                   users.add(new User(list.get(i).getUser(),""));
+                }*/
+            }
+         //  if (user.getFriends().isEmpty() & !list.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                users.add(new User(list.get(i).getUser(),""));
+           // }           
         }
         return users;
     }

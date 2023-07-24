@@ -33,13 +33,13 @@ public class FriendRequest implements Serializable {
         this.requestFor = requestFor;
     }
 
-     public String showData(int i){
+ public String showData(int i){
         if (i==1) {
-              return "Friend Request by " + requestBy + '.';
+              return "Friend Request sent by :" + requestBy.getUser();
         }else if (i==2) {
-              return "Friend Request for " + requestBy + '.';            
+              return "Friend Request sent to :" + requestFor.getUser();            
         }
         return "";
-    }     
+    } 
   
 }

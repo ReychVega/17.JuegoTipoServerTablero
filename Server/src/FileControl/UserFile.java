@@ -65,7 +65,8 @@ public class UserFile {
         output.close();
     }
     
-        public void updateUser(User sendRequest,User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
+    //actualizamos las solicitudes
+    public void updateUserRequests(User sendRequest,User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
         actualizaLista();
         // System.out.println(element.toString());
         if (archivo.exists()) {
@@ -79,7 +80,7 @@ public class UserFile {
                     if (sendRequest.getUser().equalsIgnoreCase(this.users.get(i).getUser())) {
                         this.users.get(i).getRequestSent().add(newRequest);
                     }else if (recieveRequest.getUser().equalsIgnoreCase(this.users.get(i).getUser())) {
-                        this.users.get(i).getRequestSent().add(newRequest);
+                        this.users.get(i).getRequestRecieved().add(newRequest);
                     }
                     
                 }                
@@ -91,6 +92,7 @@ public class UserFile {
         output.close();
     }
     
+    //revisamos si existe un usuario igual    
     public boolean verifyExistence(String user){
     if (archivo.exists()) {
             try {

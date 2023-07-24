@@ -171,9 +171,11 @@ public class Handler extends Thread {
                      //   System.out.println("successful log out");
                     }
                 
-                //Caso 4. Search users
+                //Caso 4. Search users, no envia usuarios que son amigos
                     if (request.getAction().equalsIgnoreCase("search users")) {
-                     request.setFoundUsers(utility.getFoundUsers(DBget.DBget.getUsers(request.getUser())));
+                     request.setFoundUsers(utility.getFoundUsers(
+                             file.getUsers(),
+                             file.getUser(request.getUser())));
                      sendFoundUsersToServer(request);
                    //  System.out.println(request.getUser()+"  *");
                     }
@@ -181,14 +183,14 @@ public class Handler extends Thread {
                     if (request.getAction().equalsIgnoreCase("requestSent")) {
                         //actualizamos
                         file.actualizaLista();
-                        //guardamos en el archivo
+                        //guardamos en el archivo. Revisa que no exista la solicitud
                         if (utility.verifyFriendRequestSent(
                                 file.getUser(request.getUser()), 
                                 new User(request.getRequest().getRequestFor().getUser(),""),
                                 request.getRequest())==false) {
                             
-                            System.out.println("false");
-                            file.updateUser(
+                           // System.out.println("false");
+                            file.updateUserRequests(
                                    new User(request.getRequest().getRequestBy().getUser(),""), 
                                     new User(request.getRequest().getRequestFor().getUser(),""),
                                     request.getRequest());
@@ -197,6 +199,13 @@ public class Handler extends Thread {
                         }else{
                         sendMessageToClient("Error, previously sent friend request");       
                         }                                            
+                    }
+                //Caso 6. Aceptar solicitud
+                    if (request.getAction().equalsIgnoreCase("requestSent")) {
+                        //actualizamos
+                        file.actualizaLista();
+                        //aceptarmos solicitud=guardarlo como amigo, y borrar soli enviada y recibida
+                        
                     }
                                                        
                 }             
@@ -234,7 +243,7 @@ public class Handler extends Thread {
         }
     }
      
-   // Método para enviar un objeto User al servidor
+    //Método para enviar un objeto User al servidor
     public void sendUserToServer(User user) {
         try {
             this.salida.writeObject(user);

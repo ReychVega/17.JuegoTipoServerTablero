@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class DBget {
 
-    public DBget() {
+    public DBget(){
     }
 
     public static ArrayList<User> getUsers(String searchCode) {
