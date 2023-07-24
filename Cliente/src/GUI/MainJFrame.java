@@ -1,11 +1,15 @@
 package GUI;
 
 import Client.Client;
+import Domain.Request;
 import Domain.User;
 import java.awt.Component;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
@@ -15,11 +19,30 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public class MainJFrame extends javax.swing.JFrame {
     
     private User user;
-    private Client clientSocket;
-
+    public static Client clientSocket;
+    public static String USERCONTROL;
+    
     public MainJFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        //Cierre
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                String btnCierre[] = {"Close", "Cancel"};
+                int eleccion = JOptionPane.showOptionDialog(null, "Do you want to close the application?",
+                        "Close program.", 0, 0, null, btnCierre, this);
+                if (eleccion == JOptionPane.YES_OPTION) {
+                    if (clientSocket != null) {
+                        // Envia el mensaje al servidor indicando que el usuario se está desconectando
+                        clientSocket.sendRequestToServer(new Request(USERCONTROL, "log out"));
+                    }
+                    System.exit(0);
+                }
+            }
+        }
+        );
     }
 
     /*
@@ -32,7 +55,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         label = new javax.swing.JLabel();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        jDesktopPanel = new javax.swing.JDesktopPane();
         gameTittle = new javax.swing.JLabel();
         passwordTittle = new javax.swing.JLabel();
         loggin = new java.awt.Button();
@@ -52,20 +75,20 @@ public class MainJFrame extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(700, 900));
         setResizable(false);
 
-        jDesktopPane1.setBackground(new java.awt.Color(0, 0, 0));
-        jDesktopPane1.setMaximumSize(new java.awt.Dimension(700, 900));
-        jDesktopPane1.setPreferredSize(new java.awt.Dimension(700, 900));
+        jDesktopPanel.setBackground(new java.awt.Color(0, 0, 0));
+        jDesktopPanel.setMaximumSize(new java.awt.Dimension(700, 900));
+        jDesktopPanel.setPreferredSize(new java.awt.Dimension(700, 900));
 
         gameTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         gameTittle.setForeground(new java.awt.Color(0, 153, 153));
-        gameTittle.setText("Clash Royale");
-        jDesktopPane1.add(gameTittle);
+        gameTittle.setText("JORGAJAR GAME");
+        jDesktopPanel.add(gameTittle);
         gameTittle.setBounds(30, 20, 221, 40);
 
         passwordTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         passwordTittle.setForeground(new java.awt.Color(255, 255, 255));
         passwordTittle.setText("Password:");
-        jDesktopPane1.add(passwordTittle);
+        jDesktopPanel.add(passwordTittle);
         passwordTittle.setBounds(120, 170, 150, 40);
 
         loggin.setBackground(new java.awt.Color(0, 102, 102));
@@ -77,21 +100,21 @@ public class MainJFrame extends javax.swing.JFrame {
                 logInMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(loggin);
+        jDesktopPanel.add(loggin);
         loggin.setBounds(290, 220, 190, 30);
 
         userTextField.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jDesktopPane1.add(userTextField);
+        jDesktopPanel.add(userTextField);
         userTextField.setBounds(290, 120, 190, 30);
 
         jPasswordField1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jDesktopPane1.add(jPasswordField1);
+        jDesktopPanel.add(jPasswordField1);
         jPasswordField1.setBounds(290, 170, 190, 30);
 
         userTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         userTittle.setForeground(new java.awt.Color(255, 255, 255));
         userTittle.setText("User:");
-        jDesktopPane1.add(userTittle);
+        jDesktopPanel.add(userTittle);
         userTittle.setBounds(130, 110, 70, 40);
 
         register.setBackground(new java.awt.Color(51, 0, 51));
@@ -103,28 +126,28 @@ public class MainJFrame extends javax.swing.JFrame {
                 newAccountMouseClicked(evt);
             }
         });
-        jDesktopPane1.add(register);
+        jDesktopPanel.add(register);
         register.setBounds(290, 270, 190, 30);
 
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
-        jDesktopPane1.add(image);
+        jDesktopPanel.add(image);
         image.setBounds(0, 480, 700, 400);
 
         alert.setForeground(new java.awt.Color(255, 255, 255));
         alert.setText(" ");
-        jDesktopPane1.add(alert);
+        jDesktopPanel.add(alert);
         alert.setBounds(290, 70, 190, 22);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jDesktopPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jDesktopPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -135,8 +158,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInMouseClicked
-        /*  Display the console game*/
-
+        this.loggin.setEnabled(false);        
+        
         //Case 1. Verificamos la informacion
         if (!this.jPasswordField1.getText().isEmpty() & !this.userTextField.getText().isEmpty()) {
 
@@ -153,15 +176,21 @@ public class MainJFrame extends javax.swing.JFrame {
               String message = clientSocket.receiveMessageFromServer();
               this.alert.setText(message);
                             
-              //Cargamos el juego
+              //Cargamos el inicio
               if (message.equalsIgnoreCase("init")) {
                   disableComponents();
-                                                
+                  USERCONTROL=user.getUser();
+                  InicioJInternalFrame inicio=new InicioJInternalFrame(this, user.getUser());
+                  inicio.setVisible(true);
+                  this.jDesktopPanel.add(inicio);
+                  disableInternalFrameMove(inicio);                                                
               }
            
         } else {
             alert.setText("Incomplete data");
+            
         }
+                this.loggin.setEnabled(true);
     }//GEN-LAST:event_logInMouseClicked
 
     //visualizar el JFrameInternal para el registro
@@ -170,20 +199,23 @@ public class MainJFrame extends javax.swing.JFrame {
         disableComponents();
         RegistrationJInternalFrame registration = new RegistrationJInternalFrame(this);
         registration.setVisible(true);
-        
-        this.jDesktopPane1.add(registration);
+        disableInternalFrameMove(registration);
+        this.jDesktopPanel.add(registration);
 
-        // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
-        registration.setBorder(null);
-        BasicInternalFrameUI ui = (BasicInternalFrameUI) registration.getUI();
+       
+    }//GEN-LAST:event_newAccountMouseClicked
+
+    private void disableInternalFrameMove(JInternalFrame frame){
+     // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
+        frame.setBorder(null);
+        BasicInternalFrameUI ui = (BasicInternalFrameUI) frame.getUI();
         Component northPane = ui.getNorthPane();
         MouseMotionListener[] motionListeners = (MouseMotionListener[]) northPane.getListeners(MouseMotionListener.class);
         for (MouseMotionListener listener : motionListeners) {
             northPane.removeMouseMotionListener(listener);
-    }
-        
-    }//GEN-LAST:event_newAccountMouseClicked
+        }
 
+    }
     
     /*
      * Método para conectarse al servidor.
@@ -230,7 +262,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel alert;
     private javax.swing.JLabel gameTittle;
     private javax.swing.JLabel image;
-    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JDesktopPane jDesktopPanel;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel label;
     private java.awt.Button loggin;

@@ -1,26 +1,44 @@
 package Domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
  * @author reych
  */
 public class User implements Serializable{
+   //user
    private String user;
    private String password;
    private String action;
+   
+   //profile data
+   private int copas;
+   
+   
+   //friendship
+   private ArrayList<User> friends;
+   private ArrayList<FriendRequest> requestRecieved;
+   private ArrayList<FriendRequest> requestSent;
+   
    private static final long serialVersionUID=1L;
 
     public User() {
+        this.copas=0;
+        this.friends=new ArrayList<>();
+        this.requestSent=new ArrayList<>();
     }
 
 
     public User(String user, String password) {
         this.user = user;
         this.password = password;
+         this.copas=0;
+        this.friends=new ArrayList<>();
+        this.requestSent=new ArrayList<>();
     }
-
+    
     public String getUser() {
         return user;
     }
@@ -37,6 +55,40 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    public int getCopas() {
+        return copas;
+    }
+
+    public void setCopas(int copas) {
+        this.copas = copas;
+    }
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    public ArrayList<FriendRequest> getRequestRecieved() {
+        return requestRecieved;
+    }
+
+    public void setRequestRecieved(ArrayList<FriendRequest> requestRecieved) {
+        this.requestRecieved = requestRecieved;
+    }
+
+    public ArrayList<FriendRequest> getRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(ArrayList<FriendRequest> requestSent) {
+        this.requestSent = requestSent;
+    }
+
+  
+    
     public String getAction() {
         return action;
     }
@@ -44,11 +96,11 @@ public class User implements Serializable{
     public void setAction(String action) {
         this.action = action;
     }
-   
     
-       @Override
+   @Override
     public String toString() {
-        return "User{" + "user=" + user + ", password=" + password + '}';
+        return "User{" + "user=" + '}';
     }
+    
     
 }

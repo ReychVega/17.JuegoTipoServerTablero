@@ -2,6 +2,7 @@ package GUI;
 
 import Client.Client;
 import Domain.User;
+import static GUI.MainJFrame.clientSocket;
 import java.io.IOException;
 
 /*
@@ -12,7 +13,6 @@ import java.io.IOException;
  */
 public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
  private User user;
-    private Client clientSocket;
         private final MainJFrame mainFrame; // Agrega este atributo
 
     /**
@@ -127,7 +127,8 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
      * Luego, muestra el mensaje de respuesta del servidor en la interfaz gráfica.
      */
     private void button1registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button1registerMouseClicked
-
+        this.button1.setEnabled(false);
+        this.button2.setEnabled(false);
         // Caso 1. Que todos los campos estén llenos
         if (!jTextField1.getText().isEmpty() && !jPasswordField1.getText().isEmpty()
             && !jPasswordField2.getText().isEmpty()) {
@@ -156,14 +157,18 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         } else {  //Caso 2. Indicamos que hay datos incompletos
             alert.setText("Incomplete data");
         }
+        
+        this.button1.setEnabled(true);
+        this.button2.setEnabled(true);
         jTextField1.setText("");
         jPasswordField1.setText("");
         jPasswordField2.setText("");
+        
     }//GEN-LAST:event_button1registerMouseClicked
 
     private void button2backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2backMouseClicked
         if (clientSocket!=null) {
-            clientSocket.closeConnection();
+
         }
         if (this.mainFrame!=null) {
             mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
@@ -181,7 +186,7 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         try {
             clientSocket = new Client("localhost", 5025);
         } catch (IOException ex) {
-            alert.setText("Internal error");
+            alert.setText("Try again later");
         }
     }    
     
