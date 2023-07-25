@@ -79,7 +79,7 @@ public class Client {
         this.smsCliente = smsCliente;
     }
     
-    
+   
     // Método para enviar un objeto User al servidor
     public void sendUserToServer(User user) {
         try {

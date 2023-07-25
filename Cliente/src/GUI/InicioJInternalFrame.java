@@ -7,6 +7,7 @@ import Client.Client;
 import Domain.FriendRequest;
 import Domain.Request;
 import Domain.User;
+import javax.swing.JScrollPane;
 
 
 /*
@@ -28,6 +29,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     private Thread thread;
     private boolean foundUsers;
     private boolean online;
+    private boolean friends;
     private boolean viewRequests;
 
     /**
@@ -44,6 +46,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.search = false;
         this.foundUsers = false;
         this.online = false;
+        this.friends = false;
         this.viewRequests=false;
         this.start = true;
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
@@ -61,9 +64,10 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         tittle = new javax.swing.JLabel();
         instruccion = new javax.swing.JLabel();
         textToSearch = new javax.swing.JTextField();
-        comeBackbtn = new java.awt.Button();
-        list = new javax.swing.JList<>();
         instruccion1 = new javax.swing.JLabel();
+        contenedor1 = new javax.swing.JScrollPane();
+        list = new javax.swing.JList<>();
+        contenedor2 = new javax.swing.JScrollPane();
         list1 = new javax.swing.JList<>();
         jMenuBar2 = new javax.swing.JMenuBar();
         inicioUserName = new javax.swing.JMenu();
@@ -72,6 +76,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         friendRequestBtn = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -82,12 +87,13 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         setMinimumSize(new java.awt.Dimension(700, 500));
         setNormalBounds(new java.awt.Rectangle(0, 0, 700, 500));
         setPreferredSize(new java.awt.Dimension(700, 500));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
 
         searchBtn.setActionCommand("back");
         searchBtn.setBackground(new java.awt.Color(51, 0, 51));
-        searchBtn.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        searchBtn.setFont(new java.awt.Font("Segoe Print", 0, 12)); // NOI18N
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setLabel("Search");
         searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -98,7 +104,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
 
         jLabel1.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/copas.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
 
         userName.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
         userName.setForeground(new java.awt.Color(255, 255, 255));
@@ -116,20 +122,12 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         instruccion.setForeground(new java.awt.Color(255, 255, 255));
         instruccion.setText("Select a user to send a friend request.");
 
-        textToSearch.setBackground(new java.awt.Color(204, 204, 204));
+        instruccion1.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
+        instruccion1.setForeground(new java.awt.Color(255, 255, 255));
+        instruccion1.setText("Select a user to send a friend request.");
 
-        comeBackbtn.setActionCommand("back");
-        comeBackbtn.setBackground(new java.awt.Color(51, 0, 51));
-        comeBackbtn.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
-        comeBackbtn.setForeground(new java.awt.Color(255, 255, 255));
-        comeBackbtn.setLabel("Log out");
-        comeBackbtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logOutMouseClicked(evt);
-            }
-        });
+        contenedor1.setBackground(new java.awt.Color(0, 0, 0));
 
-        list.setBackground(new java.awt.Color(204, 204, 204));
         list.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 102, 102), new java.awt.Color(0, 204, 204), null, null));
         list.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         list.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -137,14 +135,18 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                 listMouseClicked(evt);
             }
         });
+        contenedor1.setViewportView(list);
 
-        instruccion1.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        instruccion1.setForeground(new java.awt.Color(255, 255, 255));
-        instruccion1.setText("Select a user to send a friend request.");
+        contenedor2.setBackground(new java.awt.Color(0, 0, 0));
 
-        list1.setBackground(new java.awt.Color(204, 204, 204));
         list1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 102, 102), new java.awt.Color(0, 204, 204), null, null));
         list1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        list1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                list1MouseClicked(evt);
+            }
+        });
+        contenedor2.setViewportView(list1);
 
         jDesktopPane2.setLayer(searchBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -153,10 +155,9 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         jDesktopPane2.setLayer(tittle, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(instruccion, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(textToSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(comeBackbtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(list, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(instruccion1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(list1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(contenedor1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(contenedor2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane2Layout = new javax.swing.GroupLayout(jDesktopPane2);
         jDesktopPane2.setLayout(jDesktopPane2Layout);
@@ -165,69 +166,69 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(userName)
-                        .addGap(515, 515, 515)
-                        .addComponent(comeBackbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(90, 90, 90)
-                        .addComponent(tittle))
+                        .addContainerGap()
+                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1))))
+                .addGap(64, 64, 64)
+                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
+                        .addComponent(tittle)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                                 .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(23, 23, 23)
                                 .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(list, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(10, 10, 10))
+                                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(66, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(userName)
-                    .addComponent(comeBackbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
-                        .addGap(0, 0, 0)
-                        .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(userName))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(19, 19, 19)
                         .addComponent(tittle)
-                        .addGap(20, 20, 20)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(list, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("user");
 
+        getContentPane().add(jDesktopPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 700, 450));
+
+        inicioUserName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/user.png"))); // NOI18N
         inicioUserName.setText("user");
         inicioUserName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -236,11 +237,14 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         });
         jMenuBar2.add(inicioUserName);
 
+        friendsOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/friends.png"))); // NOI18N
         friendsOptions.setText("Friends");
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/settings.png"))); // NOI18N
         jMenu1.setText("Requests");
 
         friendRequestBtn.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        friendRequestBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/request.png"))); // NOI18N
         friendRequestBtn.setText("Friend request");
         friendRequestBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,6 +254,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         jMenu1.add(friendRequestBtn);
 
         jMenuItem2.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/game-control.png"))); // NOI18N
         jMenuItem2.setText("Game requests");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,7 +264,8 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         jMenu1.add(jMenuItem2);
 
         jMenuItem1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jMenuItem1.setText("Accept/delete requests");
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/label.png"))); // NOI18N
+        jMenuItem1.setText("Accept/delete friend requests");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AceptDeleteRequestesActionPerformed(evt);
@@ -271,48 +277,34 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
 
         jMenuBar2.add(friendsOptions);
 
-        setJMenuBar(jMenuBar2);
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/logout.png"))); // NOI18N
+        jMenu2.setText("Log out");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logOutMouseClicked(evt);
+            }
+        });
+        jMenuBar2.add(jMenu2);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jDesktopPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        setJMenuBar(jMenuBar2);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
-        this.search = true;
-    }//GEN-LAST:event_searchMouseClicked
-
-    private void logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutMouseClicked
-        if (this.mainFrame != null) {
-            mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
-        }
-        this.dispose();
-    }//GEN-LAST:event_logOutMouseClicked
 
     private void inicioUserNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inicioUserNameMouseClicked
         this.disableComponents();
     }//GEN-LAST:event_inicioUserNameMouseClicked
 
-    //
+    //visualizamos amigos en linea para enviar solicitudes de juego o eliminamos amigos
     private void gameRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameRequestActionPerformed
-        activeComponents(0);
-        this.tittle.setText("Online friends");
-        this.instruccion.setText("Select a friend to send a game request.");
+        activeComponents(2);
+        this.tittle.setText("Friends");
+        this.instruccion.setText("Online friends. Select a friend to send a game request.");
+        this.instruccion1.setText("Friends. Select a user to delete the friendship.");
         this.online = true;
     }//GEN-LAST:event_gameRequestActionPerformed
 
-    //enviamos
+    //enviamos solicitud de amistad
     private void friendRequestBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_friendRequestBtnActionPerformed
         activeComponents(1);
         this.tittle.setText("Friend requests");
@@ -329,7 +321,40 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.viewRequests=true;
     }//GEN-LAST:event_AceptDeleteRequestesActionPerformed
 
-    //control de envio, aceptacion y eliminacion de solicitudes de amistad.
+    //eliminamos solicitudes de amistadenviadas, o amigos
+    private void list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list1MouseClicked
+        String selectedValue = list1.getSelectedValue();
+        //eliminanos amigo
+        if (selectedValue != null & online == true) {
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            Request deleteFriend = new Request(user.getUser(), "DeleteFriend");
+                deleteFriend.setFriend(selectedValue.trim());
+                //Enviamos el obj. request al servidor a través del socket
+                clientSocket.sendRequestToServer(deleteFriend);
+                String sms = clientSocket.receiveMessageFromServer();
+                JOptionPane.showMessageDialog(this, sms,
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                
+        }
+        //solicitudes enviadas
+        if (selectedValue != null & viewRequests == true) {
+            String [] aux=selectedValue.split(":");
+                if (clientSocket == null) {
+                    connectToServer();
+                }
+                Request deleteRequest = new Request(user.getUser(), "DeleteRequest");
+                deleteRequest.setRequest(new FriendRequest(user, new User(aux[1].trim(), "")));
+                //Enviamos el obj. request al servidor a través del socket
+                clientSocket.sendRequestToServer(deleteRequest);
+                String sms = clientSocket.receiveMessageFromServer();
+                JOptionPane.showMessageDialog(this, sms,
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_list1MouseClicked
+
+    //control de envio, aceptacion y eliminacion de solicitudes de amistad recibidas.
     private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
         String selectedValue = list.getSelectedValue();
         //Caso 1. send a Friend request
@@ -337,72 +362,107 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
 
             //verificamos que el usuario este seguro
             int response = JOptionPane.showConfirmDialog(this, "Send request to "+selectedValue+"?",
-            "Confirmation", 
-            JOptionPane.YES_NO_OPTION);
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION);
 
             if (response == JOptionPane.YES_OPTION) {
-            
+
                 if (clientSocket == null) {
                     connectToServer();
                 }
-                
+
                 Request request =new Request(user.getUser(), "requestSent");
                 request.setRequest(new FriendRequest(user,new User(selectedValue,"")));
-                 System.out.println(request.getRequest().showData(1));
+                //System.out.println(request.getRequest().showData(1));
                 //Enviamos el obj. request al servidor a través del socket
                 clientSocket.sendRequestToServer(request);
                 String message = clientSocket.receiveMessageFromServer();
                 JOptionPane.showMessageDialog(this, message,
-                        "Process Status", JOptionPane.INFORMATION_MESSAGE );
-            
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE );
+
             }
 
-        //Caso 2. view data 
+            //Caso 2. view data
         } else if (selectedValue != null & viewRequests==true) {
-                  //verificamos decision
-            Object[] opciones = {"Accept", "Delete", "Cancel"}; 
+            //verificamos decision
+            Object[] opciones = {"Accept", "Delete", "Cancel"};
             String [] aux=selectedValue.split(":");
             int seleccion = JOptionPane.showOptionDialog(null, "Choose an option.", "Friend Request", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
             switch(seleccion){
-              case 0:
+                case 0:
                 // Aceptar
-                    if (clientSocket == null) {
+                if (clientSocket == null) {
                     connectToServer();
                 }
-                
-                Request request =new Request(user.getUser(), "AcceptRequest");
-                request.setRequest(new FriendRequest(user,new User(aux[1].trim(),"")));
+                Request acceptRequest = new Request(user.getUser(), "AcceptRequest");
+                acceptRequest.setRequest(new FriendRequest(user, new User(aux[1].trim(), "")));
                 //Enviamos el obj. request al servidor a través del socket
-                clientSocket.sendRequestToServer(request);
-                  
+                clientSocket.sendRequestToServer(acceptRequest);
+                String message = clientSocket.receiveMessageFromServer();
+                JOptionPane.showMessageDialog(this, message,
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
                 break;
-            case 1:
+                case 1:
                 // Borrar
+                if (clientSocket == null) {
+                    connectToServer();
+                }
+                Request deleteRequest = new Request(user.getUser(), "DeleteRequest");
+                deleteRequest.setRequest(new FriendRequest(user, new User(aux[1].trim(), "")));
+                //Enviamos el obj. request al servidor a través del socket
+                clientSocket.sendRequestToServer(deleteRequest);
+                String sms = clientSocket.receiveMessageFromServer();
+                JOptionPane.showMessageDialog(this, sms,
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
                 break;
-             }            
+            }
             
-        }           
+            
+        }
     }//GEN-LAST:event_listMouseClicked
- 
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        this.search = true;
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutMouseClicked
+    if (this.mainFrame != null) {
+            mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
+        }
+        this.dispose();
+    }//GEN-LAST:event_logOutMouseClicked
+
     private void activeComponents(int caso) {
-         disableComponents();
+        disableComponents();
+        DefaultListModel<String> aux = new DefaultListModel<>();
+        list.setModel(aux);
+        contenedor1.setViewportView(list); 
+        contenedor1.setVisible(true);
         if (caso == 1) {
             this.textToSearch.setVisible(true);
             this.searchBtn.setVisible(true);
         }
         if (caso == 2) {
-            this.list1.setVisible(true);
             this.instruccion1.setVisible(true);
+            list1.setModel(aux);
+            this.list1.setVisible(true);
+            contenedor2.setViewportView(list1); // Utiliza setViewportView para establecer la vista del JScrollPane
+            contenedor2.setVisible(true);
         }
         this.list.setVisible(true);
         this.tittle.setVisible(true);
         this.instruccion.setVisible(true);
         online = false;
         foundUsers = false;
+        
+        // Llamamos a revalidate y repaint para actualizar la interfaz gráfica
+         this.revalidate();
+         this.repaint();
     }
 
     private void disableComponents() {
-
+        this.contenedor1.setVisible(false);
+        this.contenedor2.setVisible(false);
         this.list.setVisible(false);
         this.list1.setVisible(false);
         this.tittle.setVisible(false);
@@ -416,18 +476,13 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     }
 
     /*
-     *solicita cada 10 seg para refrescar pantalla
+     *solicita cada 5 seg para refrescar pantalla
      */
-
-    /**
-     *
-     */
-
     @Override
     public void run() {
         long start;
         long elapse;
-        this.espera = 10000; // 10 segundos en milisegundos
+        this.espera = 5000; // 5 segundos en milisegundos
 
         while (this.start) {
             repaint();
@@ -463,7 +518,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     }//addNotify
 
     private void getCompleteData() {
-        //actualizamos
+        //actualizamos cada 10 seg
         this.getUserData(user.getUser());
         
         //Caso 1. 
@@ -471,26 +526,21 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             getFoundUsers();
             search = false;
         }
-        //Caso 2.
+        //Caso 2.actualiza cada 10 seg en el hilo
         if (viewRequests==true) {
             getRequestData();
-            //actualiza cada 10 seg en el hilo
         }
-       /* //if (friends == true) {
+        //Caso 3. Ver lista de amigos
+       if (online == true) {
+            getOnlineFriendsData(); 
             getFriendsData();
-       // }
-        if (online == true) {
-            getOnlineFriendsData();
-            online=false;
-        }
-        */ 
+        }       
      
         
     }
 
     //solicitamos y actualizamos data del usuario
     private void getUserData(String user) {
-
         try {
 
             //solicitamos los datos de usuario
@@ -509,6 +559,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             //mostramos
             showData(this.user);
 
+            //System.out.println(this.user.toString());
         } catch (IOException | ClassNotFoundException ex) {
 
         }
@@ -528,7 +579,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         for (int i = 0; i < user.getFriends().size(); i++) {
             friendList.addElement(user.getFriends().get(i).toString());
         }
-        this.list.setModel(friendList);
+        this.list1.setModel(friendList);
     }
 
     //rellenamos la lista con amigos en linea del usuario    
@@ -564,8 +615,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     }
 
     //rellenamos la lista con usuarios encontrados de la busqueda
-    private void getFoundUsers() {
-          
+    private void getFoundUsers() {      
         String userToSearch = textToSearch.getText();
         if (!userToSearch.isEmpty()) {
 
@@ -585,8 +635,21 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                 DefaultListModel<String> foundUsersList = new DefaultListModel<>();
 
                 for (int i = 0; i < request.getFoundUsers().size(); i++) {
+                    //que no se agregue a si mismo
                     if (!request.getFoundUsers().get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                        foundUsersList.addElement(request.getFoundUsers().get(i).getUser());
+                        //que no agregue amigos
+                        //Caso 1
+                        if (!user.getFriends().isEmpty()) {
+                          for (int j = 0; j < user.getFriends().size(); j++) {
+                              if (!user.getFriends().get(j).getUser().equalsIgnoreCase(request.getFoundUsers().get(i).getUser())) {
+                                foundUsersList.addElement(request.getFoundUsers().get(i).getUser()); 
+                              }
+                          } 
+                        //Caso 2  
+                        }else{
+                             foundUsersList.addElement(request.getFoundUsers().get(i).getUser());
+                        }
+                        
                     }
                 }                         
                 list.setModel(foundUsersList);
@@ -599,16 +662,17 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         }
     }
 
-    //rellenamos con la lista de solicitdes enviadas y recibidas
+    //rellenamos con la lista de solicitudes enviadas y recibidas
     private void getRequestData() {
         DefaultListModel<String> requestList;
-        if (user.getRequestSent() != null) {
+        //System.out.println("amigos\n"+ user.getFriends());
+        if (user.getRequestSent()!= null) {
             //lista 1.
             requestList = new DefaultListModel<>();
             for (int i = 0; i < user.getRequestSent().size(); i++) {
                 requestList.addElement(user.getRequestSent().get(i).showData(2));
             }
-            this.list.setModel(requestList);
+            this.list1.setModel(requestList);
         }
         if (user.getRequestRecieved() != null) {
             //lista 2    
@@ -616,7 +680,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
             for (int i = 0; i < user.getRequestRecieved().size(); i++) {
                 requestList.addElement(user.getRequestRecieved().get(i).showData(1));
             }
-            this.list1.setModel(requestList);
+            this.list.setModel(requestList);
         }
     }
     
@@ -646,7 +710,8 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Button comeBackbtn;
+    private javax.swing.JScrollPane contenedor1;
+    private javax.swing.JScrollPane contenedor2;
     private javax.swing.JLabel copas1;
     private javax.swing.JMenuItem friendRequestBtn;
     private javax.swing.JMenu friendsOptions;
@@ -656,6 +721,7 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

@@ -98,10 +98,10 @@ public class User implements Serializable{
         this.action = action;
     }
     
-   @Override
+  
+    @Override
     public String toString() {
-        return "User{" + "user=" + user+'}';
+        return user;
     }
-    
     
 }

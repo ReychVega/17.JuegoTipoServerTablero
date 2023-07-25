@@ -69,7 +69,7 @@ public class MainJFrame extends javax.swing.JFrame {
         label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Class Royale Game");
+        setTitle("Game");
         setLocation(new java.awt.Point(0, 0));
         setMaximumSize(new java.awt.Dimension(700, 900));
         setPreferredSize(new java.awt.Dimension(700, 900));
@@ -81,7 +81,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         gameTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         gameTittle.setForeground(new java.awt.Color(0, 153, 153));
-        gameTittle.setText("JORGAJAR GAME");
+        gameTittle.setText("GAME");
         jDesktopPanel.add(gameTittle);
         gameTittle.setBounds(30, 20, 221, 40);
 

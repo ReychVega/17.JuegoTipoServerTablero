@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Request implements Serializable{
 private static final long serialVersionUID=1L;
     
-    
+private String friend;    
 private String user;
 private String action;
 private FriendRequest request;
@@ -65,6 +65,13 @@ private ArrayList<User>foundUsers;
         this.request = request;
     }
 
-    
-    
+    public String getFriend() {
+        return friend;
+    }
+
+    public void setFriend(String friend) {
+        this.friend = friend;
+    }
+
+        
 }
