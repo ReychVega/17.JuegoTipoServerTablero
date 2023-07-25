@@ -158,6 +158,7 @@ public class Handler extends Thread {
                     if (request.getAction().equalsIgnoreCase("Get user data")) {
                         user=file.getUser(request.getUser());
                         sendUserToServer(user); 
+                   //     System.out.println(user.toString());
                     }
                 //Caso 2. Online users
                     if (request.getAction().equalsIgnoreCase("Get online users")) {
@@ -175,9 +176,8 @@ public class Handler extends Thread {
                     if (request.getAction().equalsIgnoreCase("search users")) {
                      request.setFoundUsers(utility.getFoundUsers(
                              file.getUsers(),
-                             file.getUser(request.getUser())));
+                             request.getUser()));
                      sendFoundUsersToServer(request);
-                   //  System.out.println(request.getUser()+"  *");
                     }
                 //Caso 5.  Enviar solicitud
                     if (request.getAction().equalsIgnoreCase("requestSent")) {
@@ -189,11 +189,11 @@ public class Handler extends Thread {
                                 new User(request.getRequest().getRequestFor().getUser(),""),
                                 request.getRequest())==false) {
                             
-                           // System.out.println("false");
                             file.updateUserRequests(
                                    new User(request.getRequest().getRequestBy().getUser(),""), 
                                     new User(request.getRequest().getRequestFor().getUser(),""),
                                     request.getRequest());
+                         
                         //enviamos mensaje
                         sendMessageToClient("Friend request sent successfully");
                         }else{
@@ -201,21 +201,39 @@ public class Handler extends Thread {
                         }                                            
                     }
                 //Caso 6. Aceptar solicitud
-                    if (request.getAction().equalsIgnoreCase("requestSent")) {
+                    if (request.getAction().equalsIgnoreCase("AcceptRequest")) {
                         //actualizamos
                         file.actualizaLista();
-                        //aceptarmos solicitud=guardarlo como amigo, y borrar soli enviada y recibida
-                        
+                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
+                        file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());
+                        file.addFriend(request.getRequest().getRequestBy(), request.getRequest().getRequestFor());
+                        file.addFriend(request.getRequest().getRequestFor(), request.getRequest().getRequestBy());
+                        sendMessageToClient("Friend added");
+                                                                  
                     }
-                                                       
-                }             
-              
+                //Caso 7. Eliminar solicitudes
+                    if (request.getAction().equalsIgnoreCase("DeleteRequest")) {
+                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
+                        file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());          
+                        sendMessageToClient("Friend request deleted");
+                                                                       
+                    }                         
+                //Caso 8. Eliminar amigos
+                    if (request.getAction().equalsIgnoreCase("DeleteFriend")) {
+                        file.removeFriend(request.getUser(),request.getFriend());
+                        file.removeFriend(request.getFriend(),request.getUser());
+                        sendMessageToClient("Friend deleted");
+                    }
+                }
+
+                //actualizamos
+                file.actualizaLista();
+
             }
             
             
         } catch (IOException e) {
-            System.out.println("Cliente cierra el programa");
-            
+            //System.out.println("Cliente cierra el programa");
         } catch (ClassNotFoundException ex) {
             System.out.println("ex=" + ex.getMessage());
         } finally {

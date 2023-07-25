@@ -23,7 +23,7 @@ public class DBget {
         try {
             if (!searchCode.isEmpty()) {
                 query = "select * from users"
-                        + " where user='" + searchCode
+                        + " where user= '" + searchCode
                         + "';";
             } else {
                 query = "select * from users";

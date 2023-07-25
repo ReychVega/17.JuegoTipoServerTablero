@@ -63,19 +63,15 @@ public class Utility {
     }
     
     //procesa busqueda de usuarios
-    public ArrayList<User>getFoundUsers(ArrayList<User> list, User user){
-      ArrayList<User> users=new ArrayList<>();
+    public ArrayList<User>getFoundUsers(ArrayList<User> list, String user){
+      
+        ArrayList<User> users=new ArrayList<>();
+        //primero agregamos los usuarios que contengan ese nombre
         for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < user.getFriends().size(); j++) {
-                //si no son amigos
-               /* if (!user.getFriends().get(j).getUser().equalsIgnoreCase(list.get(i).getUser())) {
-                   users.add(new User(list.get(i).getUser(),""));
-                }*/
-            }
-         //  if (user.getFriends().isEmpty() & !list.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+            if (list.get(i).getUser().toLowerCase().contains(user.toLowerCase())) {
                 users.add(new User(list.get(i).getUser(),""));
-           // }           
-        }
+            }           
+        }        
         return users;
     }
     

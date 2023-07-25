@@ -41,5 +41,10 @@ public class FriendRequest implements Serializable {
         }
         return "";
     } 
-  
+     @Override
+    public String toString() {
+        return "*FR{" + "de=" + requestBy.getUser() + ", para=" + requestFor.getUser() + '}';
+    }
+ 
+ 
 }
