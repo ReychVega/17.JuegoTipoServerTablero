@@ -12,9 +12,10 @@ public class User implements Serializable{
    private String user;
    private String password;
    private String action;
+   private boolean gameState;
    
    //profile data
-   private int copas;
+   private int puntaje;
    
    //friendship
    private ArrayList<User> friends;
@@ -24,20 +25,22 @@ public class User implements Serializable{
    private static final long serialVersionUID=1L;
 
     public User() {
-        this.copas=0;
+        this.puntaje=0;
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
         this.requestRecieved=new ArrayList<>();
+        this.gameState=false;
     }
 
 
     public User(String user, String password) {
         this.user = user;
         this.password = password;
-         this.copas=0;
+         this.puntaje=0;
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
         this.requestRecieved=new ArrayList<>();
+        this.gameState=false;
     }
     
     public String getUser() {
@@ -56,14 +59,24 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public int getCopas() {
-        return copas;
+    public int getPuntaje() {
+        return puntaje;
     }
 
-    public void setCopas(int copas) {
-        this.copas = copas;
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
     }
 
+    public boolean isGameState() {
+        return gameState;
+    }
+
+    public void setGameState(boolean gameState) {
+        this.gameState = gameState;
+    }
+
+    
+    
     public ArrayList<User> getFriends() {
         return friends;
     }
