@@ -59,16 +59,14 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(700, 380));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
+        jDesktopPane2.setBackground(new java.awt.Color(255, 255, 255));
         jDesktopPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("User:");
         jDesktopPane2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Password");
         jDesktopPane2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, -1));
 
@@ -114,7 +112,6 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 100, 30));
 
         jLabel7.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Confirm Password");
         jDesktopPane2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, -1));
 

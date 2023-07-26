@@ -63,7 +63,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         userTittle = new javax.swing.JLabel();
         register = new java.awt.Button();
-        image = new javax.swing.JLabel();
         alert = new javax.swing.JLabel();
 
         label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
@@ -75,7 +74,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(700, 900));
         setResizable(false);
 
-        jDesktopPanel.setBackground(new java.awt.Color(0, 0, 0));
+        jDesktopPanel.setBackground(new java.awt.Color(255, 255, 255));
         jDesktopPanel.setMaximumSize(new java.awt.Dimension(700, 900));
         jDesktopPanel.setPreferredSize(new java.awt.Dimension(700, 900));
 
@@ -86,7 +85,6 @@ public class MainJFrame extends javax.swing.JFrame {
         gameTittle.setBounds(30, 20, 221, 40);
 
         passwordTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        passwordTittle.setForeground(new java.awt.Color(255, 255, 255));
         passwordTittle.setText("Password:");
         jDesktopPanel.add(passwordTittle);
         passwordTittle.setBounds(120, 170, 150, 40);
@@ -112,7 +110,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jPasswordField1.setBounds(290, 170, 190, 30);
 
         userTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        userTittle.setForeground(new java.awt.Color(255, 255, 255));
         userTittle.setText("User:");
         jDesktopPanel.add(userTittle);
         userTittle.setBounds(130, 110, 70, 40);
@@ -128,10 +125,6 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jDesktopPanel.add(register);
         register.setBounds(290, 270, 190, 30);
-
-        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
-        jDesktopPanel.add(image);
-        image.setBounds(0, 480, 700, 400);
 
         alert.setForeground(new java.awt.Color(255, 255, 255));
         alert.setText(" ");
@@ -261,7 +254,6 @@ public class MainJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alert;
     private javax.swing.JLabel gameTittle;
-    private javax.swing.JLabel image;
     private javax.swing.JDesktopPane jDesktopPanel;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JLabel label;

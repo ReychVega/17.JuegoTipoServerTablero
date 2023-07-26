@@ -1,13 +1,14 @@
 package GUI;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import Client.Client;
-import Domain.FriendRequest;
-import Domain.Request;
-import Domain.User;
-import javax.swing.JScrollPane;
+import Domain.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 
 /*
@@ -16,7 +17,7 @@ import javax.swing.JScrollPane;
  * Contiene atributos como el usuario (User) y una instancia de Client (clientSocket) para manejar la comunicación con el servidor.
  * @author reych
  */
-public class InicioJInternalFrame extends javax.swing.JInternalFrame implements Runnable {
+public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     private User user;
     private Request newRequest;
@@ -31,6 +32,10 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     private boolean online;
     private boolean friends;
     private boolean viewRequests;
+    private ImageIcon[] conjunto1;
+    private ImageIcon[] conjunto2;
+    private int currentIndex = 0;
+    private JLabel[] imageLabels;
 
     /**
      * Creates new form RegistrationJInternalFrame
@@ -76,6 +81,8 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         friendRequestBtn = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setBackground(new java.awt.Color(0, 0, 0));
@@ -87,9 +94,9 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         setMinimumSize(new java.awt.Dimension(700, 500));
         setNormalBounds(new java.awt.Rectangle(0, 0, 700, 500));
         setPreferredSize(new java.awt.Dimension(700, 500));
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        jDesktopPane2.setBackground(new java.awt.Color(0, 0, 0));
+        jDesktopPane2.setBackground(new java.awt.Color(255, 255, 255));
 
         searchBtn.setActionCommand("back");
         searchBtn.setBackground(new java.awt.Color(51, 0, 51));
@@ -107,23 +114,18 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
 
         userName.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        userName.setForeground(new java.awt.Color(255, 255, 255));
         userName.setText("User");
 
         copas1.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        copas1.setForeground(new java.awt.Color(255, 255, 255));
         copas1.setText("Copas");
 
         tittle.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        tittle.setForeground(new java.awt.Color(255, 255, 255));
         tittle.setText("Online Friends");
 
         instruccion.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        instruccion.setForeground(new java.awt.Color(255, 255, 255));
         instruccion.setText("Select a user to send a friend request.");
 
         instruccion1.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        instruccion1.setForeground(new java.awt.Color(255, 255, 255));
         instruccion1.setText("Select a user to send a friend request.");
 
         contenedor1.setBackground(new java.awt.Color(0, 0, 0));
@@ -181,19 +183,18 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                         .addComponent(tittle)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
-                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(66, Short.MAX_VALUE))))
+                            .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                        .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23)
+                        .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,12 +222,12 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                 .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("user");
 
-        getContentPane().add(jDesktopPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 700, 450));
+        getContentPane().add(jDesktopPane2);
 
         inicioUserName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/user.png"))); // NOI18N
         inicioUserName.setText("user");
@@ -276,6 +277,20 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         friendsOptions.add(jMenu1);
 
         jMenuBar2.add(friendsOptions);
+
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/chess.png"))); // NOI18N
+        jMenu3.setText("Play");
+
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/personal-computer.png"))); // NOI18N
+        jMenuItem3.setText("Play vs computer");
+        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                playVsComputerMouseClicked(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
+        jMenuBar2.add(jMenu3);
 
         jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/logout.png"))); // NOI18N
         jMenu2.setText("Log out");
@@ -412,19 +427,23 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
                 //Enviamos el obj. request al servidor a través del socket
                 clientSocket.sendRequestToServer(deleteRequest);
                 String sms = clientSocket.receiveMessageFromServer();
-                JOptionPane.showMessageDialog(this, sms,
-                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
-                break;
+                    JOptionPane.showMessageDialog(this, sms,
+                            "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                    break;
             }
-            
+        } else if (selectedValue != null & online==true){
+        
+                    
             
         }
     }//GEN-LAST:event_listMouseClicked
 
+    //buscamos usuario
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
         this.search = true;
     }//GEN-LAST:event_searchMouseClicked
 
+    //cierre de sesion
     private void logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutMouseClicked
     if (this.mainFrame != null) {
             mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
@@ -432,11 +451,17 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.dispose();
     }//GEN-LAST:event_logOutMouseClicked
 
+    private void playVsComputerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playVsComputerMouseClicked
+
+
+    }//GEN-LAST:event_playVsComputerMouseClicked
+
+    //habilitamos los componentes que necesitamos
     private void activeComponents(int caso) {
         disableComponents();
         DefaultListModel<String> aux = new DefaultListModel<>();
         list.setModel(aux);
-        contenedor1.setViewportView(list); 
+        contenedor1.setViewportView(list);
         contenedor1.setVisible(true);
         if (caso == 1) {
             this.textToSearch.setVisible(true);
@@ -454,12 +479,13 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
         this.instruccion.setVisible(true);
         online = false;
         foundUsers = false;
-        
+
         // Llamamos a revalidate y repaint para actualizar la interfaz gráfica
-         this.revalidate();
-         this.repaint();
+        this.revalidate();
+        this.repaint();
     }
 
+    //desactivamos los componentes.
     private void disableComponents() {
         this.contenedor1.setVisible(false);
         this.contenedor2.setVisible(false);
@@ -480,15 +506,15 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
      */
     @Override
     public void run() {
-        long start;
+        long started;
         long elapse;
         this.espera = 5000; // 5 segundos en milisegundos
 
         while (this.start) {
             repaint();
-            start = System.nanoTime();
+            started = System.nanoTime();
 
-            elapse = System.nanoTime() - start;
+            elapse = System.nanoTime() - started;
             // ...   
             getCompleteData();
             // System.out.println("***\n");
@@ -722,9 +748,11 @@ public class InicioJInternalFrame extends javax.swing.JInternalFrame implements 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JList<String> list;
     private javax.swing.JList<String> list1;
     private java.awt.Button searchBtn;
