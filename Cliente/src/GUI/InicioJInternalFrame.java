@@ -63,9 +63,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
         jDesktopPane2 = new javax.swing.JDesktopPane();
         searchBtn = new java.awt.Button();
-        jLabel1 = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
-        copas1 = new javax.swing.JLabel();
         tittle = new javax.swing.JLabel();
         instruccion = new javax.swing.JLabel();
         textToSearch = new javax.swing.JTextField();
@@ -77,6 +75,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         jMenuBar2 = new javax.swing.JMenuBar();
         inicioUserName = new javax.swing.JMenu();
         friendsOptions = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         friendRequestBtn = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -109,15 +108,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
-
         userName.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
         userName.setText("User");
-
-        copas1.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
-        copas1.setText("Copas");
 
         tittle.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
         tittle.setText("Online Friends");
@@ -151,9 +143,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         contenedor2.setViewportView(list1);
 
         jDesktopPane2.setLayer(searchBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(userName, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(copas1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(tittle, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(instruccion, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(textToSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -166,18 +156,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         jDesktopPane2Layout.setHorizontalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel1))))
-                .addGap(64, 64, 64)
+                .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addComponent(tittle)
@@ -201,31 +181,25 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(copas1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(userName))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(tittle)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tittle))
+                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(userName)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel1.getAccessibleContext().setAccessibleName("user");
 
         getContentPane().add(jDesktopPane2);
 
@@ -241,12 +215,21 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         friendsOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/friends.png"))); // NOI18N
         friendsOptions.setText("Friends");
 
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/friends.png"))); // NOI18N
+        jMenuItem4.setText("Friends list");
+        jMenuItem4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                showFriendsMouseClicked(evt);
+            }
+        });
+        friendsOptions.add(jMenuItem4);
+
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/settings.png"))); // NOI18N
         jMenu1.setText("Requests");
 
         friendRequestBtn.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         friendRequestBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/request.png"))); // NOI18N
-        friendRequestBtn.setText("Friend request");
+        friendRequestBtn.setText("Add friends");
         friendRequestBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 friendRequestBtnActionPerformed(evt);
@@ -310,7 +293,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.disableComponents();
     }//GEN-LAST:event_inicioUserNameMouseClicked
 
-    //visualizamos amigos en linea para enviar solicitudes de juego o eliminamos amigos
+    //visualizamos amigos en linea para enviar solicitudes de juego,  aceptamos o rechazamos solicitudes
     private void gameRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameRequestActionPerformed
         activeComponents(2);
         this.tittle.setText("Friends");
@@ -336,7 +319,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.viewRequests=true;
     }//GEN-LAST:event_AceptDeleteRequestesActionPerformed
 
-    //eliminamos solicitudes de amistadenviadas, o amigos
+    //eliminamos solicitudes de amistad enviadas, o amigos
     private void list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list1MouseClicked
         String selectedValue = list1.getSelectedValue();
         //eliminanos amigo
@@ -451,10 +434,15 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.dispose();
     }//GEN-LAST:event_logOutMouseClicked
 
+    
     private void playVsComputerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playVsComputerMouseClicked
 
 
     }//GEN-LAST:event_playVsComputerMouseClicked
+
+    private void showFriendsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showFriendsMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_showFriendsMouseClicked
 
     //habilitamos los componentes que necesitamos
     private void activeComponents(int caso) {
@@ -559,10 +547,13 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         //Caso 3. Ver lista de amigos
        if (online == true) {
             getOnlineFriendsData(); 
-            getFriendsData();
         }       
-     
-        
+       
+        if (friends==true) {
+            getFriendsData();
+        }
+ 
+       
     }
 
     //solicitamos y actualizamos data del usuario
@@ -595,7 +586,6 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     //mostramos la info del usuario
     private void showData(User user) {
         userName.setText(user.getUser());
-        this.copas1.setText(user.getCopas() + "");
         this.inicioUserName.setText("Main page");
     }
 
@@ -605,7 +595,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         for (int i = 0; i < user.getFriends().size(); i++) {
             friendList.addElement(user.getFriends().get(i).toString());
         }
-        this.list1.setModel(friendList);
+        this.list.setModel(friendList);
     }
 
     //rellenamos la lista con amigos en linea del usuario    
@@ -738,14 +728,12 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane contenedor1;
     private javax.swing.JScrollPane contenedor2;
-    private javax.swing.JLabel copas1;
     private javax.swing.JMenuItem friendRequestBtn;
     private javax.swing.JMenu friendsOptions;
     private javax.swing.JMenu inicioUserName;
     private javax.swing.JLabel instruccion;
     private javax.swing.JLabel instruccion1;
     private javax.swing.JDesktopPane jDesktopPane2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -753,6 +741,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JList<String> list;
     private javax.swing.JList<String> list1;
     private java.awt.Button searchBtn;
