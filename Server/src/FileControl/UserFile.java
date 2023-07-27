@@ -10,14 +10,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  *
  * @author reych
  */
-public class UserFile {
+public class UserFile implements FileControl{
 
     private ArrayList<User> users;
     private File archivo;
@@ -46,10 +45,10 @@ public class UserFile {
         this.archivo = archivo;
     }
 
-    //métodos
+    //guardamos usuario en el archivo
+    @Override
     public void saveUser(User user) throws FileNotFoundException, IOException, ClassNotFoundException {
 
-        // System.out.println(element.toString());
         if (archivo.exists()) {
             ObjectInputStream input = null;
 
@@ -66,7 +65,8 @@ public class UserFile {
         output.close();
     }
 
-    //actualizamos las solicitudes
+    //creamos solicitud de amistad
+    @Override
     public void updateUserRequests(User sendRequest, User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
         if (archivo.exists()) {
             ObjectInputStream input = null;
@@ -92,6 +92,7 @@ public class UserFile {
     }
 
     //borramos las solicitudes por que el usuario las borro o acepto
+    @Override
     public void deleteUserRequests(User sendRequest,User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
        
         if (archivo.exists()) {
@@ -134,7 +135,8 @@ public class UserFile {
         output.close();
     }    
      
-    //revisamos si existe un usuario igual    
+    //revisamos si existe un usuario igual para que no se registre otro igual 
+    @Override
     public boolean verifyExistence(String user) {
         if (archivo.exists()) {
             try {
@@ -159,6 +161,7 @@ public class UserFile {
     }
 
     //actualiza lista en caso de datos nuevos
+    @Override
     public void actualizaLista() {
         if (archivo.exists()) {
             try {
@@ -173,6 +176,8 @@ public class UserFile {
 
     }
 
+    //obtener usuario
+    @Override
     public User getUser(String user) {
         this.actualizaLista();
         for (int i = 0; i < users.size(); i++) {
@@ -183,6 +188,8 @@ public class UserFile {
         return null;
     }
 
+    //agregar amigo
+    @Override
     public void addFriend(User user, User friend) throws FileNotFoundException, IOException, ClassNotFoundException {
  //  System.out.println(sendRequest.getUser()+"\n"+recieveRequest.getUser()+"\n"+newRequest+"\n");
         if (archivo.exists()) {
@@ -215,9 +222,9 @@ public class UserFile {
 
     }
 
-
+    //eliminamos la solicitud de amistad
+    @Override
     public void removeFriend(String user, String friend) throws FileNotFoundException, IOException, ClassNotFoundException {
- //  System.out.println(sendRequest.getUser()+"\n"+recieveRequest.getUser()+"\n"+newRequest+"\n");
         if (archivo.exists()) {
             ObjectInputStream input = null;
             input = new ObjectInputStream(new FileInputStream((archivo)));
