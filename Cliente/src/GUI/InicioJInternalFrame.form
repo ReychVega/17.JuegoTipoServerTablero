@@ -2,9 +2,9 @@
 
 <Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
   <NonVisualComponents>
-    <Menu class="javax.swing.JMenuBar" name="jMenuBar2">
+    <Menu class="javax.swing.JMenuBar" name="menuBar">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="inicioUserName">
+        <Menu class="javax.swing.JMenu" name="menuBtnInicio">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/images/frameIcons/user.png"/>
@@ -12,10 +12,10 @@
             <Property name="text" type="java.lang.String" value="user"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="inicioUserNameMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menuBtnInicioMouseClicked"/>
           </Events>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="friendsOptions">
+        <Menu class="javax.swing.JMenu" name="menuBtnFriendsOptions">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/images/frameIcons/friends.png"/>
@@ -31,7 +31,7 @@
                 <Property name="text" type="java.lang.String" value="Friends list"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="showFriendsMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showFriendsActionPerformed"/>
               </Events>
             </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenu1">
@@ -151,7 +151,7 @@
     </Property>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar2"/>
+    <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
   <AuxValues>
@@ -180,11 +180,11 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Component id="userName" min="-2" pref="94" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                  <Component id="lblUser" min="-2" pref="152" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="tittle" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTittle" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -192,19 +192,19 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="contenedor1" min="-2" pref="293" max="-2" attributes="0"/>
                                       <Component id="contenedor2" alignment="0" min="-2" pref="289" max="-2" attributes="0"/>
-                                      <Component id="instruccion" alignment="0" min="-2" pref="458" max="-2" attributes="0"/>
-                                      <Component id="instruccion1" alignment="0" min="-2" pref="404" max="-2" attributes="0"/>
+                                      <Component id="lblInstruccion" alignment="0" min="-2" pref="458" max="-2" attributes="0"/>
+                                      <Component id="lblInstruccion2" alignment="0" min="-2" pref="404" max="-2" attributes="0"/>
+                                      <Component id="contenedor1" alignment="0" min="-2" pref="286" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="textToSearch" min="-2" pref="190" max="-2" attributes="0"/>
+                                  <Component id="txtUserToSearch" min="-2" pref="190" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                                  <Component id="searchBtn" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="btnSearch" min="-2" pref="80" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="12" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -216,33 +216,33 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                          <Component id="tittle" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTittle" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="userName" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUser" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="textToSearch" min="-2" max="-2" attributes="0"/>
-                      <Component id="searchBtn" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="txtUserToSearch" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSearch" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="instruccion" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="lblInstruccion" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="contenedor1" min="-2" pref="100" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="instruccion1" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="lblInstruccion2" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="contenedor2" min="-2" pref="100" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="java.awt.Button" name="searchBtn">
+        <Component class="java.awt.Button" name="btnSearch">
           <Properties>
             <Property name="actionCommand" type="java.lang.String" value="back"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -260,7 +260,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="searchMouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="userName">
+        <Component class="javax.swing.JLabel" name="lblUser">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe Print" size="16" style="1"/>
@@ -268,7 +268,7 @@
             <Property name="text" type="java.lang.String" value="User"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="tittle">
+        <Component class="javax.swing.JLabel" name="lblTittle">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe Print" size="16" style="1"/>
@@ -276,7 +276,7 @@
             <Property name="text" type="java.lang.String" value="Online Friends"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="instruccion">
+        <Component class="javax.swing.JLabel" name="lblInstruccion">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe Print" size="16" style="1"/>
@@ -284,9 +284,9 @@
             <Property name="text" type="java.lang.String" value="Select a user to send a friend request."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="textToSearch">
+        <Component class="javax.swing.JTextField" name="txtUserToSearch">
         </Component>
-        <Component class="javax.swing.JLabel" name="instruccion1">
+        <Component class="javax.swing.JLabel" name="lblInstruccion2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe Print" size="16" style="1"/>
