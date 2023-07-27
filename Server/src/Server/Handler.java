@@ -211,14 +211,19 @@ public class Handler extends Thread {
                         sendMessageToClient("Friend added");
                                                                   
                     }
-                //Caso 7. Eliminar solicitudes
+                //Caso 7. Eliminar solicitudes recibidas
                     if (request.getAction().equalsIgnoreCase("DeleteRequest")) {
                         file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
                         file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());          
                         sendMessageToClient("Friend request deleted");
-                                                                       
-                    }                         
-                //Caso 8. Eliminar amigos
+                                                                      
+                    } 
+                //Caso 8. Eliminar solicitudes enviadas    
+                    if (request.getAction().equalsIgnoreCase("DeleteRequestSent")) {
+                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
+                        sendMessageToClient("Friend request deleted");                                                                       
+                    }             
+                //Caso 9. Eliminar amigos
                     if (request.getAction().equalsIgnoreCase("DeleteFriend")) {
                         file.removeFriend(request.getUser(),request.getFriend());
                         file.removeFriend(request.getFriend(),request.getUser());
