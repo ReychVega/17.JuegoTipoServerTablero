@@ -1,77 +1,42 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  *
  * @author reych
  */
-public class Request implements Serializable{
-private static final long serialVersionUID=1L;
+    abstract class Request  implements Serializable{
+    private static final long serialVersionUID=1L;
+    private User requestBy;
+    private User requestFor;
+       
+    public Request(User requestBy, User requestFor) {
+     this.requestBy=requestBy;
+     this.requestFor=requestFor;
+     
+    }
+
+    public User getRequestBy() {
+        return requestBy;
+    }
+
+    public void setRequestBy(User requestBy) {
+        this.requestBy = requestBy;
+    }
+
+    public User getRequestFor() {
+        return requestFor;
+    }
+
+    public void setRequestFor(User requestFor) {
+        this.requestFor = requestFor;
+    }
     
-private String friend;    
-private String user;
-private String action;
-private FriendRequest request;
-
-private ArrayList<User>onlineUsers;
-private ArrayList<User>foundUsers;
-
-    public Request(String user, String action) {
-        this.user = user;
-        this.action = action;
-        this.onlineUsers=new ArrayList<>();
-        this.foundUsers=new ArrayList<>();
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public ArrayList<User> getOnlineUsers() {
-        return onlineUsers;
-    }
-
-    public void setOnlineUsers(ArrayList<User> onlineUsers) {
-        this.onlineUsers = onlineUsers;
-    }
-
-    public ArrayList<User> getFoundUsers() {
-        return foundUsers;
-    }
-
-    public void setFoundUsers(ArrayList<User> foundUsers) {
-        this.foundUsers = foundUsers;
-    }
-
-    public FriendRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(FriendRequest request) {
-        this.request = request;
-    }
-
-    public String getFriend() {
-        return friend;
-    }
-
-    public void setFriend(String friend) {
-        this.friend = friend;
-    }
-
-        
+    abstract String showData(int i);
+    
 }

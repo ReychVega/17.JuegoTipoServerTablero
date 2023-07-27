@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
  private User user;
-        private final MainJFrame mainFrame; // Agrega este atributo
+ private final MainJFrame mainFrame; // Agrega este atributo
 
     /**
      * Creates new form RegistrationJInternalFrame

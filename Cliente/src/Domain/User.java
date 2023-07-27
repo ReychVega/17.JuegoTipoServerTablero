@@ -11,16 +11,18 @@ public class User implements Serializable{
    //user
    private String user;
    private String password;
-   private String action;
+   //auxiliares
    private boolean gameState;
-   
+   private String action;
    //profile data
    private int puntaje;
-   
    //friendship
    private ArrayList<User> friends;
    private ArrayList<FriendRequest> requestRecieved;
-   private ArrayList<FriendRequest> requestSent;
+   private ArrayList<FriendRequest> requestSent;   
+   //Game request
+   private ArrayList<GameRequest> gameRequestRecieved;
+   private ArrayList<GameRequest> gameRequestSent;
    
    private static final long serialVersionUID=1L;
 
@@ -29,6 +31,8 @@ public class User implements Serializable{
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
         this.requestRecieved=new ArrayList<>();
+        this.gameRequestSent=new ArrayList<>();
+        this.gameRequestRecieved=new ArrayList<>();
         this.gameState=false;
     }
 
@@ -40,8 +44,9 @@ public class User implements Serializable{
         this.friends=new ArrayList<>();
         this.requestSent=new ArrayList<>();
         this.requestRecieved=new ArrayList<>();
+        this.gameRequestSent=new ArrayList<>();
+        this.gameRequestRecieved=new ArrayList<>();
         this.gameState=false;
-
     }
     
     public String getUser() {
@@ -100,6 +105,22 @@ public class User implements Serializable{
 
     public void setRequestSent(ArrayList<FriendRequest> requestSent) {
         this.requestSent = requestSent;
+    }
+
+    public ArrayList<GameRequest> getGameRequestRecieved() {
+        return gameRequestRecieved;
+    }
+
+    public void setGameRequestRecieved(ArrayList<GameRequest> gameRequestRecieved) {
+        this.gameRequestRecieved = gameRequestRecieved;
+    }
+
+    public ArrayList<GameRequest> getGameRequestSent() {
+        return gameRequestSent;
+    }
+
+    public void setGameRequestSent(ArrayList<GameRequest> gameRequestSent) {
+        this.gameRequestSent = gameRequestSent;
     }
 
   

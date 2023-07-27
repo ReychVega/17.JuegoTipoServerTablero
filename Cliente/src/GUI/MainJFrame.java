@@ -1,7 +1,7 @@
 package GUI;
 
 import Client.Client;
-import Domain.Request;
+import Domain.ServerRequest;
 import Domain.User;
 import java.awt.Component;
 import java.awt.event.MouseMotionListener;
@@ -36,7 +36,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (eleccion == JOptionPane.YES_OPTION) {
                     if (clientSocket != null) {
                         // Envia el mensaje al servidor indicando que el usuario se está desconectando
-                        clientSocket.sendRequestToServer(new Request(USERCONTROL, "log out"));
+                        clientSocket.sendRequestToServer(new ServerRequest(USERCONTROL, "log out"));
                     }
                     System.exit(0);
                 }

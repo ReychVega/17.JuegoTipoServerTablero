@@ -1,7 +1,7 @@
 package Client;
 
 import Domain.FriendRequest;
-import Domain.Request;
+import Domain.ServerRequest;
 import Domain.User;
 
 import java.io.IOException;
@@ -20,7 +20,6 @@ import java.net.UnknownHostException;
  *send: Flujo de salida de texto hacia el servidor
  */
 public class Client {
-    
     private Socket socket;
     private ObjectOutputStream salida; 
     private ObjectInputStream entrada; 
@@ -90,11 +89,11 @@ public class Client {
     }
     
     // Método para enviar un obj. tipo request al servidor
-    public void sendRequestToServer(Request request) {
+    public void sendRequestToServer(ServerRequest request) {
         try {
             this.salida.writeObject(request);
         } catch (IOException ex) {
-            System.out.println("Internal error"+ex.getMessage());
+            System.out.println("Internal error "+ ex.getMessage());
         }
     }
 
