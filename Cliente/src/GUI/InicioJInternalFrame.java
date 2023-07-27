@@ -3,11 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import Client.Client;
 import Domain.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 
@@ -24,18 +19,18 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private Client clientSocket;
     private final MainJFrame mainFrame; // Agrega este atributo
     private ArrayList<User> onlineFriends;
-    private boolean search;
+   //atributos necesarios para el hilo
     private boolean start;
     private long espera;
     private Thread thread;
+    //atributos para iniciar comunicacion con el server (solicitud de datos)
     private boolean foundUsers;
     private boolean online;
     private boolean friends;
     private boolean viewRequests;
-    private ImageIcon[] conjunto1;
-    private ImageIcon[] conjunto2;
-    private int currentIndex = 0;
-    private JLabel[] imageLabels;
+    private boolean search;
+
+
 
     /**
      * Creates new form RegistrationJInternalFrame
@@ -163,17 +158,18 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                         .addComponent(tittle)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23)
-                        .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(instruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(instruccion1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                                .addComponent(textToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23)
+                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
@@ -302,7 +298,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.online = true;
     }//GEN-LAST:event_gameRequestActionPerformed
 
-    //enviamos solicitud de amistad
+    //Btn Add friend, enviamos solicitud de amistad
     private void friendRequestBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_friendRequestBtnActionPerformed
         activeComponents(1);
         this.tittle.setText("Friend requests");
@@ -322,21 +318,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     //eliminamos solicitudes de amistad enviadas, o amigos
     private void list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list1MouseClicked
         String selectedValue = list1.getSelectedValue();
-        //eliminanos amigo
-        if (selectedValue != null & online == true) {
-            if (clientSocket == null) {
-                connectToServer();
-            }
-            Request deleteFriend = new Request(user.getUser(), "DeleteFriend");
-                deleteFriend.setFriend(selectedValue.trim());
-                //Enviamos el obj. request al servidor a través del socket
-                clientSocket.sendRequestToServer(deleteFriend);
-                String sms = clientSocket.receiveMessageFromServer();
-                JOptionPane.showMessageDialog(this, sms,
-                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
-                
-        }
-        //solicitudes enviadas
+     
+        //Caso 1. eliminamos solicitudes enviadas
         if (selectedValue != null & viewRequests == true) {
             String [] aux=selectedValue.split(":");
                 if (clientSocket == null) {
@@ -350,14 +333,36 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                 JOptionPane.showMessageDialog(this, sms,
                     "Process Status", JOptionPane.INFORMATION_MESSAGE);
         }
+        //Caso 2. eliminamos o aceptamos solicitudes de juego
+        if (selectedValue!=null & online==true) {
+            
+        }
     }//GEN-LAST:event_list1MouseClicked
 
-    //control de envio, aceptacion y eliminacion de solicitudes de amistad recibidas.
+    //Control de lista 1.
+    //Caso 1: Eliminar amigos, 
+    //Caso 2: Add friends, 
+    //Caso 3. Aceptar/eliminar solicitudes de amistad recibidas
+    //Caso 4. Aceptar/eliminar solicitudes de juego recibidas
     private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
         String selectedValue = list.getSelectedValue();
-        //Caso 1. send a Friend request
-        if (selectedValue != null & foundUsers==true) {
-
+        //Caso 1. Eliminar amigos
+        if (selectedValue != null & friends == true) {
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            Request deleteFriend = new Request(user.getUser(), "DeleteFriend");
+                deleteFriend.setFriend(selectedValue.trim());
+                //Enviamos el obj. request al servidor a través del socket
+                clientSocket.sendRequestToServer(deleteFriend);
+                String sms = clientSocket.receiveMessageFromServer();
+                JOptionPane.showMessageDialog(this, sms,
+                    "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                
+        }
+               
+        //Caso 2. send a Friend request
+        if (selectedValue != null & foundUsers==true) {            
             //verificamos que el usuario este seguro
             int response = JOptionPane.showConfirmDialog(this, "Send request to "+selectedValue+"?",
                 "Confirmation",
@@ -380,8 +385,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
             }
 
-            //Caso 2. view data
-        } else if (selectedValue != null & viewRequests==true) {
+            
+        }
+        //Caso 3. Aceptar solicitudes de amistad recibidas
+        if (selectedValue != null & viewRequests==true) {
             //verificamos decision
             Object[] opciones = {"Accept", "Delete", "Cancel"};
             String [] aux=selectedValue.split(":");
@@ -414,7 +421,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                             "Process Status", JOptionPane.INFORMATION_MESSAGE);
                     break;
             }
-        } else if (selectedValue != null & online==true){
+        } 
+        //Caso 4. Aceptar solicitudes de juego recibidas
+        if (selectedValue != null & online==true){
         
                     
             
@@ -440,8 +449,12 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     }//GEN-LAST:event_playVsComputerMouseClicked
 
+    //primer btn Friends.
     private void showFriendsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showFriendsMouseClicked
-        // TODO add your handling code here:
+        activeComponents(0);
+        this.tittle.setText("Friends");
+        this.instruccion.setText("Friends. Select a user to delete the friendship.");
+        friends=true;
     }//GEN-LAST:event_showFriendsMouseClicked
 
     //habilitamos los componentes que necesitamos
@@ -484,6 +497,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.instruccion.setVisible(false);
         this.instruccion1.setVisible(false);
         this.searchBtn.setVisible(false);
+        friends = false;
         online = false;
         foundUsers = false;
         viewRequests=false;
@@ -544,9 +558,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         if (viewRequests==true) {
             getRequestData();
         }
-        //Caso 3. Ver lista de amigos
+        //Caso 3. Ver lista de amigos y solicitudes
        if (online == true) {
             getOnlineFriendsData(); 
+            
         }       
        
         if (friends==true) {
