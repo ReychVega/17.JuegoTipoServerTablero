@@ -1,8 +1,9 @@
 package Utility;
 
 import Domain.FriendRequest;
+import Domain.GameRequest;
 import Domain.User;
-import java.io.IOException;
+import com.sun.net.httpserver.Request;
 import java.util.ArrayList;
 
 /**
@@ -75,6 +76,7 @@ public class Utility {
         return users;
     }
     
+    //verifica solicitud enviada
     public boolean verifyFriendRequestSent(User sentBy, User sentFor, FriendRequest request){
         for (int i = 0; i < sentBy.getRequestSent().size(); i++) {
             
@@ -84,6 +86,40 @@ public class Utility {
         }
         
         return false;
+    }
+    
+    //agregamos solicitud de juego en la lista temporal
+    public void addGameRequest(ArrayList<User> usersOnline, User user, User friend){
+        for (int i = 0; i < usersOnline.size(); i++) {
+            if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                usersOnline.get(i).getGameRequestSent().add(new GameRequest(user, friend));
+            }
+            if (usersOnline.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
+                usersOnline.get(i).getGameRequestRecieved().add(new GameRequest(user, friend));
+            }
+        }   
+    }
+    
+    //recuperamos los game request recibidos por usuario
+    public ArrayList<GameRequest> getGameRequestRecieved(ArrayList<User> usersOnline, User user){
+        ArrayList<GameRequest> gameRequest=new ArrayList<>(); 
+        for (int i = 0; i < usersOnline.size(); i++) {
+                if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                    gameRequest=usersOnline.get(i).getGameRequestRecieved();
+                }
+            }
+        return gameRequest;
+    }
+
+    //recuperamos los game request enviados por usuario
+    public ArrayList<GameRequest> getGameRequestSent(ArrayList<User> usersOnline, User user){
+        ArrayList<GameRequest> gameRequest=new ArrayList<>(); 
+        for (int i = 0; i < usersOnline.size(); i++) {
+                if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                    gameRequest=usersOnline.get(i).getGameRequestSent();
+                }
+            }
+        return gameRequest;
     }
 
 }

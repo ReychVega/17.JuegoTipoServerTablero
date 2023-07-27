@@ -1,6 +1,6 @@
 package Server;
 
-import Domain.Request;
+import Domain.ServerRequest;
 import Domain.User;
 import FileControl.UserFile;
 import Utility.Utility;
@@ -50,7 +50,7 @@ public class Handler extends Thread {
     //atributos auxiliares
     private User user;
     private User userRegister;
-    private Request request;
+    private ServerRequest request;
     
     /*El constructor recibe un objeto Socket como parámetro, que representa la conexión establecida con el cliente.
      *Inicializa las variables de instancia socket, send y receive con los objetos proporcionados por el socket.
@@ -129,7 +129,7 @@ public class Handler extends Thread {
                         if (utility.search(usersList, userRegister.getUser()) == true
                                 && utility.verifyPassword(usersList, userRegister.getPassword())==true) {
                             if (utility.search(Server.onlineUsers, userRegister.getUser())==false) {
-                                Server.onlineUsers.add(userRegister);
+                                Server.onlineUsers.add(file.getUser(userRegister.getUser()));
                                 sendMessageToClient("init");
                             }else{
                                 sendMessageToClient("You are already online");                                
@@ -151,14 +151,16 @@ public class Handler extends Thread {
                 }//fin if if(object instanceof User
              
         //User data        
-                if (receivedObject instanceof Request) {
-                    request=(Request)receivedObject;
-                 //   System.out.println(request.getUser());
+                if (receivedObject instanceof ServerRequest) {
+                    request=(ServerRequest)receivedObject;
                 //Caso 1. Profile data    
                     if (request.getAction().equalsIgnoreCase("Get user data")) {
                         user=file.getUser(request.getUser());
+                        user.setGameRequestSent(
+                                utility.getGameRequestSent(Server.onlineUsers, user));
+                        user.setGameRequestRecieved(
+                                utility.getGameRequestRecieved(Server.onlineUsers, user));
                         sendUserToServer(user); 
-                   //     System.out.println(user.toString());
                     }
                 //Caso 2. Online users
                     if (request.getAction().equalsIgnoreCase("Get online users")) {
@@ -216,7 +218,6 @@ public class Handler extends Thread {
                         file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
                         file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());          
                         sendMessageToClient("Friend request deleted");
-                                                                      
                     } 
                 //Caso 8. Eliminar solicitudes enviadas    
                     if (request.getAction().equalsIgnoreCase("DeleteRequestSent")) {
@@ -229,6 +230,15 @@ public class Handler extends Thread {
                         file.removeFriend(request.getFriend(),request.getUser());
                         sendMessageToClient("Friend deleted");
                     }
+                //Caso 10. Enviar solicitud de juego (memoria temporal) 
+                    if (request.getAction().equalsIgnoreCase("sentGameRequest")) {
+                        //creamos la solicitud en la lista de usuarios en linea porque es memoria temporal
+                        utility.addGameRequest(Server.onlineUsers, new User(request.getUser(),""), 
+                                new User(request.getFriend(),""));
+                        sendMessageToClient("Game request sent");
+
+                    }
+                
                 }
 
                 //actualizamos
@@ -238,7 +248,7 @@ public class Handler extends Thread {
             
             
         } catch (IOException e) {
-            //System.out.println("Cliente cierra el programa");
+            System.out.println("Cliente cierra el programa");
         } catch (ClassNotFoundException ex) {
             System.out.println("ex=" + ex.getMessage());
         } finally {
@@ -276,7 +286,7 @@ public class Handler extends Thread {
     }
 
     // Método para enviar un objeto tipo lista al servidor
-    public void sendOnlineUserToServer(Request request) {         
+    public void sendOnlineUserToServer(ServerRequest request) {         
         try {
             this.salida.writeObject(request);
             
@@ -286,7 +296,7 @@ public class Handler extends Thread {
     }
  
     // Método para enviar un objeto tipo lista al servidor
-    public void sendFoundUsersToServer(Request request) {         
+    public void sendFoundUsersToServer(ServerRequest request) {         
         try {
             this.salida.writeObject(request);
             
