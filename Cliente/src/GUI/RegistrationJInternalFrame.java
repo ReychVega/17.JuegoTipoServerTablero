@@ -6,6 +6,7 @@ import static GUI.MainJFrame.clientSocket;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /*
  * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
@@ -36,20 +37,18 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jDesktopPane2 = new javax.swing.JDesktopPane();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        alert = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        button1 = new java.awt.Button();
-        button2 = new java.awt.Button();
-        jLabel7 = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
+        txtUser = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        txtConfirmPassword = new javax.swing.JPasswordField();
+        lblTittle = new javax.swing.JLabel();
+        btnRegister = new java.awt.Button();
+        btnComeBack = new java.awt.Button();
+        lblConfirmPassword = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(0, 0, 0));
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(null);
         setTitle("Registration");
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
@@ -62,58 +61,50 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         jDesktopPane2.setBackground(new java.awt.Color(255, 255, 255));
         jDesktopPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel2.setText("User:");
-        jDesktopPane2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, -1, -1));
+        lblUser.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
+        lblUser.setText("User:");
+        jDesktopPane2.add(lblUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel3.setText("Password");
-        jDesktopPane2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, -1));
+        lblPassword.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
+        lblPassword.setText("Password");
+        jDesktopPane2.add(lblPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, -1, -1));
 
-        alert.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
-        alert.setForeground(new java.awt.Color(255, 0, 0));
-        jDesktopPane2.add(alert, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 210, 20));
+        txtUser.setToolTipText("");
+        jDesktopPane2.add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 120, -1));
+        jDesktopPane2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 120, -1));
+        jDesktopPane2.add(txtConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 160, 120, -1));
 
-        jTextField1.setToolTipText("");
-        jDesktopPane2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 120, -1));
-        jDesktopPane2.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 120, -1));
-        jDesktopPane2.add(jPasswordField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 160, 120, -1));
+        lblTittle.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
+        lblTittle.setForeground(new java.awt.Color(0, 153, 153));
+        lblTittle.setText("Registration");
+        jDesktopPane2.add(lblTittle, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 221, 40));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/initBackground.jpg"))); // NOI18N
-        jLabel5.setText(" ;");
-        jDesktopPane2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 700, 470));
-
-        jLabel6.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 153, 153));
-        jLabel6.setText("Registration");
-        jDesktopPane2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 221, 40));
-
-        button1.setBackground(new java.awt.Color(0, 102, 102));
-        button1.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
-        button1.setForeground(new java.awt.Color(255, 255, 255));
-        button1.setLabel("Register");
-        button1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnRegister.setBackground(new java.awt.Color(0, 102, 102));
+        btnRegister.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        btnRegister.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegister.setLabel("Register");
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                button1registerMouseClicked(evt);
+                btnRegisterregisterMouseClicked(evt);
             }
         });
-        jDesktopPane2.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, 120, 30));
+        jDesktopPane2.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, 120, 30));
 
-        button2.setActionCommand("back");
-        button2.setBackground(new java.awt.Color(51, 0, 51));
-        button2.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setLabel("Back");
-        button2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnComeBack.setActionCommand("back");
+        btnComeBack.setBackground(new java.awt.Color(51, 0, 51));
+        btnComeBack.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        btnComeBack.setForeground(new java.awt.Color(255, 255, 255));
+        btnComeBack.setLabel("Back");
+        btnComeBack.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                button2backMouseClicked(evt);
+                btnComeBackbackMouseClicked(evt);
             }
         });
-        jDesktopPane2.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 100, 30));
+        jDesktopPane2.add(btnComeBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 100, 30));
 
-        jLabel7.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
-        jLabel7.setText("Confirm Password");
-        jDesktopPane2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, -1));
+        lblConfirmPassword.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
+        lblConfirmPassword.setText("Confirm Password");
+        jDesktopPane2.add(lblConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, -1));
 
         getContentPane().add(jDesktopPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 680, 517));
 
@@ -125,27 +116,27 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
      * Recolecta los datos ingresados por el usuario, crea una instancia de User y la envía al servidor a través del cliente.
      * Luego, muestra el mensaje de respuesta del servidor en la interfaz gráfica.
      */
-    private void button1registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button1registerMouseClicked
-        this.button1.setEnabled(false);
-        this.button2.setEnabled(false);
+    private void btnRegisterregisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterregisterMouseClicked
+        this.btnRegister.setEnabled(false);
+        this.btnComeBack.setEnabled(false);
         
         
         // Caso 1. Que todos los campos estén llenos
-        if (!jTextField1.getText().isEmpty() && !jPasswordField1.getText().isEmpty()
-            && !jPasswordField2.getText().isEmpty()) {
+        if (!txtUser.getText().isEmpty() && !txtPassword.getText().isEmpty()
+            && !txtConfirmPassword.getText().isEmpty()) {
 
             String patron = ".*[:].*";
             Pattern pattern = Pattern.compile(patron);
-            Matcher matcher = pattern.matcher(jTextField1.getText());
+            Matcher matcher = pattern.matcher(txtUser.getText());
             boolean contieneCaracterEspecial = matcher.matches();
             //Caso1.1
             if(!contieneCaracterEspecial){
             
             //1.2 Revisamos que las contraseñas coincidan
-            if (jPasswordField1.getText().equals(jPasswordField2.getText())) {
+            if (txtPassword.getText().equals(txtConfirmPassword.getText())) {
 
                 // Creamos una nueva instancia de User con los datos del formulario
-                user = new User(jTextField1.getText(), jPasswordField1.getText());
+                user = new User(txtUser.getText(), txtPassword.getText());
                 user.setAction("registration");
                 
                 if (clientSocket == null) {
@@ -157,29 +148,29 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
 
                 // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
                 String message = clientSocket.receiveMessageFromServer();
-                this.alert.setText(message);
+                JOptionPane.showMessageDialog(this, message, "Status", JOptionPane.INFORMATION_MESSAGE);
 
             } else {// Indicamos que las contraseñas no coinciden
-                alert.setText("Passwords do not match");
+                JOptionPane.showMessageDialog(this, "Passwords do not match", "Status", JOptionPane.INFORMATION_MESSAGE);
             }
             
             }else{
-                alert.setText("Do not use special characters");
+                 JOptionPane.showMessageDialog(this, "Do not use special characters", "Status", JOptionPane.INFORMATION_MESSAGE);
             }
             
         } else {  //Caso 2. Indicamos que hay datos incompletos
-            alert.setText("Incomplete data");
+            JOptionPane.showMessageDialog(this, "Incomplete data", "Status", JOptionPane.INFORMATION_MESSAGE);
         }
         
-        this.button1.setEnabled(true);
-        this.button2.setEnabled(true);
-        jTextField1.setText("");
-        jPasswordField1.setText("");
-        jPasswordField2.setText("");
+        this.btnRegister.setEnabled(true);
+        this.btnComeBack.setEnabled(true);
+        txtUser.setText("");
+        txtPassword.setText("");
+        txtConfirmPassword.setText("");
         
-    }//GEN-LAST:event_button1registerMouseClicked
+    }//GEN-LAST:event_btnRegisterregisterMouseClicked
 
-    private void button2backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_button2backMouseClicked
+    private void btnComeBackbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComeBackbackMouseClicked
         if (clientSocket!=null) {
 
         }
@@ -187,7 +178,7 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
             mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
         }
         dispose();
-    }//GEN-LAST:event_button2backMouseClicked
+    }//GEN-LAST:event_btnComeBackbackMouseClicked
 
         
      /*
@@ -199,24 +190,22 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         try {
             clientSocket = new Client("localhost", 5025);
         } catch (IOException ex) {
-            alert.setText("Try again later");
+            JOptionPane.showMessageDialog(this, "Check your internet connection", "Status", JOptionPane.INFORMATION_MESSAGE);
         }
     }    
     
  
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel alert;
-    private java.awt.Button button1;
-    private java.awt.Button button2;
+    private java.awt.Button btnComeBack;
+    private java.awt.Button btnRegister;
     private javax.swing.JDesktopPane jDesktopPane2;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblConfirmPassword;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblTittle;
+    private javax.swing.JLabel lblUser;
+    private javax.swing.JPasswordField txtConfirmPassword;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }
