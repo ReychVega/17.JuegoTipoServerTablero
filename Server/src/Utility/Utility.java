@@ -131,14 +131,23 @@ public class Utility implements Serializable{
     public void acceptGameRequest(User user, User friend){
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                Server.onlineUsers.get(i).setGameState(true);
-                Server.onlineUsers.get(i).setEnemy(friend.getUser());
+                Server.onlineUsers.get(i).setGameState(true);                
             }
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
                 Server.onlineUsers.get(i).setGameState(true);
-                Server.onlineUsers.get(i).setEnemy(user.getUser());
             }
         }   
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                Server.onlineUsers.get(i).setEnemy(getEnemyData(friend.getUser()));
+               // System.out.println(getEnemyData(friend.getUser()));
+            }
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
+                Server.onlineUsers.get(i).setEnemy(getEnemyData(user.getUser()));
+               // System.out.println(getEnemyData(user.getUser()));
+            }
+        }       
+        
         deleteGameRequestRecieved(user, friend);
         deleteGameRequestSent(user, friend);
     }  
@@ -192,6 +201,7 @@ public class Utility implements Serializable{
         for (int i = 0; i < usersOnline.size(); i++) {
             if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
                 usersOnline.get(i).setGameState(true);
+                
             }
         }   
     }  
@@ -285,9 +295,9 @@ public class Utility implements Serializable{
     }
 
     //verifica estado de juego
-    private boolean getGameState(User user){
+    public boolean getGameState(String user){
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
-            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
                 return Server.onlineUsers.get(i).isGameState();
             }
         }
@@ -296,9 +306,9 @@ public class Utility implements Serializable{
     }
     
     //recuperamos la data del oponente
-    private User getEnemyData(User user){
+    private User getEnemyData(String user){
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
-            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
                 return Server.onlineUsers.get(i);
             }
         }
@@ -306,8 +316,23 @@ public class Utility implements Serializable{
     }  
     
     //recuperamos la data del enemigo
-    
+    public User getEnemyByUser(String user){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
+                return Server.onlineUsers.get(i).getEnemy();
+            }
+        }
+        return null;
+    }  
     
     //borramos el enemigo
-    
+    public void removeEnemy(String enemy){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+           if (Server.onlineUsers.get(i).getEnemy()!=null &&
+                   Server.onlineUsers.get(i).getEnemy().getUser().equalsIgnoreCase(enemy)) {
+                   Server.onlineUsers.get(i).setEnemy(null);
+                   Server.onlineUsers.get(i).setGameState(false);
+            }
+        }
+    }
 }

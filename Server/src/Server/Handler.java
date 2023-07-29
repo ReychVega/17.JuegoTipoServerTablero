@@ -166,6 +166,7 @@ public class Handler extends Thread {
                 //Caso 3. Log out
                     if (request.getAction().equalsIgnoreCase("log out")) {
                         utility.cleanGameRequest(new User(request.getUser(),""));
+                        utility.removeEnemy(request.getUser());
                         utility.logOut(Server.onlineUsers, request.getUser());
                      //   System.out.println("successful log out");
                     }
@@ -243,7 +244,7 @@ public class Handler extends Thread {
                     if (request.getAction().equalsIgnoreCase("AcceptGameRequest")) {
                     utility.acceptGameRequest(request.getGameRequest().getRequestBy(),
                             request.getGameRequest().getRequestFor());
-                       // System.out.println(utility.getUser(request.getGameRequest().getRequestBy().getUser()).isGameState());
+                    
                     }
                 //Caso 12. Eliminar solicitud de juego recibida.  
                     if (request.getAction().equalsIgnoreCase("RemoveGameRequest")) {
@@ -288,8 +289,9 @@ public class Handler extends Thread {
                 //Caso 17. valida inicio de juego 
                     if (request.getAction().equalsIgnoreCase("getGameValidation")) {
                     //pedimos el usuario y el gameState
-                    
-                    
+                    request.setEnemy(utility.getEnemyByUser(request.getUser()));
+                    request.setGameState(utility.getGameState(request.getUser()));
+                    sendRequest(request);
                     }
                 }
 

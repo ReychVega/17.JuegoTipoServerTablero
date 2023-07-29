@@ -13,7 +13,7 @@ public class User implements Serializable{
    private String password;
    //auxiliares
    private boolean gameState;
-   private String enemy;
+   private User enemy;
    private String action;
    //profile data
    private int puntaje;
@@ -59,11 +59,11 @@ public class User implements Serializable{
         this.user = user;
     }
 
-    public String getEnemy() {
+    public User getEnemy() {
         return enemy;
     }
 
-    public void setEnemy(String enemy) {
+    public void setEnemy(User enemy) {
         this.enemy = enemy;
     }
    

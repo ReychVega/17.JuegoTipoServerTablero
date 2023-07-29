@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class ServerRequest implements Serializable{
 private static final long serialVersionUID=1L;
     
+private boolean gameState;
 private String friend;    
 private String user;
 private String action;
+private User enemy;
 private FriendRequest request;
 private GameRequest gameRequest;
 
@@ -23,6 +25,7 @@ private ArrayList<GameRequest>gameRequestSent;
 private ArrayList<GameRequest>gameRequestRecieved;
 private ArrayList<FriendRequest>friendRequestSent;
 private ArrayList<FriendRequest>friendRequestRecieved;
+
 
     public ServerRequest(String user, String action) {
         this.user = user;
@@ -66,6 +69,14 @@ private ArrayList<FriendRequest>friendRequestRecieved;
         this.foundUsers = foundUsers;
     }
 
+    public User getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(User enemy) {
+        this.enemy = enemy;
+    }
+    
     public ArrayList<GameRequest> getGameRequestSent() {
         return gameRequestSent;
     }
@@ -82,8 +93,13 @@ private ArrayList<FriendRequest>friendRequestRecieved;
         this.gameRequestRecieved = gameRequestRecieved;
     }
 
+    public boolean isGameState() {
+        return gameState;
+    }
 
-    
+    public void setGameState(boolean gameState) {
+        this.gameState = gameState;
+    }
     
     public FriendRequest getRequest() {
         return request;
