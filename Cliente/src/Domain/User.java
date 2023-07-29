@@ -13,6 +13,7 @@ public class User implements Serializable{
    private String password;
    //auxiliares
    private boolean gameState;
+   private String enemy;
    private String action;
    //profile data
    private int puntaje;
@@ -23,6 +24,7 @@ public class User implements Serializable{
    //Game request
    private ArrayList<GameRequest> gameRequestRecieved;
    private ArrayList<GameRequest> gameRequestSent;
+   
    
    private static final long serialVersionUID=1L;
 
@@ -57,6 +59,14 @@ public class User implements Serializable{
         this.user = user;
     }
 
+    public String getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(String enemy) {
+        this.enemy = enemy;
+    }
+   
     public String getPassword() {
         return password;
     }
@@ -80,8 +90,6 @@ public class User implements Serializable{
     public void setGameState(boolean gameState) {
         this.gameState = gameState;
     }
-
-    
     
     public ArrayList<User> getFriends() {
         return friends;
@@ -123,8 +131,6 @@ public class User implements Serializable{
         this.gameRequestSent = gameRequestSent;
     }
 
-  
-    
     public String getAction() {
         return action;
     }
@@ -137,5 +143,7 @@ public class User implements Serializable{
     public String toString() {
         return user;
     }
+
+   
      
 }

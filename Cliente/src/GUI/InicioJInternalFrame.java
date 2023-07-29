@@ -6,6 +6,11 @@ import Domain.*;
 import javax.swing.*;
 import Client.Client;
 import static GUI.MainJFrame.clientSocket;
+import java.awt.Component;
+import java.awt.event.MouseMotionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /*
  * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
@@ -17,6 +22,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private User user;
     private ServerRequest newRequest;
     private final MainJFrame mainFrame; 
+    private GameJInternalFrame game;
     private ArrayList<User> onlineFriends;
     //atributos necesarios para el hilo
     private boolean start;
@@ -24,9 +30,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private Thread thread;
     //atributos para iniciar comunicacion con el server (solicitud de datos)
     private boolean foundUsers;
-    private boolean online;
+    private boolean gameRequest;
     private boolean friends;
-    private boolean viewRequests;
+    private boolean friendRequest;
     private boolean search;
 
     /**
@@ -42,9 +48,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
         this.search = false;
         this.foundUsers = false;
-        this.online = false;
+        this.gameRequest = false;
         this.friends = false;
-        this.viewRequests = false;
+        this.friendRequest = false;
         this.start = true;
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
     }
@@ -64,14 +70,17 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         list = new javax.swing.JList<>();
         contenedor2 = new javax.swing.JScrollPane();
         list1 = new javax.swing.JList<>();
+        lblInstruccion3 = new javax.swing.JLabel();
+        contenedor3 = new javax.swing.JScrollPane();
+        list2 = new javax.swing.JList<>();
         menuBar = new javax.swing.JMenuBar();
         menuBtnInicio = new javax.swing.JMenu();
         menuBtnFriendsOptions = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         friendRequestBtn = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -81,10 +90,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         setTitle("Profile");
         setAlignmentX(0.0F);
         setAlignmentY(0.0F);
-        setMaximumSize(new java.awt.Dimension(700, 500));
-        setMinimumSize(new java.awt.Dimension(700, 500));
-        setNormalBounds(new java.awt.Rectangle(0, 0, 700, 500));
-        setPreferredSize(new java.awt.Dimension(700, 500));
+        setMaximumSize(new java.awt.Dimension(700, 800));
+        setMinimumSize(new java.awt.Dimension(700, 800));
+        setNormalBounds(new java.awt.Rectangle(0, 0, 700, 800));
+        setPreferredSize(new java.awt.Dimension(700, 800));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         jDesktopPane2.setBackground(new java.awt.Color(255, 255, 255));
@@ -134,6 +143,18 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         });
         contenedor2.setViewportView(list1);
 
+        lblInstruccion3.setFont(new java.awt.Font("Segoe Print", 1, 16)); // NOI18N
+        lblInstruccion3.setText("Select a user to send a friend request.");
+
+        list2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 102, 102), new java.awt.Color(0, 204, 204), null, null));
+        list2.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        list2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                list2MouseClicked(evt);
+            }
+        });
+        contenedor3.setViewportView(list2);
+
         jDesktopPane2.setLayer(btnSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(lblUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(lblTittle, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -142,6 +163,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         jDesktopPane2.setLayer(lblInstruccion2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(contenedor1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(contenedor2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(lblInstruccion3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(contenedor3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane2Layout = new javax.swing.GroupLayout(jDesktopPane2);
         jDesktopPane2.setLayout(jDesktopPane2Layout);
@@ -162,12 +185,14 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                                     .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblInstruccion, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblInstruccion2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblInstruccion3, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(contenedor3, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jDesktopPane2Layout.createSequentialGroup()
                                 .addComponent(txtUserToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(23, 23, 23)
                                 .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,9 +214,13 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                 .addComponent(contenedor1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblInstruccion2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addComponent(contenedor2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblInstruccion3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contenedor3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jDesktopPane2);
@@ -230,16 +259,6 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         });
         jMenu1.add(friendRequestBtn);
 
-        jMenuItem2.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/game-control.png"))); // NOI18N
-        jMenuItem2.setText("Game requests");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gameRequestActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem2);
-
         jMenuItem1.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/label.png"))); // NOI18N
         jMenuItem1.setText("Accept/delete friend requests");
@@ -249,6 +268,16 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/game-control.png"))); // NOI18N
+        jMenuItem2.setText("Game requests");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gameRequestActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         menuBtnFriendsOptions.add(jMenu1);
 
@@ -282,17 +311,19 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //volvemos a la pag principal
     private void menuBtnInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuBtnInicioMouseClicked
         this.disableComponents();
     }//GEN-LAST:event_menuBtnInicioMouseClicked
 
     //visualizamos amigos en linea para enviar solicitudes de juego,  aceptamos o rechazamos solicitudes
     private void gameRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameRequestActionPerformed
-        activeComponents(2);
+        activeComponents(3);
         this.lblTittle.setText("Game Request");
         this.lblInstruccion.setText("Online friends. Select a friend to send a game request.");
-        this.lblInstruccion2.setText("Game Request recieved.");
-        this.online = true;
+        this.lblInstruccion2.setText("Request recieved.");
+        this.lblInstruccion3.setText("Request Sent.");
+        this.gameRequest = true;
     }//GEN-LAST:event_gameRequestActionPerformed
 
     //Btn Add friend, enviamos solicitud de amistad
@@ -309,7 +340,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.lblTittle.setText("Friend request");
         this.lblInstruccion.setText("Received request:");
         this.lblInstruccion2.setText("Sent request:");
-        this.viewRequests = true;
+        this.friendRequest = true;
     }//GEN-LAST:event_AceptDeleteRequestesActionPerformed
 
     //Control de lista 2
@@ -340,18 +371,23 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         }
         this.dispose();
     }//GEN-LAST:event_logOutMouseClicked
-
    
     private void playVsComputerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playVsComputerMouseClicked
 
     }//GEN-LAST:event_playVsComputerMouseClicked
 
+    //mostramos data de amigos   
     private void showFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFriendsActionPerformed
         activeComponents(0);
         this.lblTittle.setText("Friends");
-        this.lblInstruccion.setText("Friends. Select a user to delete the friendship.");
+        this.lblInstruccion.setText("Select a user to delete the friendship.");
         friends = true;
     }//GEN-LAST:event_showFriendsActionPerformed
+
+    //control de lista 2
+    private void list2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list2MouseClicked
+        controlThirdList();
+    }//GEN-LAST:event_list2MouseClicked
 
     //habilitamos los componentes que necesitamos
     private void activeComponents(int caso) {
@@ -368,13 +404,25 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             this.lblInstruccion2.setVisible(true);
             list1.setModel(aux);
             this.list1.setVisible(true);
-            contenedor2.setViewportView(list1); // Utiliza setViewportView para establecer la vista del JScrollPane
+            contenedor2.setViewportView(list1); // 
             contenedor2.setVisible(true);
+        }
+        if (caso == 3) {
+            this.lblInstruccion2.setVisible(true);
+            list1.setModel(aux);
+            this.list1.setVisible(true);
+            contenedor2.setViewportView(list1); // 
+            contenedor2.setVisible(true);
+            this.lblInstruccion3.setVisible(true);
+            list2.setModel(aux);
+            this.list2.setVisible(true);
+            contenedor3.setViewportView(list2); // 
+            contenedor3.setVisible(true);
         }
         this.list.setVisible(true);
         this.lblTittle.setVisible(true);
         this.lblInstruccion.setVisible(true);
-        online = false;
+        gameRequest = false;
         foundUsers = false;
 
         // Llamamos a revalidate y repaint para actualizar la interfaz gráfica
@@ -387,17 +435,20 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.txtUserToSearch.setText("");
         this.contenedor1.setVisible(false);
         this.contenedor2.setVisible(false);
+        this.contenedor3.setVisible(false);
         this.list.setVisible(false);
         this.list1.setVisible(false);
+        this.list2.setVisible(false);
         this.lblTittle.setVisible(false);
         this.txtUserToSearch.setVisible(false);
         this.lblInstruccion.setVisible(false);
         this.lblInstruccion2.setVisible(false);
+        this.lblInstruccion3.setVisible(false);
         this.btnSearch.setVisible(false);
         friends = false;
-        online = false;
+        gameRequest = false;
         foundUsers = false;
-        viewRequests = false;
+        friendRequest = false;
     }
 
     /*
@@ -443,7 +494,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     }//addNotify
 
     private void getCompleteData() {
-        //actualizamos cada 10 seg
+        //actualizamos cada 5 seg
         this.getUserData(user.getUser());
 
         //Caso 1. 
@@ -451,16 +502,19 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             getFoundUsers();
             search = false;
         }
-        //Caso 2.actualiza cada 10 seg en el hilo
-        if (viewRequests == true) {
+        //Caso 2.actualiza cada 5 seg en el hilo
+        if (friendRequest == true) {
             getRequestData();
         }
         //Caso 3. Ver lista de amigos y solicitudes
-        if (online == true) {
-            getOnlineFriendsData();
-
+        if (gameRequest == true) {
+            try {
+                getOnlineFriendsData();
+                getGameRequestData();
+            } catch (IOException | ClassNotFoundException ex) {
+                System.out.println("GAME REQUEST ERROR");
+            }
         }
-
         if (friends == true) {
             getFriendsData();
         }
@@ -482,31 +536,91 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
             //recibimos el objeto del usuario
             Object receivedObject = clientSocket.getEntrada().readObject();
-            this.user = (User) receivedObject;
-
+            this.user = (User) receivedObject;   
+           
             //mostramos
             showData(this.user);
 
-            //System.out.println(this.user.toString());
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("error de coneccion");
         }
 
     }
 
+    private void getGameValidation(){
+      //validamos inicio de juego
+        newRequest = new ServerRequest(user.getUser(), "getGameValidation");
+        if (clientSocket == null) {
+            connectToServer();
+        }
+        //Enviamos el obj. request al servidor a través del socket
+        clientSocket.sendRequestToServer(newRequest);
+
+        
+
+               // game=new GameJInternalFrame(this.mainFrame);
+                //game.setVisible(true);
+               // disableInternalFrameMove(game);
+               // this.jDesktopPane2.add(game);
+
+            
+    }
+    
     //mostramos la info del usuario
     private void showData(User user) {
         lblUser.setText(user.getUser().toUpperCase());
         this.menuBtnInicio.setText("Main page");
     }
 
+    //rellenamos la lista con GameRequest del/para usuario
+    private void getGameRequestData() throws IOException, ClassNotFoundException {
+        newRequest = new ServerRequest(user.getUser(), "GetGameRequestData");
+        if (clientSocket == null) {
+            connectToServer();
+        }
+        //Enviamos el obj. request al servidor a través del socket
+        clientSocket.sendRequestToServer(newRequest);
+
+        //recibimos el objeto del usuario
+        Object receivedObject = clientSocket.getEntrada().readObject();
+        newRequest = (ServerRequest) receivedObject;
+        
+        DefaultListModel<String> request = new DefaultListModel<>();
+        for (int i = 0; i < newRequest.getGameRequestSent().size(); i++) {
+            request.addElement(newRequest.getGameRequestSent().get(i).showData(2));
+        }
+        this.list2.setModel(request);
+
+       request = new DefaultListModel<>();
+        for (int i = 0; i < newRequest.getGameRequestRecieved().size(); i++) {
+            request.addElement(newRequest.getGameRequestRecieved().get(i).showData(1));
+        }
+        this.list1.setModel(request);
+    }
+    
     //rellenamos la lista con amigos del usuario
     private void getFriendsData() {
-        DefaultListModel<String> friendList = new DefaultListModel<>();
-        for (int i = 0; i < user.getFriends().size(); i++) {
-            friendList.addElement(user.getFriends().get(i).toString());
+        try {
+            newRequest = new ServerRequest(user.getUser(), "GetFriendsData");
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            clientSocket.sendRequestToServer(newRequest);
+            //recibimos el objeto del usuario
+            Object receivedObject = clientSocket.getEntrada().readObject();
+            newRequest = (ServerRequest) receivedObject;
+              
+            //System.out.println(newRequest.getFriends().size()+"*");
+            
+            DefaultListModel<String> friendList = new DefaultListModel<>();
+            for (int i = 0; i < newRequest.getFriends().size(); i++) {
+                friendList.addElement(newRequest.getFriends().get(i).toString());
+            }
+            this.list.setModel(friendList);
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println("error al solicitar friends data");
         }
-        this.list.setModel(friendList);
     }
 
     //rellenamos la lista con amigos en linea del usuario    
@@ -591,26 +705,40 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     //rellenamos con la lista de solicitudes enviadas y recibidas
     private void getRequestData() {
-        DefaultListModel<String> requestList;
-        //System.out.println("amigos\n"+ user.getFriends());
-        if (user.getRequestSent() != null) {
-            //lista 1.
-            requestList = new DefaultListModel<>();
-            for (int i = 0; i < user.getRequestSent().size(); i++) {
-                requestList.addElement(user.getRequestSent().get(i).showData(2));
+        try {
+            newRequest = new ServerRequest(user.getUser(), "GetFriendRequestData");
+            if (clientSocket == null) {
+                connectToServer();
             }
-            this.list1.setModel(requestList);
-        }
-        if (user.getRequestRecieved() != null) {
-            //lista 2    
-            requestList = new DefaultListModel<>();
-            for (int i = 0; i < user.getRequestRecieved().size(); i++) {
-                requestList.addElement(user.getRequestRecieved().get(i).showData(1));
+            //Enviamos el obj. request al servidor a través del socket
+            clientSocket.sendRequestToServer(newRequest);
+            //recibimos el objeto del usuario
+            Object receivedObject = clientSocket.getEntrada().readObject();
+            newRequest = (ServerRequest) receivedObject;                
+            
+            DefaultListModel<String> requestList;
+            //System.out.println("amigos\n"+ user.getFriends());
+            if (user.getRequestSent() != null) {
+                //lista 1.
+                requestList = new DefaultListModel<>();
+                for (int i = 0; i < newRequest.getFriendRequestSent().size(); i++) {
+                    requestList.addElement(newRequest.getFriendRequestSent().get(i).showData(2));
+                }
+                this.list1.setModel(requestList);
             }
-            this.list.setModel(requestList);
+            if (user.getRequestRecieved() != null) {
+                //lista 2
+                requestList = new DefaultListModel<>();
+                for (int i = 0; i < newRequest.getFriendRequestRecieved().size(); i++) {
+                    requestList.addElement(newRequest.getFriendRequestRecieved().get(i).showData(1));
+                }
+                this.list.setModel(requestList);
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println("error get friend request data");
         }
     }
-
+    
     //control de la primer lista
     private void controlFirstList(){
           String selectedValue = list.getSelectedValue();
@@ -638,44 +766,59 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
         //Caso 2. send a Friend request
         if (selectedValue != null & foundUsers == true) {
-            this.getUserData(user.getUser());
-            boolean valid = true;
-            for (int i = 0; i < this.user.getFriends().size(); i++) {
-                if (this.user.getFriends().get(i).getUser().equalsIgnoreCase(selectedValue)) {
-                    valid = false;
-                }
-            }
-            if (valid == true) {
-
-                //verificamos que el usuario este seguro
-                int response = JOptionPane.showConfirmDialog(this, "Send request to " + selectedValue + "?",
-                        "Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (response == JOptionPane.YES_OPTION) {
-
-                    if (clientSocket == null) {
-                        connectToServer();
-                    }
-
-                    ServerRequest request = new ServerRequest(user.getUser(), "requestSent");
-                    request.setRequest(new FriendRequest(user, new User(selectedValue, "")));
-                    //System.out.println(request.getRequest().showData(1));
-                    //Enviamos el obj. request al servidor a través del socket
-                    
-                    clientSocket.sendRequestToServer(request);
-                    String message = clientSocket.receiveMessageFromServer();
-                    JOptionPane.showMessageDialog(this, message,
-                          "Process Status", JOptionPane.INFORMATION_MESSAGE);
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(this, selectedValue.toUpperCase() + " has accepted your friend request.",
-                        "Process Status", JOptionPane.INFORMATION_MESSAGE);
-            }
+              try {
+                  this.getUserData(user.getUser());
+                  boolean valid = true;
+                  newRequest = new ServerRequest(user.getUser(), "GetFriendsData");
+                  if (clientSocket == null) {
+                      connectToServer();
+                  }
+                  //Enviamos el obj. request al servidor a través del socket
+                  clientSocket.sendRequestToServer(newRequest);
+                  //recibimos el objeto del usuario
+                  Object receivedObject = clientSocket.getEntrada().readObject();
+                  newRequest = (ServerRequest) receivedObject;
+                  
+                  for (int i = 0; i < newRequest.getFriends().size(); i++) {
+                      if (newRequest.getFriends().get(i).getUser().equalsIgnoreCase(selectedValue)) {
+                          valid = false;
+                      }
+                  }
+                  if (valid == true) {
+                      
+                      //verificamos que el usuario este seguro
+                      int response = JOptionPane.showConfirmDialog(this, "Send request to " + selectedValue + "?",
+                              "Confirmation",
+                              JOptionPane.YES_NO_OPTION);
+                      
+                      if (response == JOptionPane.YES_OPTION) {
+                          
+                          if (clientSocket == null) {
+                              connectToServer();
+                          }
+                          
+                          ServerRequest request = new ServerRequest(user.getUser(), "requestSent");
+                          request.setRequest(new FriendRequest(user, new User(selectedValue, "")));
+                          //System.out.println(request.getRequest().showData(1));
+                          //Enviamos el obj. request al servidor a través del socket
+                          
+                          clientSocket.sendRequestToServer(request);
+                          String message = clientSocket.receiveMessageFromServer();
+                          JOptionPane.showMessageDialog(this, message,
+                                  "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                      }
+                      
+                  } else {
+                      JOptionPane.showMessageDialog(this, selectedValue.toUpperCase() + " has accepted your friend request.",
+                              "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                  } } catch (IOException ex) {
+                  Logger.getLogger(InicioJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (ClassNotFoundException ex) {
+                  Logger.getLogger(InicioJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
         //Caso 3. Aceptar solicitudes de amistad recibidas
-        if (selectedValue != null & viewRequests == true) {
+        if (selectedValue != null & friendRequest == true) {
             //verificamos decision
             Object[] opciones = {"Accept", "Delete", "Cancel"};
             String[] aux = selectedValue.split(":");
@@ -710,7 +853,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             }
         }
         //Caso 4. Aceptar solicitudes de juego recibidas
-        if (selectedValue != null & online == true) {
+        if (selectedValue != null & gameRequest == true) {
             int response = JOptionPane.showConfirmDialog(this, "Send request to " + selectedValue + "?",
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION);
@@ -718,7 +861,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             //enviamos solicitud de juego
             if (response == JOptionPane.YES_OPTION) {
                  ServerRequest gameRequest = new ServerRequest(user.getUser(), "sentGameRequest");
-                 gameRequest.setFriend(selectedValue);
+                 gameRequest.setGameRequest(new GameRequest(new User(user.getUser(),""),new User(selectedValue,"")));
                  //Enviamos el obj. request al servidor a través del socket
                  clientSocket.sendRequestToServer(gameRequest);
                  String sms = clientSocket.receiveMessageFromServer();
@@ -731,9 +874,16 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private void controlSecondList(){
     String selectedValue = list1.getSelectedValue();
 
-        //Caso 1. eliminamos solicitudes enviadas
-        if (selectedValue != null & viewRequests == true) {
+        //Caso 1. eliminamos solicitudes de amistad enviadas
+        if (selectedValue != null & friendRequest == true) {
             String[] aux = selectedValue.split(":");
+            int delete = JOptionPane.showConfirmDialog(this, "Remove friend request sent to\n" 
+                    + aux[1].toUpperCase() + "?",
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (delete == JOptionPane.YES_OPTION) {
+                   
             if (clientSocket == null) {
                 connectToServer();
             }
@@ -744,12 +894,77 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             String sms = clientSocket.receiveMessageFromServer();
             JOptionPane.showMessageDialog(this, sms,
                     "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            
+            }
         }
-        //Caso 2. eliminamos o aceptamos solicitudes de juego
-        if (selectedValue != null & online == true) {
+        //Caso 2. eliminamos o aceptamos solicitudes de juego recibidas
+        if (selectedValue != null & gameRequest == true) {
+            String[] aux = selectedValue.split(":");
+             Object[] opciones = {"Accept", "Delete", "Cancel"};
+            int seleccion = JOptionPane.showOptionDialog(null, "Choose an option.", "Game Request",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            switch (seleccion) {
+                //aceptar
+                case 0 -> {
+                    if (clientSocket == null) {
+                        connectToServer();
+                    }
+                    ServerRequest acceptRequest = new ServerRequest(user.getUser(), "AcceptGameRequest");
+                    acceptRequest.setGameRequest(new GameRequest(user, new User(aux[1].trim(), "")));
+                    //Enviamos el obj. request al servidor a través del socket
+                    clientSocket.sendRequestToServer(acceptRequest);
+                                                 
+                }
+                //borrar
+                case 1 -> {
+                    if (clientSocket == null) {
+                        connectToServer();
+                    }
+                    ServerRequest removeRequest = new ServerRequest(user.getUser(), "RemoveGameRequest");
+                    removeRequest.setGameRequest(new GameRequest(user, new User(aux[1].trim(), "")));
+                    clientSocket.sendRequestToServer(removeRequest);
+                    String sms = clientSocket.receiveMessageFromServer();
+                    JOptionPane.showMessageDialog(this, sms,
+                            "Process Status", JOptionPane.INFORMATION_MESSAGE);
 
+                }
+            }
         }
     }
+    
+    private void controlThirdList(){
+        String selectedValue = list2.getSelectedValue();
+        if (selectedValue != null & gameRequest == true) {
+          String[] aux = selectedValue.split(":");
+             Object[] opciones = {"Delete", "Cancel"};
+            int seleccion = JOptionPane.showOptionDialog(null, "Choose an option.", "Game Request",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            if (seleccion==0) {
+                 if (clientSocket == null) {
+                        connectToServer();
+                    }
+                    ServerRequest removeRequest = new ServerRequest(user.getUser(), "RemoveGameRequestRecieved");
+                    removeRequest.setGameRequest(new GameRequest(user, new User(aux[1].trim(), "")));
+                    clientSocket.sendRequestToServer(removeRequest);
+                    String sms = clientSocket.receiveMessageFromServer();
+                    JOptionPane.showMessageDialog(this, sms,
+                            "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+    
+    private void disableInternalFrameMove(GameJInternalFrame frame) {
+        // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
+        frame.setBorder(null);
+        BasicInternalFrameUI ui = (BasicInternalFrameUI) frame.getUI();
+        Component northPane = ui.getNorthPane();
+        MouseMotionListener[] motionListeners = (MouseMotionListener[]) northPane.getListeners(MouseMotionListener.class);
+        for (MouseMotionListener listener : motionListeners) {
+            northPane.removeMouseMotionListener(listener);
+        }
+
+    }
+
     
     // Método para conectarse al servidor.
     private void connectToServer() {
@@ -780,6 +995,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private java.awt.Button btnSearch;
     private javax.swing.JScrollPane contenedor1;
     private javax.swing.JScrollPane contenedor2;
+    private javax.swing.JScrollPane contenedor3;
     private javax.swing.JMenuItem friendRequestBtn;
     private javax.swing.JDesktopPane jDesktopPane2;
     private javax.swing.JMenu jMenu1;
@@ -791,10 +1007,12 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JLabel lblInstruccion;
     private javax.swing.JLabel lblInstruccion2;
+    private javax.swing.JLabel lblInstruccion3;
     private javax.swing.JLabel lblTittle;
     private javax.swing.JLabel lblUser;
     private javax.swing.JList<String> list;
     private javax.swing.JList<String> list1;
+    private javax.swing.JList<String> list2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBtnFriendsOptions;
     private javax.swing.JMenu menuBtnInicio;
