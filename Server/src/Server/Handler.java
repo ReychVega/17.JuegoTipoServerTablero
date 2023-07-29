@@ -155,12 +155,7 @@ public class Handler extends Thread {
                     request=(ServerRequest)receivedObject;
                 //Caso 1. Profile data    
                     if (request.getAction().equalsIgnoreCase("Get user data")) {
-                        user=file.getUser(request.getUser());
-                        user.setGameRequestSent(
-                                utility.getGameRequestSent(Server.onlineUsers, user));
-                        user.setGameRequestRecieved(
-                                utility.getGameRequestRecieved(Server.onlineUsers, user));
-                        sendUserToServer(user); 
+                        sendUserToServer(utility.getUser(request.getUser())); 
                     }
                 //Caso 2. Online users
                     if (request.getAction().equalsIgnoreCase("Get online users")) {
@@ -170,6 +165,7 @@ public class Handler extends Thread {
                     }                   
                 //Caso 3. Log out
                     if (request.getAction().equalsIgnoreCase("log out")) {
+                        utility.cleanGameRequest(new User(request.getUser(),""));
                         utility.logOut(Server.onlineUsers, request.getUser());
                      //   System.out.println("successful log out");
                     }
@@ -179,7 +175,7 @@ public class Handler extends Thread {
                      request.setFoundUsers(utility.getFoundUsers(
                              file.getUsers(),
                              request.getUser()));
-                     sendFoundUsersToServer(request);
+                     sendRequest(request);
                     }
                 //Caso 5.  Enviar solicitud
                     if (request.getAction().equalsIgnoreCase("requestSent")) {
@@ -187,10 +183,10 @@ public class Handler extends Thread {
                         file.actualizaLista();
                         //guardamos en el archivo. Revisa que no exista la solicitud
                         if (utility.verifyFriendRequestSent(
-                                file.getUser(request.getUser()), 
-                                new User(request.getRequest().getRequestFor().getUser(),""),
+                                file.getUser(request.getRequest().getRequestBy().getUser()), 
+                                file.getUser(request.getRequest().getRequestFor().getUser()),
                                 request.getRequest())==false) {
-                            
+                                                        
                             file.updateUserRequests(
                                    new User(request.getRequest().getRequestBy().getUser(),""), 
                                     new User(request.getRequest().getRequestFor().getUser(),""),
@@ -199,30 +195,30 @@ public class Handler extends Thread {
                         //enviamos mensaje
                         sendMessageToClient("Friend request sent successfully");
                         }else{
-                        sendMessageToClient("Error, previously sent friend request");       
+                        sendMessageToClient("Error, previously sent");       
                         }                                            
                     }
                 //Caso 6. Aceptar solicitud
                     if (request.getAction().equalsIgnoreCase("AcceptRequest")) {
                         //actualizamos
+                        //actualizamos
                         file.actualizaLista();
-                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
-                        file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());
+                        file.deleteFriendRequestSent(request.getRequest().getRequestFor(),request.getRequest().getRequestBy());
+                        file.deleteFriendRequestSent(request.getRequest().getRequestBy(),request.getRequest().getRequestFor());
                         file.addFriend(request.getRequest().getRequestBy(), request.getRequest().getRequestFor());
                         file.addFriend(request.getRequest().getRequestFor(), request.getRequest().getRequestBy());
-                        sendMessageToClient("Friend added");
-                                                                  
+                        sendMessageToClient("Friend added");                                                
                     }
+                    
                 //Caso 7. Eliminar solicitudes recibidas
                     if (request.getAction().equalsIgnoreCase("DeleteRequest")) {
-                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
-                        file.deleteUserRequests(request.getRequest().getRequestFor(), request.getRequest().getRequestBy(), request.getRequest());          
+                        file.deleteFriendRequestSent(request.getRequest().getRequestFor(),request.getRequest().getRequestBy());
                         sendMessageToClient("Friend request deleted");
                     } 
                 //Caso 8. Eliminar solicitudes enviadas    
                     if (request.getAction().equalsIgnoreCase("DeleteRequestSent")) {
-                        file.deleteUserRequests(request.getRequest().getRequestBy(), request.getRequest().getRequestFor(), request.getRequest());
-                        sendMessageToClient("Friend request deleted");                                                                       
+                     file.deleteFriendRequestSent(request.getRequest().getRequestBy(), request.getRequest().getRequestFor());
+                        sendMessageToClient("Friend request deleted");   
                     }             
                 //Caso 9. Eliminar amigos
                     if (request.getAction().equalsIgnoreCase("DeleteFriend")) {
@@ -233,12 +229,68 @@ public class Handler extends Thread {
                 //Caso 10. Enviar solicitud de juego (memoria temporal) 
                     if (request.getAction().equalsIgnoreCase("sentGameRequest")) {
                         //creamos la solicitud en la lista de usuarios en linea porque es memoria temporal
-                        utility.addGameRequest(Server.onlineUsers, new User(request.getUser(),""), 
-                                new User(request.getFriend(),""));
-                        sendMessageToClient("Game request sent");
-
+                        if (utility.verifyGameRequest(
+                                request.getGameRequest().getRequestBy().getUser(),
+                                request.getGameRequest().getRequestFor().getUser())==false) {
+                                                  utility.addGameRequest(request.getGameRequest());
+                          sendMessageToClient("Game request sent");
+                        }else{
+                          sendMessageToClient("Error, previously sent");
+                        }
+                        
                     }
-                
+                //Caso 11. Aceptar solicitud de juego recibida. 
+                    if (request.getAction().equalsIgnoreCase("AcceptGameRequest")) {
+                    utility.acceptGameRequest(request.getGameRequest().getRequestBy(),
+                            request.getGameRequest().getRequestFor());
+                       // System.out.println(utility.getUser(request.getGameRequest().getRequestBy().getUser()).isGameState());
+                    }
+                //Caso 12. Eliminar solicitud de juego recibida.  
+                    if (request.getAction().equalsIgnoreCase("RemoveGameRequest")) {
+                    utility.deleteGameRequestRecieved(request.getGameRequest().getRequestBy(),
+                            request.getGameRequest().getRequestFor());
+                        sendMessageToClient("Game request removed");
+                    }
+                //Caso 13. Obtener game request data
+                    if (request.getAction().equalsIgnoreCase("GetGameRequestData")) {
+                        request.setGameRequestSent(
+                                utility.getGameRequestSent(
+                                        Server.onlineUsers, new User(request.getUser(),"")));
+                        
+                        request.setGameRequestRecieved(
+                                utility.getGameRequestRecieved(
+                                        Server.onlineUsers, new User(request.getUser(),"")));
+                        
+                        sendRequest(request);
+                    }
+                //Caso 14. Obtener friend request data
+                    if (request.getAction().equalsIgnoreCase("GetFriendRequestData")) {
+                        request.setFriendRequestSent(
+                                utility.getFriendRequestSent(
+                                        file.getUsers(), new User(request.getUser(),"")));
+                        
+                        request.setFriendRequestRecieved(
+                                utility.getFriendRequestRecieved(
+                                        file.getUsers(), new User(request.getUser(),"")));     
+                        sendRequest(request);
+                    }
+                //Caso 15. Obtener friends data 
+                    if (request.getAction().equalsIgnoreCase("GetFriendsData")) {
+                        request.setFriends(utility.getFriendData(file.getUsers(), new User(request.getUser(),"")));
+                        sendRequest(request);
+                    }
+                //Caso 16. Eliminar solicitud de juego enviada.  
+                    if (request.getAction().equalsIgnoreCase("RemoveGameRequestRecieved")) {
+                    utility .deleteGameRequestSent(request.getGameRequest().getRequestBy(),
+                            request.getGameRequest().getRequestFor());
+                        sendMessageToClient("Game request removed");
+                    }    
+                //Caso 17. valida inicio de juego 
+                    if (request.getAction().equalsIgnoreCase("getGameValidation")) {
+                    //pedimos el usuario y el gameState
+                    
+                    
+                    }
                 }
 
                 //actualizamos
@@ -296,7 +348,7 @@ public class Handler extends Thread {
     }
  
     // Método para enviar un objeto tipo lista al servidor
-    public void sendFoundUsersToServer(ServerRequest request) {         
+    public void sendRequest(ServerRequest request) {         
         try {
             this.salida.writeObject(request);
             
@@ -305,5 +357,6 @@ public class Handler extends Thread {
         }
     }
     
+     
     
 } // fin clase 

@@ -14,15 +14,24 @@ private String friend;
 private String user;
 private String action;
 private FriendRequest request;
+private GameRequest gameRequest;
 
 private ArrayList<User>onlineUsers;
 private ArrayList<User>foundUsers;
+private ArrayList<User>friends;
+private ArrayList<GameRequest>gameRequestSent;
+private ArrayList<GameRequest>gameRequestRecieved;
+private ArrayList<FriendRequest>friendRequestSent;
+private ArrayList<FriendRequest>friendRequestRecieved;
 
     public ServerRequest(String user, String action) {
         this.user = user;
         this.action = action;
+        this.friends=new ArrayList<>();
         this.onlineUsers=new ArrayList<>();
         this.foundUsers=new ArrayList<>();
+        this.gameRequestSent=new ArrayList<>();
+        this.gameRequestRecieved=new ArrayList<>();
     }
 
     public String getUser() {
@@ -57,6 +66,25 @@ private ArrayList<User>foundUsers;
         this.foundUsers = foundUsers;
     }
 
+    public ArrayList<GameRequest> getGameRequestSent() {
+        return gameRequestSent;
+    }
+
+    public void setGameRequestSent(ArrayList<GameRequest> gameRequestSent) {
+        this.gameRequestSent = gameRequestSent;
+    }
+
+    public ArrayList<GameRequest> getGameRequestRecieved() {
+        return gameRequestRecieved;
+    }
+
+    public void setGameRequestRecieved(ArrayList<GameRequest> gameRequestRecieved) {
+        this.gameRequestRecieved = gameRequestRecieved;
+    }
+
+
+    
+    
     public FriendRequest getRequest() {
         return request;
     }
@@ -73,5 +101,38 @@ private ArrayList<User>foundUsers;
         this.friend = friend;
     }
 
-        
+    public GameRequest getGameRequest() {
+        return gameRequest;
+    }
+
+    public void setGameRequest(GameRequest gameRequest) {
+        this.gameRequest = gameRequest;
+    }
+
+    public ArrayList<FriendRequest> getFriendRequestSent() {
+        return friendRequestSent;
+    }
+
+    public void setFriendRequestSent(ArrayList<FriendRequest> friendRequestSent) {
+        this.friendRequestSent = friendRequestSent;
+    }
+
+    public ArrayList<FriendRequest> getFriendRequestRecieved() {
+        return friendRequestRecieved;
+    }
+
+    public void setFriendRequestRecieved(ArrayList<FriendRequest> friendRequestRecieved) {
+        this.friendRequestRecieved = friendRequestRecieved;
+    }
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<User> friends) {
+        this.friends = friends;
+    }
+
+    
+    
 }

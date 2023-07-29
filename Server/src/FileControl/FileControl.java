@@ -12,7 +12,7 @@ import java.io.IOException;
 public interface FileControl {
     public void saveUser(User user) throws FileNotFoundException, IOException, ClassNotFoundException;
     public void updateUserRequests(User sendRequest, User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException;
-    public void deleteUserRequests(User sendRequest,User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException;
+    public void deleteFriendRequests(User sendRequest,User recieveRequest) throws FileNotFoundException, IOException, ClassNotFoundException;
     public boolean verifyExistence(String user);
     public void actualizaLista();
     public User getUser(String user);

@@ -3,14 +3,16 @@ package Utility;
 import Domain.FriendRequest;
 import Domain.GameRequest;
 import Domain.User;
-import com.sun.net.httpserver.Request;
+import Server.Server;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author reych
  */
-public class Utility {
+public class Utility implements Serializable{
+   private static final long serialVersionUID=1L;
 
     public Utility() {
     }
@@ -26,7 +28,6 @@ public class Utility {
         }
         return false;
     }
-    
     
     //revisamos password
     public boolean verifyPassword(ArrayList<User> list, String password){
@@ -78,8 +79,8 @@ public class Utility {
     
     //verifica solicitud enviada
     public boolean verifyFriendRequestSent(User sentBy, User sentFor, FriendRequest request){
+        
         for (int i = 0; i < sentBy.getRequestSent().size(); i++) {
-            
             if (sentBy.getRequestSent().get(i).getRequestFor().getUser().equalsIgnoreCase(request.getRequestFor().getUser())) {
                 return true;
             }
@@ -89,23 +90,25 @@ public class Utility {
     }
     
     //agregamos solicitud de juego en la lista temporal
-    public void addGameRequest(ArrayList<User> usersOnline, User user, User friend){
-        for (int i = 0; i < usersOnline.size(); i++) {
-            if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                usersOnline.get(i).getGameRequestSent().add(new GameRequest(user, friend));
+    public void addGameRequest(GameRequest request){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(request.getRequestBy().getUser().trim())) {
+                Server.onlineUsers.get(i).getGameRequestSent().add(request);
             }
-            if (usersOnline.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
-                usersOnline.get(i).getGameRequestRecieved().add(new GameRequest(user, friend));
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(request.getRequestFor().getUser().trim())) {
+                Server.onlineUsers.get(i).getGameRequestRecieved().add(request);
             }
         }   
     }
     
     //recuperamos los game request recibidos por usuario
-    public ArrayList<GameRequest> getGameRequestRecieved(ArrayList<User> usersOnline, User user){
+    public ArrayList<GameRequest> getGameRequestRecieved(ArrayList<User> usersOnline,  User user ){
         ArrayList<GameRequest> gameRequest=new ArrayList<>(); 
         for (int i = 0; i < usersOnline.size(); i++) {
                 if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                    gameRequest=usersOnline.get(i).getGameRequestRecieved();
+                     for (int j = 0; j < usersOnline.get(i).getGameRequestRecieved().size(); j++) {
+                        gameRequest.add(usersOnline.get(i).getGameRequestRecieved().get(j));
+                    } 
                 }
             }
         return gameRequest;
@@ -113,13 +116,198 @@ public class Utility {
 
     //recuperamos los game request enviados por usuario
     public ArrayList<GameRequest> getGameRequestSent(ArrayList<User> usersOnline, User user){
-        ArrayList<GameRequest> gameRequest=new ArrayList<>(); 
+        ArrayList<GameRequest> list=new ArrayList<>();
+        for (int i = 0; i < usersOnline.size(); i++) {
+                if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {   
+                    for (int j = 0; j < usersOnline.get(i).getGameRequestSent().size(); j++) {
+                        list.add(usersOnline.get(i).getGameRequestSent().get(j));
+                    }         
+                }
+            }
+        return list;
+    }
+
+    //agregamos solicitud de juego en la lista temporal
+    public void acceptGameRequest(User user, User friend){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                Server.onlineUsers.get(i).setGameState(true);
+                Server.onlineUsers.get(i).setEnemy(friend.getUser());
+            }
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
+                Server.onlineUsers.get(i).setGameState(true);
+                Server.onlineUsers.get(i).setEnemy(user.getUser());
+            }
+        }   
+        deleteGameRequestRecieved(user, friend);
+        deleteGameRequestSent(user, friend);
+    }  
+  
+    //eliminamos solicitud recibidas de juego en la lista temporal
+    public void deleteGameRequestRecieved(User user, User friend) {
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestSent().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(friend.getUser())
+                            & Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(user.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestSent().remove(j);
+                    }
+                }
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestRecieved().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(user.getUser()) 
+                            & Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(friend.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestRecieved().remove(j);
+                    }
+                }
+          }
+    } 
+    
+    //eliminamos solicitud enviadas de juego en la lista temporal
+    public void deleteGameRequestSent(User user, User friend) {
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestSent().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(user.getUser())
+                            & Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(friend.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestSent().remove(j);
+                    }
+                }
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestRecieved().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(friend.getUser()) 
+                            & Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(user.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestRecieved().remove(j);
+                    }
+                }
+          }
+    } 
+    
+    //asigna estado de juego
+    public void setGameState(ArrayList<User> usersOnline, User user){
+        for (int i = 0; i < usersOnline.size(); i++) {
+            if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                usersOnline.get(i).setGameState(true);
+            }
+        }   
+    }  
+    
+    //obtenemos el usuario
+    public User getUser(String name) {
+        User user = new User();
+       // System.out.println("" + Server.onlineUsers.size());
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(name)) {
+                user = Server.onlineUsers.get(i);
+            }
+        }
+        return user;
+    }
+    
+    //limpiamos gameRequest
+    public void cleanGameRequest(User user){
+          for (int i = 0; i < Server.onlineUsers.size(); i++) {
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestSent().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(user.getUser())
+                            || Server.onlineUsers.get(i).getGameRequestSent().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(user.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestSent().remove(j);
+                    }
+                }
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestRecieved().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(user.getUser()) 
+                            || Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(user.getUser())) {
+                        Server.onlineUsers.get(i).getGameRequestRecieved().remove(j);
+                    }
+                }
+          }
+    }
+ 
+    //verifica gameRequest
+    public boolean verifyGameRequest(String user, String friend){
+          for (int i = 0; i < Server.onlineUsers.size(); i++) {
+                for (int j = 0; j < Server.onlineUsers.get(i).getGameRequestRecieved().size(); j++) {
+                    if (Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestBy().getUser().equalsIgnoreCase(user)
+                                & Server.onlineUsers.get(i).getGameRequestRecieved().get(j).
+                            getRequestFor().getUser().equalsIgnoreCase(friend)) {
+                       return true;
+                    }
+                }
+          }
+          return false;
+    }
+    
+   //recuperamos los friend request enviados
+    public ArrayList<FriendRequest> getFriendRequestSent(ArrayList<User> usersOnline, User user){
+        ArrayList<FriendRequest> list=new ArrayList<>();
+        for (int i = 0; i < usersOnline.size(); i++) {
+                if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {   
+                    for (int j = 0; j < usersOnline.get(i).getRequestSent().size(); j++) {
+                        list.add(usersOnline.get(i).getRequestSent().get(j));
+                    }         
+                }
+            }
+        return list;
+    }
+    
+    //recuperamos los friend request recibidos por usuario
+    public ArrayList<FriendRequest> getFriendRequestRecieved(ArrayList<User> usersOnline,  User user ){
+        ArrayList<FriendRequest> gameRequest=new ArrayList<>(); 
         for (int i = 0; i < usersOnline.size(); i++) {
                 if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                    gameRequest=usersOnline.get(i).getGameRequestSent();
+                     for (int j = 0; j < usersOnline.get(i).getRequestRecieved().size(); j++) {
+                        gameRequest.add(usersOnline.get(i).getRequestRecieved().get(j));
+                    } 
                 }
             }
         return gameRequest;
     }
+    
+    //recuperamos data de amigos
+    public ArrayList<User> getFriendData(ArrayList<User> usersOnline,  User user ){
+        ArrayList<User> friends=new ArrayList<>(); 
+        for (int i = 0; i < usersOnline.size(); i++) {
+                if (usersOnline.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                     for (int j = 0; j < usersOnline.get(i).getFriends().size(); j++) {
+                        friends.add(usersOnline.get(i).getFriends().get(j));
+                    } 
+                }
+            }
+        return friends;
+    }
 
+    //verifica estado de juego
+    private boolean getGameState(User user){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                return Server.onlineUsers.get(i).isGameState();
+            }
+        }
+    
+        return false;
+    }
+    
+    //recuperamos la data del oponente
+    private User getEnemyData(User user){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
+                return Server.onlineUsers.get(i);
+            }
+        }
+        return null;
+    }  
+    
+    //recuperamos la data del enemigo
+    
+    
+    //borramos el enemigo
+    
 }

@@ -93,8 +93,7 @@ public class UserFile implements FileControl{
 
     //borramos las solicitudes por que el usuario las borro o acepto
     @Override
-    public void deleteUserRequests(User sendRequest,User recieveRequest, FriendRequest newRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
-       
+    public void deleteFriendRequests(User sendRequest, User recieveRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
         if (archivo.exists()) {
             ObjectInputStream input = null;
            
@@ -116,7 +115,7 @@ public class UserFile implements FileControl{
                                
                             }
                         }
-                        //recorremos la lista de solicitudes de el que recibe
+                     //recorremos la lista de solicitudes de el que recibe
                         for (int k = 0; k < this.users.get(i).getRequestRecieved().size(); k++) {
                             //revisamos las solicitudes y la eliminamos
                             if (this.users.get(i).getRequestRecieved().get(k).getRequestFor().getUser().
@@ -127,7 +126,8 @@ public class UserFile implements FileControl{
                     }
                     
                 }                
-                input.close();
+                input.close();   
+                        
         }
         
         ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream((fileName)));
@@ -135,6 +135,52 @@ public class UserFile implements FileControl{
         output.close();
     }    
      
+    public void deleteFriendRequestSent(User sendRequest, User recieveRequest) throws FileNotFoundException, IOException, ClassNotFoundException {
+        if (archivo.exists()) {
+            ObjectInputStream input = null;
+           
+                input = new ObjectInputStream(new FileInputStream((archivo)));
+                Object aux = input.readObject();
+                
+                this.users=((ArrayList<User>) (List<User>) aux);
+                //recorremos toda la lista
+                for (int i = 0; i < this.users.size(); i++) {
+                    
+                    //verificamos el usuario que envia
+                    if (sendRequest.getUser().equalsIgnoreCase(this.users.get(i).getUser())) {
+                        //recorremos la lista de solicitudes de el que envia
+                        for (int j = 0; j < this.users.get(i).getRequestSent().size(); j++) {
+                            //revisamos las solicitudes y la eliminamos
+                            if (recieveRequest.getUser().equalsIgnoreCase(
+                                    this.users.get(i).getRequestSent().get(j).getRequestFor().getUser())) {
+                                this.users.get(i).getRequestSent().remove(j);
+                               
+                            }
+                        }
+                                     
+                    }
+                    
+                    if (recieveRequest.getUser().equalsIgnoreCase(this.users.get(i).getUser())) {
+                        //recorremos la lista de solicitudes de el que recibe
+                        for (int k = 0; k < this.users.get(i).getRequestRecieved().size(); k++) {
+                            //revisamos las solicitudes y la eliminamos
+                            if (this.users.get(i).getRequestRecieved().get(k).getRequestBy().getUser().
+                                    equalsIgnoreCase(sendRequest.getUser())) {
+                                this.users.get(i).getRequestRecieved().remove(k);
+                            }
+                        }    
+                    }
+                    
+                }                
+                input.close();   
+                        
+        }
+        
+        ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream((fileName)));
+        output.writeUnshared(this.users);
+        output.close();
+    }    
+
     //revisamos si existe un usuario igual para que no se registre otro igual 
     @Override
     public boolean verifyExistence(String user) {
