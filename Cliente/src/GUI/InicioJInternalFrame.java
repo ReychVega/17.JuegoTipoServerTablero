@@ -8,6 +8,7 @@ import Client.Client;
 import static GUI.MainJFrame.clientSocket;
 import java.awt.Component;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -541,6 +542,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             //mostramos
             showData(this.user);
 
+            getGameValidation();
+            
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("error de coneccion");
         }
@@ -548,20 +551,51 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     }
 
     private void getGameValidation(){
-      //validamos inicio de juego
-        newRequest = new ServerRequest(user.getUser(), "getGameValidation");
-        if (clientSocket == null) {
-            connectToServer();
+        try {
+            //validamos inicio de juego
+            newRequest = new ServerRequest(user.getUser(), "getGameValidation");
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            clientSocket.sendRequestToServer(newRequest);
+            Object receivedObject = clientSocket.getEntrada().readObject();
+            newRequest = (ServerRequest) receivedObject;
+            
+            if (newRequest.getEnemy()!=null && newRequest.getEnemy().isGameState()==true
+                    && newRequest.isGameState()==true) {
+             this.disableComponents();
+             this.menuBar.setVisible(false);
+            // this.start=false;
+             game=new GameJInternalFrame(this.mainFrame);
+             game.setVisible(true);
+             disableInternalFrameMove(game);
+             this.jDesktopPane2.add(game);
+            
+            }else{
+             this.menuBar.setVisible(true);
+                if (game != null) {
+                    // Remove game from the JDesktopPane.
+                    this.jDesktopPane2.remove(game);
+
+                    // Dispose of the game's internal resources.
+                    game.setClosed(true);
+                    game.dispose();
+
+                    // Hide the game component after removing and disposing of it.
+                    game.setVisible(false);
+
+                    // Set the game reference to null.
+                    game = null;
+                    
+                    JOptionPane.showMessageDialog(this, "Game finished", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                }          
+            }
+             
+            
+        } catch (IOException | ClassNotFoundException | PropertyVetoException ex) {
+            Logger.getLogger(InicioJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Enviamos el obj. request al servidor a través del socket
-        clientSocket.sendRequestToServer(newRequest);
-
-        
-
-               // game=new GameJInternalFrame(this.mainFrame);
-                //game.setVisible(true);
-               // disableInternalFrameMove(game);
-               // this.jDesktopPane2.add(game);
 
             
     }
