@@ -36,24 +36,24 @@ public class InterfazGrafica extends JPanel implements ActionListener {
         }
     }
 
-    private void actualizarBoton(int i, int j) {
-        int valor = damas.verdamas(i, j);
-        Color colorFondo = (i + j) % 2 == 0 ? Color.WHITE : Color.BLACK;
+private void actualizarBoton(int i, int j) {
+    int valor = damas.verdamas(i, j);
+    Color colorFondo = (i + j) % 2 == 0 ? Color.WHITE : Color.BLACK;
 
-        if (valor == damas.getNegras()) {
-            botones[i][j].setIcon(new ImageIcon("./images/framelcons/fichaNn.jpg"));
-        } else if (valor == damas.getRojas()) {
-            botones[i][j].setIcon(new ImageIcon("./images/framelcons/fichaRn.jpg"));
-        } else if (valor == damas.getReinaR()) {
-            botones[i][j].setIcon(new ImageIcon("./images/framelcons/fichaRRn.jpg"));
-        } else if (valor == damas.getReinaN()) {
-            botones[i][j].setIcon(new ImageIcon("./images/framelcons/fichaRNn.jpg"));
-        } else if (valor == damas.getRelleno()) {
-            botones[i][j].setIcon(null); // Opcional: También puedes cargar una imagen para el espacio en blanco
-        }
-
-        botones[i][j].setBackground(colorFondo);
+    if (valor == damas.getNegras()) {
+        botones[i][j].setIcon(new ImageIcon(getClass().getResource("/images/frameIcons/fichaNn.jpg")));
+    } else if (valor == damas.getRojas()) {
+        botones[i][j].setIcon(new ImageIcon(getClass().getResource("/images/frameIcons/fichaRn.jpg")));
+    } else if (valor == damas.getReinaR()) {
+        botones[i][j].setIcon(new ImageIcon(getClass().getResource("/images/frameIcons/fichaRRn.jpg")));
+    } else if (valor == damas.getReinaN()) {
+        botones[i][j].setIcon(new ImageIcon(getClass().getResource("/images/frameIcons/fichaRNn.jpg")));
+    } else if (valor == damas.getRelleno()) {
+        botones[i][j].setIcon(null);
     }
+
+    botones[i][j].setBackground(colorFondo);
+}
 
     @Override
     public void actionPerformed(ActionEvent e) {
