@@ -1,20 +1,36 @@
 package GUI;
 
+import Client.Client;
+import Domain.ServerRequest;
+import static GUI.MainJFrame.clientSocket;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author reych
  */
-public class GameJInternalFrame extends JInternalFrame {
-    private final MainJFrame mainFrame; 
-
+public class GameJInternalFrame extends JInternalFrame implements Runnable{
+    private final InicioJInternalFrame mainInternalFrame; 
+    private ServerRequest newRequest;
+    private String user;
+    //atributos necesarios para el hilo
+    private boolean start;
+    private long espera;
+    private Thread thread;
+   
     /**
      * Creates new form GameJInternalFrame
      */
-    public GameJInternalFrame(MainJFrame mainFrame) {
+    public GameJInternalFrame(InicioJInternalFrame mainInternalFrame, String user) {
         initComponents();
-        this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
+        this.user=user;
+        this.start = true;
+        this.mainInternalFrame = mainInternalFrame; // Inicializa la referencia a MainJFrame
     }
 
     /**
@@ -27,6 +43,7 @@ public class GameJInternalFrame extends JInternalFrame {
     private void initComponents() {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
+        lblEnemyName = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -34,18 +51,13 @@ public class GameJInternalFrame extends JInternalFrame {
         setMaximumSize(new java.awt.Dimension(700, 900));
         setPreferredSize(new java.awt.Dimension(700, 900));
 
-        jDesktopPane1.setBackground(new java.awt.Color(255, 204, 255));
+        jDesktopPane1.setBackground(new java.awt.Color(0, 51, 51));
+        jDesktopPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
-        );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 864, Short.MAX_VALUE)
-        );
+        lblEnemyName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        lblEnemyName.setForeground(new java.awt.Color(255, 255, 255));
+        lblEnemyName.setText("Oponente");
+        jDesktopPane1.add(lblEnemyName, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,14 +67,117 @@ public class GameJInternalFrame extends JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+     @Override
+    public void run() {
+        long started;
+        long elapse;
+        this.espera = 5000; // 5 segundos en milisegundos
+
+        while (this.start) {
+            repaint();
+            started = System.nanoTime();
+
+            elapse = System.nanoTime() - started;
+            // ...   
+            getCompleteData();
+
+            //...
+            if (this.espera < 0) {
+                this.espera = 10000;
+                /// System.out.println("Tiempo de espera ajustado: " + this.espera + " ms");
+            } else {
+                try {
+                    Thread.sleep(espera);
+                } catch (InterruptedException ex) {
+                    System.out.println("Error en hilo en lacle internalFrame");
+                }
+            }
+
+        }//while
+    }//run
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        if (this.thread == null) {
+            this.thread = new Thread(this);
+            this.thread.start();
+        }
+    }//addNotify
+    
+    //solicitud de datos de juego
+    private void getCompleteData(){
+   
+        
+        
+        try {
+            verifyGameState();
+        } catch (PropertyVetoException ex) {
+           // Logger.getLogger(GameJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //vrifica salida del juego
+    private void verifyGameState() throws PropertyVetoException {
+        try {
+            //validamos inicio de juego
+            newRequest = new ServerRequest(user, "getGameValidation");
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            clientSocket.sendRequestToServer(newRequest);
+            Object receivedObject = clientSocket.getEntrada().readObject();
+            newRequest = (ServerRequest) receivedObject;
+            
+            if (newRequest.getEnemy() == null && newRequest.isGameState() == false) {
+                mainInternalFrame.getMenuBar().setVisible(true);
+                //paramos el hilo
+                this.start = false;
+                
+                // Remove game from the JDesktopPane.
+                this.mainInternalFrame.getjDesktopPane2().remove(mainInternalFrame.getGame());
+                
+                // Dispose of the game's internal resources.
+                this.setClosed(true);
+                this.dispose();
+                
+                // Hide the game component after removing and disposing of it.
+                this.setVisible(false);
+                
+                // Set the game reference to null.
+                mainInternalFrame.setGame(null);
+
+                //iniamos el hilo en el internal frame padre
+                mainInternalFrame.setStart(true);
+                mainInternalFrame.setThread(new Thread(mainInternalFrame));
+                mainInternalFrame.getThread().start();
+
+                JOptionPane.showMessageDialog(this, "Game finished", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+           // Logger.getLogger(GameJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+     // Método para conectarse al servidor.
+    private void connectToServer() {
+        try {
+            clientSocket = new Client("localhost", 5025);
+        } catch (IOException ex) {
+            System.out.println("*");
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JLabel lblEnemyName;
     // End of variables declaration//GEN-END:variables
 }

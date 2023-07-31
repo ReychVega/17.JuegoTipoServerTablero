@@ -8,7 +8,6 @@ import Client.Client;
 import static GUI.MainJFrame.clientSocket;
 import java.awt.Component;
 import java.awt.event.MouseMotionListener;
-import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -56,6 +55,39 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
     }
 
+    public Thread getThread() {
+        return thread;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
+    }
+    
+    public void setStart(boolean start) {
+        this.start = start;
+    }
+
+    public boolean getStart() {
+        return start;
+    }
+
+    @Override
+    public JMenuBar getMenuBar() {
+        return menuBar;
+    }   
+
+    public JDesktopPane getjDesktopPane2() {
+        return jDesktopPane2;
+    }
+
+    public GameJInternalFrame getGame() {
+        return game;
+    }
+
+    public void setGame(GameJInternalFrame game) {
+        this.game = game;
+    }      
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -172,8 +204,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         jDesktopPane2Layout.setHorizontalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
                         .addComponent(lblTittle)
@@ -198,13 +231,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         jDesktopPane2Layout.setVerticalGroup(
             jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(lblTittle))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblUser)))
+                .addGap(19, 19, 19)
+                .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTittle)
+                    .addComponent(lblUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtUserToSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -461,7 +491,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         long elapse;
         this.espera = 5000; // 5 segundos en milisegundos
 
-        while (this.start) {
+        while (start) {
             repaint();
             started = System.nanoTime();
 
@@ -488,12 +518,12 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     @Override
     public void addNotify() {
         super.addNotify();
-        if (this.thread == null) {
-            this.thread = new Thread(this);
-            this.thread.start();
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
         }
     }//addNotify
-
+    
     private void getCompleteData() {
         //actualizamos cada 5 seg
         this.getUserData(user.getUser());
@@ -566,34 +596,15 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                     && newRequest.isGameState()==true) {
              this.disableComponents();
              this.menuBar.setVisible(false);
-            // this.start=false;
-             game=new GameJInternalFrame(this.mainFrame);
+             this.start=false;
+             game=new GameJInternalFrame(this, this.user.getUser());
              game.setVisible(true);
              disableInternalFrameMove(game);
              this.jDesktopPane2.add(game);
             
-            }else{
-             this.menuBar.setVisible(true);
-                if (game != null) {
-                    // Remove game from the JDesktopPane.
-                    this.jDesktopPane2.remove(game);
-
-                    // Dispose of the game's internal resources.
-                    game.setClosed(true);
-                    game.dispose();
-
-                    // Hide the game component after removing and disposing of it.
-                    game.setVisible(false);
-
-                    // Set the game reference to null.
-                    game = null;
-                    
-                    JOptionPane.showMessageDialog(this, "Game finished", "Process Status", JOptionPane.INFORMATION_MESSAGE);
-                }          
             }
-             
             
-        } catch (IOException | ClassNotFoundException | PropertyVetoException ex) {
+        } catch (IOException | ClassNotFoundException  ex) {
             Logger.getLogger(InicioJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -999,7 +1010,6 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     }
 
-    
     // Método para conectarse al servidor.
     private void connectToServer() {
         try {
