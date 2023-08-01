@@ -1,14 +1,18 @@
 package GUI;
 
 import Client.Client;
+import Domain.Damas;
 import Domain.ServerRequest;
 import static GUI.MainJFrame.clientSocket;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -23,6 +27,12 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     private long espera;
     private Thread thread;
    
+    private JPanel p;
+    private JButton[] b;
+    private Damas juego;
+    private juegoListener pL;
+    private int lastSelectedButton = -1;
+    
     /**
      * Creates new form GameJInternalFrame
      */
@@ -31,8 +41,28 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         this.user=user;
         this.start = true;
         this.mainInternalFrame = mainInternalFrame; // Inicializa la referencia a MainJFrame
+        
+        p = new JPanel();
+        juego = new Damas();
+        pL = new juegoListener(this);
+
+        this.setLayout(null);
+
+        p.setBackground(Color.white);
+        p.setLayout(null);
+        p.setBounds(40, 50, 600, 600);
+        
+        iniciamosTablero();
+        
+        this.add(p);
+        
     }
 
+      public JButton getButton(int index) {
+        return b[index];
+    }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,7 +72,6 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
         lblEnemyName = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -51,23 +80,25 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         setMaximumSize(new java.awt.Dimension(700, 900));
         setPreferredSize(new java.awt.Dimension(700, 900));
 
-        jDesktopPane1.setBackground(new java.awt.Color(0, 51, 51));
-        jDesktopPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        lblEnemyName.setBackground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
-        lblEnemyName.setForeground(new java.awt.Color(255, 255, 255));
+        lblEnemyName.setForeground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setText("Oponente");
-        jDesktopPane1.add(lblEnemyName, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(543, Short.MAX_VALUE)
+                .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblEnemyName)
+                .addContainerGap(835, Short.MAX_VALUE))
         );
 
         pack();
@@ -112,9 +143,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     }//addNotify
     
     //solicitud de datos de juego
-    private void getCompleteData(){
-   
-        
+    private void getCompleteData(){ 
         
         try {
             verifyGameState();
@@ -175,9 +204,82 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         }
     }
 
+      // Método para actualizar las imágenes de los botones según el estado del juego
+    public void actualizarTablero() {
+        for (int i = 0; i < b.length; i++) {
+            String ruta = getPath(juego.getJuego()[i / 8][i % 8]);
+            b[i].setIcon(new ImageIcon(getClass().getResource(ruta)));
+        }
+    }
+
+
+    private void iniciamosTablero() {
+    p.removeAll();
+    p.setLayout(new GridLayout(8, 8));
+
+    b = new JButton[64];
+    for (int i = 0; i < b.length; i++) {
+        String ruta = getPath(juego.getJuego()[i / 8][i % 8]);
+        b[i] = new JButton();
+        b[i].setBackground(Color.black);
+        b[i].setActionCommand("" + i);
+        b[i].setIcon(new ImageIcon(getClass().getResource(ruta)));
+
+        if (juego.getJuego()[i / 8][i % 8] == 0) {
+            b[i].setEnabled(false);
+        }
+
+        b[i].addActionListener(pL);
+        p.add(b[i]);
+    }
+
+    p.revalidate();
+    p.repaint();
+}
+    
+      private String getPath(int num) {
+        String s = "";
+        switch (num) {
+            case 0:
+                s = "/images/tablero/fichaNula.jpg";
+                break;
+            case 1:
+                s = "/images/tablero/blueCircle.png";
+                break;
+            case 2:
+                s = "/images/tablero/fichaEnemiga.png";
+                break;
+            case 3:
+                s = "/images/tablero/fichaValida.jpg";
+                break;
+            case 11:
+                s = "/images/tablero/rey.png";
+                break;
+            case 22:
+                s = "/images/reyEnemigo.png";
+                break;
+        }
+        return s;
+    }
+
+    
+    public boolean realizarMovimiento(int fromIndex, int toIndex) {
+        int rowFrom = fromIndex / 8;
+        int colFrom = fromIndex % 8;
+        int rowTo = toIndex / 8;
+        int colTo = toIndex % 8;
+
+        boolean isValidMove = juego.validaMovimiento(rowFrom, colFrom, rowTo, colTo);
+        if (isValidMove) {
+            juego.movimiento(rowFrom, colFrom, rowTo, colTo);
+            //System.out.println(juego.toString());
+            actualizarTablero();
+        }
+        return isValidMove;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel lblEnemyName;
     // End of variables declaration//GEN-END:variables
 }

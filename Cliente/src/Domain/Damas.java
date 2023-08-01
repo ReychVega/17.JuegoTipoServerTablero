@@ -1,346 +1,165 @@
 package Domain;
 
 /**
- *
- * @author Shuperman23
+ * Clase para manejo del juego de Damas
+ * 0: posiciones inválidas
+ * 1: fichas propias (peones blancos)
+ * 2: fichas enemigas (peones negros)
+ * 3: campos disponibles para movimiento
+ * 11: reinas propias (reinas blancas)
+ * 22: reinas enemigas (reinas negras)
+ * 
+ * Autor: reych
  */
-import javax.swing.JOptionPane;
-
 public class Damas {
+    
+    // Matriz de juego (tablero)
+    public int[][] juego = {
+        {2, 0, 2, 0, 2, 0, 2, 0},
+        {0, 2, 0, 2, 0, 2, 0, 2},
+        {2, 0, 2, 0, 2, 0, 2, 0},
+        {0, 3, 0, 3, 0, 3, 0, 3},
+        {3, 0, 3, 0, 3, 0, 3, 0},
+        {0, 1, 0, 1, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 0, 1, 0},
+        {0, 1, 0, 1, 0, 1, 0, 1}
+    };
 
-	private int tabla[][];
-	private final int rojas = 1, negras = 2, reinaR = 3, reinaN = 4, relleno = 5;
-	private char color = 'N';
-	// Métodos para obtener los valores de las constantes
-	// que representan los tipos de fichas y el relleno del tablero
+    // Constructor de la clase
+    public  Damas(){
+        // El tablero se inicializa con las posiciones de las fichas
+    }
+
+    // Método para obtener el tablero de juego
+    public int[][] getJuego() {
+        return juego;
+    }
+
+    // Método para establecer el tablero de juego
+    public void setJuego(int[][] juego) {
+        this.juego = juego;
+    }
+    
+    /**
+     * Método para validar si un movimiento es válido
+     * @param filaOrigen La fila de origen de la ficha
+     * @param columnaOrigen La columna de origen de la ficha
+     * @param nuevaFila La nueva fila a la que se quiere mover la ficha
+     * @param nuevaColumna La nueva columna a la que se quiere mover la ficha
+     * @return true si el movimiento es válido, false en caso contrario
+     */
+    public boolean validaMovimiento(int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
+        // Caso 1: Verificar si es una posición válida en el tablero (3 es una posición válida)
+        if (this.juego[nuevaFila][nuevaColumna] != 3) {
+            return false;
+        }
+
+        int fichaOrigen = this.juego[filaOrigen][columnaOrigen];
+        // Dirección del movimiento de las fichas normales (1: hacia arriba, 2: hacia abajo) 
+        int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; 
+
+        // Caso 2: Movimiento válido para fichas normales (no reinas)
+        if (fichaOrigen == 1 || fichaOrigen == 2) {
+            if ((nuevaFila == filaOrigen + direccionMovimiento) &&
+                (nuevaColumna == columnaOrigen + 1 || nuevaColumna == columnaOrigen - 1)) {
+                return true;
+            }
+
+            // Verificar si puede comer ficha
+            if ((nuevaFila == filaOrigen + 2 * direccionMovimiento) &&
+                (nuevaColumna == columnaOrigen + 2 || nuevaColumna == columnaOrigen - 2)) {
+                int filaComida = filaOrigen + direccionMovimiento;
+                int columnaComida = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
+                int fichaComida = this.juego[filaComida][columnaComida];
+
+                // Verificar si la ficha comida es del oponente
+                if ((fichaOrigen == 1 && (fichaComida == 2 || fichaComida == 22)) ||
+                    (fichaOrigen == 2 && (fichaComida == 1 || fichaComida == 11))) {
+                    // Comer la ficha
+                    //this.juego[filaComida][columnaComida] = 3;
+                    return true;
+                }
+            }
+        }
+
+        // Caso 3: Movimiento válido para reinas (fichas coronadas)
+        if (fichaOrigen == 11 || fichaOrigen == 22) {
+            int filaDistancia = Math.abs(nuevaFila - filaOrigen);
+            int columnaDistancia = Math.abs(nuevaColumna - columnaOrigen);
+            if (filaDistancia == columnaDistancia) {
+                return true;
+            }
+
+            // Verificar si puede comer ficha
+            if (filaDistancia == 2 && columnaDistancia == 2) {
+                int filaComida = (nuevaFila > filaOrigen) ? filaOrigen + 1 : filaOrigen - 1;
+                int columnaComida = (nuevaColumna > columnaOrigen) ? columnaOrigen + 1 : columnaOrigen - 1;
+                int fichaComida = this.juego[filaComida][columnaComida];
+
+                // Verificar si la ficha comida es del oponente
+                if ((fichaOrigen == 11 && (fichaComida == 2 || fichaComida == 22)) ||
+                    (fichaOrigen == 22 && (fichaComida == 1 || fichaComida == 11))) {
+                    // Comer la ficha
+                   // this.juego[filaComida][columnaComida] = 3;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Método para realizar un movimiento en el tablero
+     * @param filaOrigen La fila de origen de la ficha
+     * @param columnaOrigen La columna de origen de la ficha
+     * @param nuevaFila La nueva fila a la que se quiere mover la ficha
+     * @param nuevaColumna La nueva columna a la que se quiere mover la ficha
+     */
+    public void movimiento(int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
+        if (validaMovimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna)) {
+            int fichaOrigen = this.juego[filaOrigen][columnaOrigen];
+            int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; // Dirección del movimiento de las
+        // Realizar el movimiento
+        this.juego[nuevaFila][nuevaColumna] = fichaOrigen;
+        this.juego[filaOrigen][columnaOrigen] = 3; // La posición de origen queda vacía
+
+        // Caso de captura (eliminar ficha enemiga)
+        int filaCaptura = filaOrigen + direccionMovimiento;
+        int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
+
+        if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
+            
+            this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
+            // Actualizar coordenadas de la ficha después de la captura
+            nuevaFila = filaCaptura;
+            nuevaColumna = columnaCaptura;
+        }
+
+        // Comprobar si un peón alcanza el borde opuesto del tablero y convertirlo en reina
+        if (fichaOrigen == 1 && nuevaFila == 0) {
+            this.juego[nuevaFila][nuevaColumna] = 11; // Peón blanco se convierte en reina blanca
+        } else if (fichaOrigen == 2 && nuevaFila == 7) {
+            this.juego[nuevaFila][nuevaColumna] = 22; // Peón negro se convierte en reina negra
+        }
+    }
         
-	public char getColor() {
-		return color;
-	}
-	public int getRelleno() {
-		return relleno;
-	}
-	public int getRojas() {
-		return rojas;
-	}
-	public int getNegras() {
-		return negras;
-	}
-	public int getReinaR() {
-		return reinaR;
-	}
-	public int getReinaN() {
-		return reinaN;
-	}
-	// Método para cambiar el turno de juego
-	public void CambioDeTurno() {
-		if(color == 'R') {
-			color = 'N';
-		}else {
-			color = 'R';
-		}
-	}
-	// Constructor de la clase, inicializa el tablero de damas
-	public Damas() {
-		tabla = new int[8][8];
-	}
-        // Método para obtener el tipo de ficha en una posición dada
-	public int verdamas(int i,int j) {
-		posibilidad_reina();
-		return tabla[i][j];
-	}
-	// Coloca las fichas en las posiciones iniciales del tablero
-	public void poner_fichas() {	
-		for (int i = 0; i < tabla.length; i++) {
-			for (int j = 0; j < tabla.length; j++) {
-				if (j % 2 == 0) {
-					tabla[1][j] = rojas;
-					tabla[7][j] = negras;
-					tabla[5][j] = relleno;
-					tabla[3][j] = relleno;
-				} else {
-					tabla[0][j] = rojas;
-					tabla[6][j] = negras;
-					tabla[2][j] = relleno;
-					tabla[4][j] = relleno;
-				}
-			}
-		}
-	}
+        
+}
 
-	// Verifica si una ficha de un cierto color existe en una posición dada
-	public boolean verificar_exitencia_de_ficha(char color, int x,int y) {
-		if(color == 'N') {
-			if(tabla[x][y] == negras || tabla[x][y] == reinaN) {
-				return true;
-			}
-		}else if(color == 'R'){
-			if(tabla[x][y] == rojas || tabla[x][y] == reinaR) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	// Imprime el estado actual del tablero en la consola
-	public void imprimir(int contadorN, int contadorR, char color) {
-//		System.out.println();
-//		for (int i = 0; i < tabla.length; i++) {
-//			System.out.println("----------------------------------------");
-//			for (int j = 0; j < tabla[0].length; j++) {
-//				if (tabla[i][j] == rojas) {
-//					System.out.print(" R  |");
-//				} else if (tabla[i][j] == negras) {
-//					System.out.print(" N  |");
-//				} else if (tabla[i][j] == reinaR) {
-//					System.out.print(" RR |");
-//				} else if (tabla[i][j] == reinaN) {
-//					System.out.print(" RN |");
-//				} else if (tabla[i][j] == 5) {
-//					System.out.print("----|");
-//				} else if (i == 4 && j == 7) {
-//					System.out.print("    | Negras:");
-//				} else if (i == 5 && j == 7) {
-//					System.out.print("    | Rojas:");
-//				} else if (i == 3 && j == 7 && color == 'R') {
-//					System.out.print("    | Rojas");
-//				} else if (i == 3 && j == 7 && color == 'N') {
-//					System.out.print("    | Negras");
-//				} else {
-//					System.out.print("    |");
-//				}
-//				if (i == 2 && j == 7) {
-//					System.out.print(" Turno De:");
-//				}
-//			}
-//
-//			System.out.println();
-//		}
-	}
-        // Método para buscar una ficha en una posición dada
-	public void buscar_ficha(int i,int j) {
-		if(tabla[i][j] == getNegras()) {
-			System.out.println("negra");
-		}else if(tabla[i][j] == getRojas()){
-			System.out.println("roja");
-		}
-	}
-	// Muestra el tablero actual en la consola
-	public void mostrartabla() {
-		for (int i = 0; i < tabla.length; i++) {
-			for (int j = 0; j < tabla.length; j++) {
-				System.out.print(tabla[i][j]+" ");
-			}
-			System.out.println();
-		}
-	}
-	
-	/**
-	 * @param color
-	 */
-        // Método para realizar un movimiento de una ficha en el tablero
-	public boolean jugar(char color, int x, int y, int x1, int y1) {
-		boolean pasa = false;
-		int variable, reina, enemigo, Renemiga;
-		if (color == 'R') {
-			enemigo = negras;
-			Renemiga = reinaN;
-			variable = rojas;
-			reina = reinaR;
-		} else {
-			Renemiga = reinaN;
-			enemigo = rojas;
-			variable = negras;
-			reina = reinaN;
-		}
-		while (pasa == false) {
-			
-			if (tabla[x][y] == variable) {
-				if (y1 > -1 && x1 > -1 && y1 < 8 && x1 < 8) {
-					if (tabla[x1][y1] == 5) {
-						if (variable == negras) {
-							
-							if (x1 == x - 1) {
-								
-								if (y1 == y - 1 || y1 == y + 1) {
-									tabla[x][y] = 5;
-									tabla[x1][y1] = negras;
-									pasa = true;
-								}
-							}
-							if (x1 == x - 2) {
-								if (y1 == y + 2) {
-									if (tabla[x - 1][y + 1] == enemigo || tabla[x - 1][y + 1] == Renemiga) {
-										tabla[x - 1][y + 1] = 5;
-										tabla[x][y] = 5;
-										tabla[x1][y1] = negras;
-										pasa = true;
-									}
-								} else if (y1 == y - 2) {
-									if (tabla[x - 1][y - 1] == enemigo || tabla[x - 1][y - 1] == Renemiga) {
-										tabla[x - 1][y - 1] = 5;
-										tabla[x][y] = 5;
-										tabla[x1][y1] = negras;
-										pasa = true;
-									}
+    //mostramos el array
+    @Override
+    public String toString() {
+        String s="";
+        for (int i = 0; i < juego.length; i++) {
+            for (int j = 0; j < juego[0].length; j++) {
+                s+=juego[i][j]+" ";
+            }
+            s+="\n";
+        }
+        return s;
+    }
 
-								}
-							}
-							
-						} else if (variable == rojas) {
-							if (x1 == x + 1) {
-								if (y1 == y - 1 || y1 == y + 1) {
-									tabla[x][y] = 5;
-									tabla[x1][y1] = rojas;
-									pasa = true;
-								}
-							}
-							if (x1 == x + 2) {
-								if (y1 == y + 2) {
-									if (tabla[x + 1][y + 1] == enemigo || tabla[x + 1][y + 1] == Renemiga) {
-										tabla[x + 1][y + 1] = 5;
-										tabla[x][y] = 5;
-										tabla[x1][y1] = rojas;
-										pasa = true;
-									}
-								} else if (y1 == y - 2) {
-									if (tabla[x + 1][y - 1] == enemigo || tabla[x + 1][y - 1] == Renemiga) {
-										tabla[x + 1][y - 1] = 5;
-										tabla[x][y] = 5;
-										tabla[x1][y1] = rojas;
-										pasa = true;
-									}
-
-								}
-							}
-						}
-					}
-
-				} else {
-					 //JOptionPane.showMessageDialog(null, "coordenadas no validas");
-				}
-			} 
-			
-			
-			else if (tabla[x][y] == reina) {
-				// movimiento reina
-				int menorx = 0, menory = 0;
-
-				if (x == x1 || y == y1) {
-					 //JOptionPane.showMessageDialog(null, "movimiento invalido por movimiento en vertical/horizontal");
-				} else if (tabla[x1][y1] == variable) {
-					 //JOptionPane.showMessageDialog(null, "movimiento invalido por chocar con una ficha aliada");
-				} else if (tabla[x1][y1] == 5) {
-					for (int i = x, j = y; i >= 0 && j >= 0; i--, j--) {
-						menory = i;
-						menorx = j;
-					}
-					for (int i = menory, j = menorx; i < tabla[0].length; i++, j++) {
-						if (i == x1 && j == y1) {
-
-							if (x > x1 && y > y1) {
-
-								for (int j2 = x, i2 = y; i2 >= y1 || j2 >= x1; j2--, i2--) {
-									if (tabla[j2][i2] == variable || tabla[j2][i2] == reina) {
-
-									} else {
-										tabla[j2][i2] = 5;
-										pasa = true;
-									}
-
-								}
-							} else if (x < x1 && y < y1) {
-
-								for (int j2 = x, i2 = y; i2 < y1 || j2 < x1; j2++, i2++) {
-									tabla[j2][i2] = 5;
-									pasa = true;
-								}
-							}
-
-							tabla[x][y] = 5;
-							tabla[x1][y1] = reina;
-							pasa = true;
-						}
-					}
-					for (int i = x, j = y; i >= 0; i--, j++) {
-						menory = i;
-						menorx = j;
-					}
-					for (int i = menory, j = menorx; i < tabla[0].length; i++, j--) {
-						if (i == x1 && j == y1) {
-							if (x < x1 && y > y1) {
-
-								for (int j2 = x, i2 = y; i2 >= y1 || j2 < x1; j2++, i2--) {
-									if (tabla[j2][i2] == variable || tabla[j2][i2] == reina) {
-
-									} else {
-										tabla[j2][i2] = 5;
-										pasa = true;
-									}
-								}
-							} else if (x > x1 && y < y1) {
-								for (int j2 = x, i2 = y; i2 < y1 || j2 >= x1; j2--, i2++) {
-									if (tabla[j2][i2] == variable || tabla[j2][i2] == reina) {
-
-									} else {
-										tabla[j2][i2] = 5;
-										pasa = true;
-									}
-								}
-							}
-							tabla[x][y] = 5;
-							tabla[x1][y1] = reina;
-							pasa = true;
-						}
-					}
-					if (pasa == false) {
-						 //JOptionPane.showMessageDialog(null, "movimiento invalido");
-					} else {
-						//JOptionPane.showMessageDialog(null, "movimiento hecho");
-					}
-				} else {
-					 //JOptionPane.showMessageDialog(null, "tienes que pasar por encima de la ficha");
-				}
-			} else {
-				 //JOptionPane.showMessageDialog(null, "ficha inesistente");
-				pasa = false;
-			}
-			if(pasa == false) {
-				break;
-			}
-		}
-		return pasa;
-	}
-        // Verifica si hay un ganador del juego
-	public boolean verificar(char color) {
-		int contadorN = 0, contadorR = 0;
-		for (int i = 0; i < tabla.length; i++) {
-			for (int j = 0; j < tabla[0].length; j++) {
-				if (tabla[i][j] == rojas || tabla[i][j] == reinaR) {
-					contadorR++;
-				} else if (tabla[i][j] == negras || tabla[i][j] == reinaN) {
-					contadorN++;
-				}
-			}
-		}
-		imprimir(contadorN, contadorR, color);
-		if (contadorN == 0 && contadorR > 0) {
-			JOptionPane.showMessageDialog(null, "ganan las rojas");
-			return true;
-		} else if (contadorR == 0 && contadorN > 0) {
-			JOptionPane.showMessageDialog(null, "ganan las negras");
-			return true;
-		}
-		return false;
-	}
-        // Convierte fichas en reinas si llegan al extremo opuesto del tablero
-	public void posibilidad_reina() {
-		for (int j = 0; j < tabla[0].length; j++) {
-			if (tabla[0][j] == negras) {
-				tabla[0][j] = reinaN;
-			} else if (tabla[7][j] == rojas) {
-				tabla[7][j] = reinaR;
-			}
-		}
-	}
+    
+    
 }
