@@ -20,13 +20,13 @@ public class juegoListener implements ActionListener {
             if (lastSelectedButton == -1) {
                 lastSelectedButton = selectedButton;
                 firstSelectedBtn=gui.juego.getJuego()[lastSelectedButton / 8][lastSelectedButton % 8];
-                if (firstSelectedBtn!=1) {
+                if (firstSelectedBtn==3 || firstSelectedBtn==2 || firstSelectedBtn==0) {
                     lastSelectedButton = -1;
                     firstSelectedBtn = -1;
                 }
             } else {
      //         System.out.println(" num "+gui.juego.getJuego()[lastSelectedButton / 8][lastSelectedButton % 8]);
-                if (firstSelectedBtn == 1) {
+                if (firstSelectedBtn == 1 || firstSelectedBtn==11) {
                     gui.realizarMovimiento(lastSelectedButton, selectedButton);
                     lastSelectedButton = -1;
                     firstSelectedBtn = -1;
