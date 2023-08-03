@@ -44,6 +44,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     public InicioJInternalFrame(MainJFrame mainFrame, String userName) {
         initComponents();
         disableComponents();
+        this.lblUser.setVisible(true);
         this.getUserData(userName);
 
         this.search = false;
@@ -71,6 +72,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         return start;
     }
 
+    public JLabel getLblUser() {
+        return lblUser;
+    }
+    
     @Override
     public JMenuBar getMenuBar() {
         return menuBar;
@@ -423,6 +428,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     //habilitamos los componentes que necesitamos
     private void activeComponents(int caso) {
         disableComponents();
+        this.lblUser.setVisible(true);
         DefaultListModel<String> aux = new DefaultListModel<>();
         list.setModel(aux);
         contenedor1.setViewportView(list);
@@ -463,6 +469,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     //desactivamos los componentes.
     private void disableComponents() {
+        this.lblUser.setVisible(false);
         this.txtUserToSearch.setText("");
         this.contenedor1.setVisible(false);
         this.contenedor2.setVisible(false);

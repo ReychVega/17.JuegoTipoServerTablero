@@ -185,8 +185,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     //solicitud de datos de juego
     private void getCompleteData(){    
         try {
-            verifyGameState();
-            
+            verifyGameState();     
         } catch (PropertyVetoException ex) {
            // Logger.getLogger(GameJInternalFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -212,7 +211,8 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
                 
                 // Remove game from the JDesktopPane.
                 this.mainInternalFrame.getjDesktopPane2().remove(mainInternalFrame.getGame());
-                
+                //mostramos el usuario de nuevo
+                this.mainInternalFrame.getLblUser().setVisible(true);
                 // Dispose of the game's internal resources.
                 this.setClosed(true);
                 this.dispose();
@@ -297,6 +297,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     
     //define ruta de imagen para cada boton, conforme el caso
     private String getPath(int num) {
+
         String s = "";
         switch (num) {
             case 0:
@@ -315,7 +316,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
                 s = "/images/tablero/rey.png";
                 break;
             case 22:
-                s = "/images/reyEnemigo.png";
+                s = "/images/tablero/reyEnemigo.png";
                 break;
         }
         return s;
@@ -385,6 +386,12 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
                 if (tablero[k][l] == 1) {
                     juego.getJuego()[contador / 8][contador % 8] = 2;
                 }
+                if (tablero[k][l] == 22) {
+                    juego.getJuego()[contador / 8][contador % 8] = 11;
+                }
+                if (tablero[k][l] == 11) {
+                    juego.getJuego()[contador / 8][contador % 8] = 22;
+                }
                 if (tablero[k][l] == 2) {
                     juego.getJuego()[contador / 8][contador % 8] = 1;
                 }
@@ -400,7 +407,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             }
             s += "\n";
         }
-       // System.out.println(s);
+        // System.out.println(s);
          this.actualizarTablero();
          iniciamosTablero();
     }

@@ -7,24 +7,30 @@ public class juegoListener implements ActionListener {
 
     private GameJInternalFrame gui;
     private int lastSelectedButton = -1;
-
+    private int firstSelectedBtn=-1;
     public juegoListener(GameJInternalFrame gui) {
         this.gui = gui;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-         String command = e.getActionCommand();
-            int selectedButton = Integer.parseInt(command);
-          // System.out.print(" "+selectedButton);
-        if (gui.getPermisoTurno() 
-                //&& gui.juego.getJuego()[selectedButton/8][selectedButton%8]==1
-                ) {
+        String command = e.getActionCommand();
+        int selectedButton = Integer.parseInt(command);
+        if (gui.getPermisoTurno()) {
             if (lastSelectedButton == -1) {
                 lastSelectedButton = selectedButton;
+                firstSelectedBtn=gui.juego.getJuego()[lastSelectedButton / 8][lastSelectedButton % 8];
+                if (firstSelectedBtn!=1) {
+                    lastSelectedButton = -1;
+                    firstSelectedBtn = -1;
+                }
             } else {
-                gui.realizarMovimiento(lastSelectedButton, selectedButton);
-                lastSelectedButton = -1;
+     //         System.out.println(" num "+gui.juego.getJuego()[lastSelectedButton / 8][lastSelectedButton % 8]);
+                if (firstSelectedBtn == 1) {
+                    gui.realizarMovimiento(lastSelectedButton, selectedButton);
+                    lastSelectedButton = -1;
+                    firstSelectedBtn = -1;
+                }
             }
         }
     }
