@@ -308,12 +308,6 @@ public class Handler extends Thread {
                     }
                 }
 
-                //inicio de sesion
-                iniciaSesion();
-                
-                //juego en linea
-                juegoEnLinea();
-                
                 //actualizamos
                 file.actualizaLista();
 
@@ -376,17 +370,6 @@ public class Handler extends Thread {
         } catch (IOException ex) {
             System.out.println("Internal error");
         }
-    }
-    
-    private void juegoEnLinea(){
-    
-    
-    }
-    
-    private void iniciaSesion(){
-    
-    
-    }
-    
+    }    
     
 } // fin clase 
