@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
 
 public class juegoListener implements ActionListener {
 
@@ -15,20 +14,18 @@ public class juegoListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        int selectedButton = Integer.parseInt(command);
-
-        if (lastSelectedButton == -1) {
-            lastSelectedButton = selectedButton;
-        } else {
-           boolean result = gui.realizarMovimiento(lastSelectedButton, selectedButton);
-            if (result) {
-                JButton lastButton = gui.getButton(lastSelectedButton);
-                JButton currentButton = gui.getButton(selectedButton);                
+         String command = e.getActionCommand();
+            int selectedButton = Integer.parseInt(command);
+          // System.out.print(" "+selectedButton);
+        if (gui.getPermisoTurno() 
+                //&& gui.juego.getJuego()[selectedButton/8][selectedButton%8]==1
+                ) {
+            if (lastSelectedButton == -1) {
+                lastSelectedButton = selectedButton;
+            } else {
+                gui.realizarMovimiento(lastSelectedButton, selectedButton);
+                lastSelectedButton = -1;
             }
-            lastSelectedButton = -1;
         }
-      //  System.out.println("*"+lastSelectedButton);
-        
     }
 }

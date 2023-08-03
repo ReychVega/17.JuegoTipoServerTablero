@@ -1,5 +1,7 @@
 package Domain;
 
+import java.io.Serializable;
+
 /**
  * Clase para manejo del juego de Damas
  * 0: posiciones inválidas
@@ -11,8 +13,9 @@ package Domain;
  * 
  * Autor: reych
  */
-public class Damas {
-    
+public class Damas implements Serializable{
+private static final long serialVersionUID=1L;
+ 
     // Matriz de juego (tablero)
     public int[][] juego = {
         {2, 0, 2, 0, 2, 0, 2, 0},
@@ -32,7 +35,7 @@ public class Damas {
 
     // Método para obtener el tablero de juego
     public int[][] getJuego() {
-        return juego;
+        return this.juego;
     }
 
     // Método para establecer el tablero de juego
