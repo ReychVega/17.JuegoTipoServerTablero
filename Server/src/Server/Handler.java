@@ -291,10 +291,29 @@ public class Handler extends Thread {
                     //pedimos el usuario y el gameState
                     request.setEnemy(utility.getEnemyByUser(request.getUser()));
                     request.setGameState(utility.getGameState(request.getUser()));
-                    sendRequest(request);
+                    request.setTurno(utility.getTurno(request.getUser()));
+                    
+                        if (request.getEnemy()!=null) {
+                           request.setJuego(
+                                   utility.getJuego(request.getUser(),request.getEnemy().getUser()));
+                        }
+                        
+                        sendRequest(request);
+                    }
+                //Caso 18. valida movimiento de juego 
+                    if (request.getAction().equalsIgnoreCase("GameMove")) {
+                        utility.setTablero(request.getUser(),request.getEnemy().getUser(), request.getJuego()); 
+                        utility.setTurnos(request.getUser(),request.getEnemy().getUser());
+                        request.setJuego(null);
                     }
                 }
 
+                //inicio de sesion
+                iniciaSesion();
+                
+                //juego en linea
+                juegoEnLinea();
+                
                 //actualizamos
                 file.actualizaLista();
 
@@ -359,6 +378,15 @@ public class Handler extends Thread {
         }
     }
     
-     
+    private void juegoEnLinea(){
+    
+    
+    }
+    
+    private void iniciaSesion(){
+    
+    
+    }
+    
     
 } // fin clase 

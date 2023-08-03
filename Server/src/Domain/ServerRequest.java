@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class ServerRequest implements Serializable{
 private static final long serialVersionUID=1L;
     
+private boolean turno;
 private boolean gameState;
 private String friend;    
 private String user;
@@ -17,6 +18,7 @@ private String action;
 private User enemy;
 private FriendRequest request;
 private GameRequest gameRequest;
+public int[][] juego;
 
 private ArrayList<User>onlineUsers;
 private ArrayList<User>foundUsers;
@@ -30,11 +32,17 @@ private ArrayList<FriendRequest>friendRequestRecieved;
     public ServerRequest(String user, String action) {
         this.user = user;
         this.action = action;
+        this.turno=false;
+        this.gameState=false;
         this.friends=new ArrayList<>();
         this.onlineUsers=new ArrayList<>();
         this.foundUsers=new ArrayList<>();
         this.gameRequestSent=new ArrayList<>();
         this.gameRequestRecieved=new ArrayList<>();
+        this.foundUsers=new ArrayList<>();
+        this.friendRequestSent=new ArrayList<>();
+        this.friendRequestRecieved=new ArrayList<>();
+        this.juego=null;
     }
 
     public String getUser() {
@@ -52,6 +60,16 @@ private ArrayList<FriendRequest>friendRequestRecieved;
     public void setAction(String action) {
         this.action = action;
     }
+
+    public int[][] getJuego() {
+        return juego;
+    }
+
+    public void setJuego(int[][] juego) {
+        this.juego = juego;
+    }
+    
+    
 
     public ArrayList<User> getOnlineUsers() {
         return onlineUsers;
@@ -149,6 +167,13 @@ private ArrayList<FriendRequest>friendRequestRecieved;
         this.friends = friends;
     }
 
+    public boolean isTurno() {
+        return turno;
+    }
+
+    public void setTurno(boolean turno) {
+        this.turno = turno;
+    }
     
     
 }

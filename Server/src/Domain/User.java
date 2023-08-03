@@ -12,6 +12,7 @@ public class User implements Serializable{
    private String user;
    private String password;
    //auxiliares
+   private boolean turno;
    private boolean gameState;
    private User enemy;
    private String action;
@@ -24,7 +25,8 @@ public class User implements Serializable{
    //Game request
    private ArrayList<GameRequest> gameRequestRecieved;
    private ArrayList<GameRequest> gameRequestSent;
-   
+   //tablero
+   private int[][]tablero;
    
    private static final long serialVersionUID=1L;
 
@@ -36,6 +38,8 @@ public class User implements Serializable{
         this.gameRequestSent=new ArrayList<>();
         this.gameRequestRecieved=new ArrayList<>();
         this.gameState=false;
+        this.turno=false;
+        this.tablero=null;
     }
 
 
@@ -49,8 +53,10 @@ public class User implements Serializable{
         this.gameRequestSent=new ArrayList<>();
         this.gameRequestRecieved=new ArrayList<>();
         this.gameState=false;
+        this.turno=false;
+        this.tablero=null;
     }
-    
+        
     public String getUser() {
         return user;
     }
@@ -139,11 +145,25 @@ public class User implements Serializable{
         this.action = action;
     }
 
+    public boolean isTurno() {
+        return turno;
+    }
+
+    public void setTurno(boolean turno) {
+        this.turno = turno;
+    }
+
+    public int[][] getTablero() {
+        return tablero;
+    }
+
+    public void setTablero(int[][] tablero) {
+        this.tablero = tablero;
+    }
+    
     @Override
     public String toString() {
         return user;
     }
-
-   
      
 }

@@ -17,6 +17,17 @@ public class Utility implements Serializable{
     public Utility() {
     }
     
+     public String mostrarArray(int [][] juego) {
+        String s="";
+        for (int i = 0; i < juego.length; i++) {
+            for (int j = 0; j < juego[0].length; j++) {
+                s+=juego[i][j]+" ";
+            }
+            s+="\n";
+        }
+        return s;
+    }
+    
     //buscamos un usuario
     public boolean search(ArrayList<User> list, String user) {
         if (list != null) {
@@ -77,7 +88,7 @@ public class Utility implements Serializable{
         return users;
     }
     
-    //verifica solicitud enviada
+    //verifica solicitud de amistad enviada
     public boolean verifyFriendRequestSent(User sentBy, User sentFor, FriendRequest request){
         
         for (int i = 0; i < sentBy.getRequestSent().size(); i++) {
@@ -131,7 +142,8 @@ public class Utility implements Serializable{
     public void acceptGameRequest(User user, User friend){
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
-                Server.onlineUsers.get(i).setGameState(true);                
+                Server.onlineUsers.get(i).setGameState(true);   
+                Server.onlineUsers.get(i).setTurno(true);                   
             }
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
                 Server.onlineUsers.get(i).setGameState(true);
@@ -140,11 +152,10 @@ public class Utility implements Serializable{
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user.getUser())) {
                 Server.onlineUsers.get(i).setEnemy(getEnemyData(friend.getUser()));
-               // System.out.println(getEnemyData(friend.getUser()));
+                
             }
             if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(friend.getUser())) {
                 Server.onlineUsers.get(i).setEnemy(getEnemyData(user.getUser()));
-               // System.out.println(getEnemyData(user.getUser()));
             }
         }       
         
@@ -304,6 +315,17 @@ public class Utility implements Serializable{
     
         return false;
     }
+
+    //verifica turnos de juego
+    public boolean getTurno(String user){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
+                return Server.onlineUsers.get(i).isTurno();
+            }
+        }
+    
+        return false;
+    }
     
     //recuperamos la data del oponente
     private User getEnemyData(String user){
@@ -314,6 +336,23 @@ public class Utility implements Serializable{
         }
         return null;
     }  
+ 
+    //recuperamos el tablero del oponente
+    public int[][] getJuego(String user, String enemy) {
+        int[][] tablero = null;
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)
+                    && Server.onlineUsers.get(i).getEnemy() != null
+                    && Server.onlineUsers.get(i).getEnemy().getUser().equalsIgnoreCase(enemy)
+                    && Server.onlineUsers.get(i).getEnemy().getTablero() != null) {
+                
+                tablero = Server.onlineUsers.get(i).getEnemy().getTablero();
+                Server.onlineUsers.get(i).getEnemy().setTablero(null);
+                return tablero;
+            }
+        }
+        return tablero;
+    }
     
     //recuperamos la data del enemigo
     public User getEnemyByUser(String user){
@@ -334,5 +373,31 @@ public class Utility implements Serializable{
                    Server.onlineUsers.get(i).setGameState(false);
             }
         }
+    }
+    
+    //establecemos el tablero para el enemigo, de forma que se pueda actualizar
+    public void setTablero(String user, String enemy, int[][]tablero){
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(enemy)) {
+                Server.onlineUsers.get(i).getEnemy().setTablero(tablero);
+              //  System.out.println("para "+enemy+"\n"+mostrarArray(tablero));
+            }
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
+                Server.onlineUsers.get(i).getEnemy().setTablero(null);
+            }
+        }
+    }
+    
+    //intercalamos turnos
+    public void setTurnos(String user, String enemy) {
+        for (int i = 0; i < Server.onlineUsers.size(); i++) {
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(user)) {
+               Server.onlineUsers.get(i).setTurno(false);
+            }
+            if (Server.onlineUsers.get(i).getUser().equalsIgnoreCase(enemy)) {
+               Server.onlineUsers.get(i).setTurno(true);
+            }
+        }
+
     }
 }
