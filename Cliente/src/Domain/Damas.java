@@ -3,19 +3,17 @@ package Domain;
 import java.io.Serializable;
 
 /**
- * Clase para manejo del juego de Damas
- * 0: posiciones inválidas
- * 1: fichas propias (peones blancos)
- * 2: fichas enemigas (peones negros)
- * 3: campos disponibles para movimiento
- * 11: reinas propias (reinas blancas)
- * 22: reinas enemigas (reinas negras)
- * 
+ * Clase para manejo del juego de Damas 0: posiciones inválidas 1: fichas
+ * propias (peones blancos) 2: fichas enemigas (peones negros) 3: campos
+ * disponibles para movimiento 11: reinas propias (reinas blancas) 22: reinas
+ * enemigas (reinas negras)
+ *
  * Autor: reych
  */
-public class Damas implements Serializable{
-private static final long serialVersionUID=1L;
- 
+public class Damas implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     // Matriz de juego (tablero)
     public int[][] juego = {
         {2, 0, 2, 0, 2, 0, 2, 0},
@@ -29,7 +27,7 @@ private static final long serialVersionUID=1L;
     };
 
     // Constructor de la clase
-    public  Damas(){
+    public Damas() {
         // El tablero se inicializa con las posiciones de las fichas
     }
 
@@ -42,9 +40,10 @@ private static final long serialVersionUID=1L;
     public void setJuego(int[][] juego) {
         this.juego = juego;
     }
-    
+
     /**
      * Método para validar si un movimiento es válido
+     *
      * @param filaOrigen La fila de origen de la ficha
      * @param columnaOrigen La columna de origen de la ficha
      * @param nuevaFila La nueva fila a la que se quiere mover la ficha
@@ -59,25 +58,25 @@ private static final long serialVersionUID=1L;
 
         int fichaOrigen = this.juego[filaOrigen][columnaOrigen];
         // Dirección del movimiento de las fichas normales (1: hacia arriba, 2: hacia abajo) 
-        int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; 
+        int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1;
 
         // Caso 2: Movimiento válido para fichas normales (no reinas)
         if (fichaOrigen == 1 || fichaOrigen == 2) {
-            if ((nuevaFila == filaOrigen + direccionMovimiento) &&
-                (nuevaColumna == columnaOrigen + 1 || nuevaColumna == columnaOrigen - 1)) {
+            if ((nuevaFila == filaOrigen + direccionMovimiento)
+                    && (nuevaColumna == columnaOrigen + 1 || nuevaColumna == columnaOrigen - 1)) {
                 return true;
             }
 
             // Verificar si puede comer ficha
-            if ((nuevaFila == filaOrigen + 2 * direccionMovimiento) &&
-                (nuevaColumna == columnaOrigen + 2 || nuevaColumna == columnaOrigen - 2)) {
+            if ((nuevaFila == filaOrigen + 2 * direccionMovimiento)
+                    && (nuevaColumna == columnaOrigen + 2 || nuevaColumna == columnaOrigen - 2)) {
                 int filaComida = filaOrigen + direccionMovimiento;
                 int columnaComida = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
                 int fichaComida = this.juego[filaComida][columnaComida];
 
                 // Verificar si la ficha comida es del oponente
-                if ((fichaOrigen == 1 && (fichaComida == 2 || fichaComida == 22)) ||
-                    (fichaOrigen == 2 && (fichaComida == 1 || fichaComida == 11))) {
+                if ((fichaOrigen == 1 && (fichaComida == 2 || fichaComida == 22))
+                        || (fichaOrigen == 2 && (fichaComida == 1 || fichaComida == 11))) {
                     // Comer la ficha
                     //this.juego[filaComida][columnaComida] = 3;
                     return true;
@@ -100,10 +99,10 @@ private static final long serialVersionUID=1L;
                 int fichaComida = this.juego[filaComida][columnaComida];
 
                 // Verificar si la ficha comida es del oponente
-                if ((fichaOrigen == 11 && (fichaComida == 2 || fichaComida == 22)) ||
-                    (fichaOrigen == 22 && (fichaComida == 1 || fichaComida == 11))) {
+                if ((fichaOrigen == 11 && (fichaComida == 2 || fichaComida == 22))
+                        || (fichaOrigen == 22 && (fichaComida == 1 || fichaComida == 11))) {
                     // Comer la ficha
-                   // this.juego[filaComida][columnaComida] = 3;
+                    //this.juego[filaComida][columnaComida] = 3;
                     return true;
                 }
             }
@@ -114,6 +113,7 @@ private static final long serialVersionUID=1L;
 
     /**
      * Método para realizar un movimiento en el tablero
+     *
      * @param filaOrigen La fila de origen de la ficha
      * @param columnaOrigen La columna de origen de la ficha
      * @param nuevaFila La nueva fila a la que se quiere mover la ficha
@@ -123,46 +123,100 @@ private static final long serialVersionUID=1L;
         if (validaMovimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna)) {
             int fichaOrigen = this.juego[filaOrigen][columnaOrigen];
             int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; // Dirección del movimiento de las
-        // Realizar el movimiento
-        this.juego[nuevaFila][nuevaColumna] = fichaOrigen;
-        this.juego[filaOrigen][columnaOrigen] = 3; // La posición de origen queda vacía
+            // Realizar el movimiento
+            this.juego[nuevaFila][nuevaColumna] = fichaOrigen;
+            this.juego[filaOrigen][columnaOrigen] = 3; // La posición de origen queda vacía
 
-        // Caso de captura (eliminar ficha enemiga)
-        int filaCaptura = filaOrigen + direccionMovimiento;
-        int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
+            //Peon come.
+            //Caso de captura (eliminar ficha enemiga)
+            int filaCaptura = filaOrigen + direccionMovimiento;
+            int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
+            if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
+                this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
+            }
 
-        if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
-            
-            this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
-            // Actualizar coordenadas de la ficha después de la captura
-            nuevaFila = filaCaptura;
-            nuevaColumna = columnaCaptura;
+            //reina propia come.
+            //Caso 1. abajo, derecha          
+            if ((this.juego[nuevaFila][nuevaColumna] == 11)
+                    && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
+               // System.out.println("yyy");
+                int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 1) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida++;
+                    columnaComida++;
+                }
+            }
+            //caso 2. arriba, izq.
+            if ((this.juego[nuevaFila][nuevaColumna] == 11)
+                    && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
+               // System.out.println("xxx");
+                int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 1) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+
+                    filaComida--;
+                    columnaComida--;
+                }
+            }
+            // Caso 3. abajo, derecha
+            if ((this.juego[nuevaFila][nuevaColumna] == 11)
+                    && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
+                //System.out.println("zzz");
+                int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 1) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida++;
+                    columnaComida--;
+                }
+            }
+
+            // Caso 4. arriba, derecha
+            if ((this.juego[nuevaFila][nuevaColumna] == 11)
+                    && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
+                //System.out.println("www");
+                int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 1) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida--;
+                    columnaComida++;
+                }
+            }
+
+            //System.out.println(direccionMovimiento);
+            // Comprobar si un peón alcanza el borde opuesto del tablero y convertirlo en reina
+            if (fichaOrigen == 1 && nuevaFila == 0) {
+                this.juego[nuevaFila][nuevaColumna] = 11; // Peón blanco se convierte en reina blanca
+            } else if (fichaOrigen == 2 && nuevaFila == 7) {
+                this.juego[nuevaFila][nuevaColumna] = 22; // Peón negro se convierte en reina negra
+            }
         }
 
-        // Comprobar si un peón alcanza el borde opuesto del tablero y convertirlo en reina
-        if (fichaOrigen == 1 && nuevaFila == 0) {
-            this.juego[nuevaFila][nuevaColumna] = 11; // Peón blanco se convierte en reina blanca
-        } else if (fichaOrigen == 2 && nuevaFila == 7) {
-            this.juego[nuevaFila][nuevaColumna] = 22; // Peón negro se convierte en reina negra
-        }
     }
-        
-        
-}
 
     //mostramos el array
     @Override
     public String toString() {
-        String s="";
+        String s = "";
         for (int i = 0; i < juego.length; i++) {
             for (int j = 0; j < juego[0].length; j++) {
-                s+=juego[i][j]+" ";
+                s += juego[i][j] + " ";
             }
-            s+="\n";
+            s += "\n";
         }
         return s;
     }
 
-    
-    
 }
