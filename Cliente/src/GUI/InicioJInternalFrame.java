@@ -23,6 +23,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private ServerRequest newRequest;
     private final MainJFrame mainFrame; 
     private GameJInternalFrame game;
+    private GameVsComputerInternalFrame gameVsComputer;
     private ArrayList<User> onlineFriends;
     //atributos necesarios para el hilo
     private boolean start;
@@ -89,9 +90,17 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         return game;
     }
 
+    public GameVsComputerInternalFrame getGameVsComputer() {
+        return gameVsComputer;
+    }
+    
     public void setGame(GameJInternalFrame game) {
         this.game = game;
     }      
+
+    public void setGameVsComputer(GameVsComputerInternalFrame gameVsComputer) {
+        this.gameVsComputer = gameVsComputer;
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -324,9 +333,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/personal-computer.png"))); // NOI18N
         jMenuItem3.setText("Play vs computer");
-        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                playVsComputerMouseClicked(evt);
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playVsComputerActionPerformed(evt);
             }
         });
         jMenu3.add(jMenuItem3);
@@ -408,10 +417,6 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.dispose();
     }//GEN-LAST:event_logOutMouseClicked
    
-    private void playVsComputerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playVsComputerMouseClicked
-
-    }//GEN-LAST:event_playVsComputerMouseClicked
-
     //mostramos data de amigos   
     private void showFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFriendsActionPerformed
         activeComponents(0);
@@ -424,6 +429,16 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private void list2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list2MouseClicked
         controlThirdList();
     }//GEN-LAST:event_list2MouseClicked
+
+    private void playVsComputerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playVsComputerActionPerformed
+        this.disableComponents();
+        this.menuBar.setVisible(false);
+        this.start = false;
+        gameVsComputer = new GameVsComputerInternalFrame(this, this.user.getUser());
+        gameVsComputer.setVisible(true);
+        disableInternalFrameMove(gameVsComputer);
+        this.jDesktopPane2.add(gameVsComputer);
+    }//GEN-LAST:event_playVsComputerActionPerformed
 
     //habilitamos los componentes que necesitamos
     private void activeComponents(int caso) {
@@ -1006,6 +1021,18 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     }
     
     private void disableInternalFrameMove(GameJInternalFrame frame) {
+        // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
+        frame.setBorder(null);
+        BasicInternalFrameUI ui = (BasicInternalFrameUI) frame.getUI();
+        Component northPane = ui.getNorthPane();
+        MouseMotionListener[] motionListeners = (MouseMotionListener[]) northPane.getListeners(MouseMotionListener.class);
+        for (MouseMotionListener listener : motionListeners) {
+            northPane.removeMouseMotionListener(listener);
+        }
+
+    }
+    
+    private void disableInternalFrameMove(GameVsComputerInternalFrame frame) {
         // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
         frame.setBorder(null);
         BasicInternalFrameUI ui = (BasicInternalFrameUI) frame.getUI();

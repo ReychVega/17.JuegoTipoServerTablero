@@ -8,6 +8,7 @@ public class juegoListener implements ActionListener {
     private GameJInternalFrame gui;
     private int lastSelectedButton = -1;
     private int firstSelectedBtn=-1;
+    
     public juegoListener(GameJInternalFrame gui) {
         this.gui = gui;
     }

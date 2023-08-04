@@ -104,7 +104,7 @@
                 <Property name="text" type="java.lang.String" value="Play vs computer"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="playVsComputerMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="playVsComputerActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

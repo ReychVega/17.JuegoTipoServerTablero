@@ -148,7 +148,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     public void run() {
         long started;
         long elapse;
-        this.espera = 5000; // 5 segundos en milisegundos
+        this.espera = 2000; // 2 segundos en milisegundos
 
         while (this.start) {
             repaint();
