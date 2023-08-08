@@ -9,7 +9,7 @@ public class Movimiento {
     int columnaOrigen;
     int nuevaFila;
     int nuevaColumna;
-
+// Comen
     public Movimiento(int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
         this.filaOrigen = filaOrigen;
         this.columnaOrigen = columnaOrigen;
