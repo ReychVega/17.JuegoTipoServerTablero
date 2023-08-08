@@ -7,43 +7,54 @@ import java.util.ArrayList;
  *
  * @author reych
  */
-public class ServerRequest implements Serializable{
-private static final long serialVersionUID=1L;
-    
-private boolean turno;
-private boolean gameState;
-private String friend;    
-private String user;
-private String action;
-private User enemy;
-private FriendRequest request;
-private GameRequest gameRequest;
-public int[][] juego;
+// Clase que representa una solicitud del servidor
+public class ServerRequest implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-private ArrayList<User>onlineUsers;
-private ArrayList<User>foundUsers;
-private ArrayList<User>friends;
-private ArrayList<GameRequest>gameRequestSent;
-private ArrayList<GameRequest>gameRequestRecieved;
-private ArrayList<FriendRequest>friendRequestSent;
-private ArrayList<FriendRequest>friendRequestRecieved;
+    // Atributos de la solicitud del servidor
+    private boolean turno; // Indica si es el turno del jugador
+    private boolean gameState; // Indica el estado del juego (si está en curso o no)
+    private String friend; // Almacena el nombre del amigo
+    private String user; // Almacena el nombre de usuario
+    private String action; // Almacena la acción que se debe realizar
+    private User enemy; // Representa al enemigo del usuario
+    private FriendRequest request; // Solicitud de amistad recibida
+    private GameRequest gameRequest; // Solicitud de juego recibida
+    public int[][] juego; // Representa el tablero del juego
 
+    // Listas para almacenar diferentes objetos relacionados con el usuario
+    private ArrayList<User> onlineUsers; // Usuarios en línea
+    private ArrayList<User> foundUsers; // Usuarios encontrados
+    private ArrayList<User> friends; // Lista de amigos del usuario
+    private ArrayList<GameRequest> gameRequestSent; // Solicitud de juego enviada
+    private ArrayList<GameRequest> gameRequestRecieved; // Solicitud de juego recibida
+    private ArrayList<FriendRequest> friendRequestSent; // Solicitud de amistad enviada
+    private ArrayList<FriendRequest> friendRequestRecieved; // Solicitud de amistad recibida
 
+    // Constructor para crear una solicitud del servidor con el nombre de usuario y acción específica
     public ServerRequest(String user, String action) {
         this.user = user;
         this.action = action;
-        this.turno=false;
-        this.gameState=false;
-        this.friends=new ArrayList<>();
-        this.onlineUsers=new ArrayList<>();
-        this.foundUsers=new ArrayList<>();
-        this.gameRequestSent=new ArrayList<>();
-        this.gameRequestRecieved=new ArrayList<>();
-        this.foundUsers=new ArrayList<>();
-        this.friendRequestSent=new ArrayList<>();
-        this.friendRequestRecieved=new ArrayList<>();
-        this.juego=null;
+        this.turno = false;
+        this.gameState = false;
+        this.friends = new ArrayList<>();
+        this.onlineUsers = new ArrayList<>();
+        this.foundUsers = new ArrayList<>();
+        this.gameRequestSent = new ArrayList<>();
+        this.gameRequestRecieved = new ArrayList<>();
+        this.foundUsers = new ArrayList<>();
+        this.friendRequestSent = new ArrayList<>();
+        this.friendRequestRecieved = new ArrayList<>();
+        this.juego = null;
     }
+
+    // Métodos para obtener y establecer los atributos de la solicitud del servidor
+
+    // ...
+    // (Métodos getters y setters para los atributos)
+    // ...
+
+
 
     public String getUser() {
         return user;
