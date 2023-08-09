@@ -10,17 +10,22 @@ import java.io.Serializable;
  *
  * @author reych
  */
-    abstract class Request  implements Serializable{
-    private static final long serialVersionUID=1L;
+  // Clase abstracta que representa una solicitud realizada por un usuario a otro
+abstract class Request implements Serializable {
+    // Identificador para la serialización
+    private static final long serialVersionUID = 1L;
+
+    // Atributos que almacenan el usuario que realiza la solicitud y el usuario solicitado
     private User requestBy;
     private User requestFor;
-       
+
+    // Constructor que recibe el usuario que realiza la solicitud y el usuario solicitado
     public Request(User requestBy, User requestFor) {
-     this.requestBy=requestBy;
-     this.requestFor=requestFor;
-     
+        this.requestBy = requestBy;
+        this.requestFor = requestFor;
     }
 
+    // Métodos para acceder y modificar el usuario que realiza la solicitud
     public User getRequestBy() {
         return requestBy;
     }
@@ -29,6 +34,7 @@ import java.io.Serializable;
         this.requestBy = requestBy;
     }
 
+    // Métodos para acceder y modificar el usuario solicitado
     public User getRequestFor() {
         return requestFor;
     }
@@ -36,7 +42,7 @@ import java.io.Serializable;
     public void setRequestFor(User requestFor) {
         this.requestFor = requestFor;
     }
-    
+
+    // Método abstracto que debe ser implementado por las subclases para mostrar información específica de la solicitud
     abstract String showData(int i);
-    
 }
