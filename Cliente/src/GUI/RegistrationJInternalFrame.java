@@ -1,11 +1,24 @@
 package GUI;
 
 import Client.Client;
+import Domain.GenericClass;
 import Domain.User;
 import static GUI.MainJFrame.clientSocket;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /*
@@ -15,16 +28,29 @@ import javax.swing.JOptionPane;
  * @author reych
  */
 public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
- private User user;
- private final MainJFrame mainFrame; // Agrega este atributo
+
+    private User user;
+    private final MainJFrame mainFrame; // Agrega este atributo
+
+    private JFileChooser fileChooser = new JFileChooser();
+    private File archivoImagen;
+    private JLabel imageLabel;
+    private boolean imagenCargada = false;
 
     /**
      * Creates new form RegistrationJInternalFrame
+     *
      * @param mainFrame
      */
     public RegistrationJInternalFrame(MainJFrame mainFrame) {
         initComponents();
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
+
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
+        imageLabel = new JLabel();//ojo x2
+
+        jDesktopPane2.add(imageLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 100, 100));
+
     }
 
     /**
@@ -46,6 +72,8 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         btnRegister = new java.awt.Button();
         btnComeBack = new java.awt.Button();
         lblConfirmPassword = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        btnFoto = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(null);
@@ -83,12 +111,18 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         btnRegister.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
         btnRegister.setForeground(new java.awt.Color(255, 255, 255));
         btnRegister.setLabel("Register");
+        btnRegister.setName(""); // NOI18N
         btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnRegisterregisterMouseClicked(evt);
             }
         });
-        jDesktopPane2.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, 120, 30));
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+        jDesktopPane2.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 280, 120, 30));
 
         btnComeBack.setActionCommand("back");
         btnComeBack.setBackground(new java.awt.Color(51, 0, 51));
@@ -104,14 +138,30 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
 
         lblConfirmPassword.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
         lblConfirmPassword.setText("Confirm Password");
-        jDesktopPane2.add(lblConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, -1));
+        jDesktopPane2.add(lblConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Castellar", 0, 16)); // NOI18N
+        jLabel1.setText("add profile picture");
+        jDesktopPane2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 210, -1));
+
+        btnFoto.setBackground(new java.awt.Color(0, 102, 102));
+        btnFoto.setFont(new java.awt.Font("Cascadia Mono", 0, 12)); // NOI18N
+        btnFoto.setForeground(new java.awt.Color(255, 255, 255));
+        btnFoto.setText("Load picture");
+        btnFoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFotoActionPerformed(evt);
+            }
+        });
+        jDesktopPane2.add(btnFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 240, 120, 30));
 
         getContentPane().add(jDesktopPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 680, 517));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-     /*
+    /*
      * Evento que se dispara cuando se hace clic en el botón de registro.
      * Recolecta los datos ingresados por el usuario, crea una instancia de User y la envía al servidor a través del cliente.
      * Luego, muestra el mensaje de respuesta del servidor en la interfaz gráfica.
@@ -119,69 +169,120 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
     private void btnRegisterregisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterregisterMouseClicked
         this.btnRegister.setEnabled(false);
         this.btnComeBack.setEnabled(false);
-        
-        
-        // Caso 1. Que todos los campos estén llenos
-        if (!txtUser.getText().isEmpty() && !txtPassword.getText().isEmpty()
-            && !txtConfirmPassword.getText().isEmpty()) {
 
+        // Caso 1. Que todos los campos estén llenos
+        if (!txtUser.getText().isEmpty() && !txtPassword.getText().isEmpty() && !txtConfirmPassword.getText().isEmpty()) {
             String patron = ".*[:].*";
             Pattern pattern = Pattern.compile(patron);
             Matcher matcher = pattern.matcher(txtUser.getText());
             boolean contieneCaracterEspecial = matcher.matches();
-            //Caso1.1
-            if(!contieneCaracterEspecial){
-            
-            //1.2 Revisamos que las contraseñas coincidan
-            if (txtPassword.getText().equals(txtConfirmPassword.getText())) {
 
-                // Creamos una nueva instancia de User con los datos del formulario
-                user = new User(txtUser.getText(), txtPassword.getText());
-                user.setAction("registration");
-                
-                if (clientSocket == null) {
-                    connectToServer();
+            if (!contieneCaracterEspecial) {
+                // 1.2 Revisamos que las contraseñas coincidan
+                if (txtPassword.getText().equals(txtConfirmPassword.getText())) {
+                    if (imagenCargada) {
+                        try {
+                            byte[] bytesImagen = null;
+                            try {
+                                bytesImagen = Files.readAllBytes(Paths.get(archivoImagen.getPath()));
+                            } catch (InvalidPathException e) {
+                                JOptionPane.showMessageDialog(RegistrationJInternalFrame.this, "Invalid image format.", "Error", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                            String base64Imagen = Base64.getEncoder().encodeToString(bytesImagen);
+
+                            GenericClass gC = new GenericClass();
+                            if (gC.verificarExistenciaArchivo("usuarios.txt") == true) {
+                                new GenericClass().guardarImagenEnArchivo(base64Imagen, txtUser.getText());
+                            } else {
+                                File archivo = new File("usuarios.txt");
+                                archivo.createNewFile();
+                                gC.guardarImagenEnArchivo("test", txtUser.getText());
+                            }
+
+                            // Creamos una nueva instancia de User con los datos del formulario
+                            user = new User(txtUser.getText(), txtPassword.getText());
+                            user.setAction("registration");
+
+                            if (clientSocket == null) {
+                                connectToServer();
+                            }
+
+                            // Enviamos el objeto User al servidor a través del socket
+                            clientSocket.sendUserToServer(user);
+
+                            // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
+                            String message = clientSocket.receiveMessageFromServer();
+                            JOptionPane.showMessageDialog(this, message, "Status", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        // Mostrar el mensaje de error si no se carga la imagen
+                        JOptionPane.showMessageDialog(RegistrationJInternalFrame.this, "Upload an picture before creating your user.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Passwords do not match", "Status", JOptionPane.INFORMATION_MESSAGE);
                 }
-
-                // Enviamos el objeto User al servidor a través del socket
-                clientSocket.sendUserToServer(user);
-
-                // Obtenemos la respuesta del servidor y la mostramos en la interfaz gráfica
-                String message = clientSocket.receiveMessageFromServer();
-                JOptionPane.showMessageDialog(this, message, "Status", JOptionPane.INFORMATION_MESSAGE);
-
-            } else {// Indicamos que las contraseñas no coinciden
-                JOptionPane.showMessageDialog(this, "Passwords do not match", "Status", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Do not use special characters", "Status", JOptionPane.INFORMATION_MESSAGE);
             }
-            
-            }else{
-                 JOptionPane.showMessageDialog(this, "Do not use special characters", "Status", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-        } else {  //Caso 2. Indicamos que hay datos incompletos
+        } else {
+            // Caso 2. Indicamos que hay datos incompletos
             JOptionPane.showMessageDialog(this, "Incomplete data", "Status", JOptionPane.INFORMATION_MESSAGE);
         }
-        
+
         this.btnRegister.setEnabled(true);
         this.btnComeBack.setEnabled(true);
         txtUser.setText("");
         txtPassword.setText("");
         txtConfirmPassword.setText("");
-        
+        imageLabel.setIcon(null);
     }//GEN-LAST:event_btnRegisterregisterMouseClicked
 
     private void btnComeBackbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComeBackbackMouseClicked
-        if (clientSocket!=null) {
+        if (clientSocket != null) {
 
         }
-        if (this.mainFrame!=null) {
+        if (this.mainFrame != null) {
             mainFrame.enableComponents(); // Llama al método en MainJFrame para mostrar los componentes
         }
         dispose();
     }//GEN-LAST:event_btnComeBackbackMouseClicked
 
-        
-     /*
+    private void btnFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotoActionPerformed
+        int seleccion = fileChooser.showOpenDialog(RegistrationJInternalFrame.this);
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            archivoImagen = fileChooser.getSelectedFile();
+
+            // Cargar la imagen en el JLabel
+            ImageIcon imageIcon = new ImageIcon(archivoImagen.getPath());
+            Image image = imageIcon.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+
+            imageLabel.setIcon(imageIcon);
+
+            // Habilitar el botón "Guardar" cuando se carga la imagen
+            btnRegister.setEnabled(true);
+            imagenCargada = true;
+
+            //mainFrame.setSize(300, 150); // Tamaño del JFrame
+            // mainFrame.setLocationRelativeTo(null); // Centrar JFrame en la pantalla
+            //mainFrame.setVisible(true);
+            //imageLabel.setPreferredSize(new Dimension(300, 300));
+        }
+
+
+    }//GEN-LAST:event_btnFotoActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        // Verificar si se ha cargado una imagen antes de guardar los datos del usuario
+
+
+    }//GEN-LAST:event_btnRegisterActionPerformed
+
+    /*
      * Método para conectarse al servidor.
      * Crea una instancia de Client para establecer la conexión con el servidor.
      * Si ocurre algún error, se mostrará un mensaje en la interfaz gráfica.
@@ -192,14 +293,15 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Check your internet connection", "Status", JOptionPane.INFORMATION_MESSAGE);
         }
-    }    
-    
- 
-    
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button btnComeBack;
+    private javax.swing.JButton btnFoto;
     private java.awt.Button btnRegister;
     private javax.swing.JDesktopPane jDesktopPane2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblConfirmPassword;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblTittle;

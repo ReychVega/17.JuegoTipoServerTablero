@@ -8,6 +8,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -167,10 +169,16 @@ public class MainJFrame extends javax.swing.JFrame {
             if (message.equalsIgnoreCase("init")) {
                 disableComponents();
                 USERCONTROL = user.getUser();
-                InicioJInternalFrame inicio = new InicioJInternalFrame(this, user.getUser());
-                inicio.setVisible(true);
-                this.jDesktopPanel.add(inicio);
+                InicioJInternalFrame inicio;
+                try {
+                    inicio = new InicioJInternalFrame(this, user.getUser()); 
+                    inicio.setVisible(true);
+                    this.jDesktopPanel.add(inicio);
                 disableInternalFrameMove(inicio);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               
             }
 
         } else {
