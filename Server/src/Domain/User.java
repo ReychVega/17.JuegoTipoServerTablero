@@ -7,65 +7,57 @@ import java.util.ArrayList;
  *
  * @author reych
  */
-// Clase que representa un usuario del juego
-public class User implements Serializable {
-    // Atributos de usuario
-    private String user; // Nombre de usuario
-    private String password; // Contraseña del usuario
-    private boolean turno; // Indica si es el turno del usuario en el juego
-    private boolean gameState; // Indica el estado del juego del usuario
-    private User enemy; // Representa al enemigo del usuario en el juego
-    private String action; // Almacena la acción que el usuario debe realizar
-    private int puntaje; // Puntaje del usuario en el juego
-    // Lista de amigos del usuario y solicitudes de amistad enviadas y recibidas
-    private ArrayList<User> friends; 
-    private ArrayList<FriendRequest> requestRecieved; 
-    private ArrayList<FriendRequest> requestSent;
-    // Lista de solicitudes de juego enviadas y recibidas
-    private ArrayList<GameRequest> gameRequestRecieved; 
-    private ArrayList<GameRequest> gameRequestSent; 
-    // Tablero del juego del usuario
-    private int[][] tablero;
+public class User implements Serializable{
+   //user
+   private String user;
+   private String password;
+   //auxiliares
+   private boolean turno;
+   private boolean gameState;
+   private User enemy;
+   private String action;
+   private String imageBase64;
+   //profile data
+   private int puntaje;
+   //friendship
+   private ArrayList<User> friends;
+   private ArrayList<FriendRequest> requestRecieved;
+   private ArrayList<FriendRequest> requestSent;   
+   //Game request
+   private ArrayList<GameRequest> gameRequestRecieved;
+   private ArrayList<GameRequest> gameRequestSent;
+   //tablero
+   private int[][]tablero;
+   
+   private static final long serialVersionUID=1L;
 
-    private static final long serialVersionUID = 1L;
-
-    // Constructor sin parámetros para crear un nuevo usuario
     public User() {
-        this.puntaje = 0;
-        this.friends = new ArrayList<>();
-        this.requestSent = new ArrayList<>();
-        this.requestRecieved = new ArrayList<>();
-        this.gameRequestSent = new ArrayList<>();
-        this.gameRequestRecieved = new ArrayList<>();
-        this.gameState = false;
-        this.turno = false;
-        this.tablero = null;
+        this.puntaje=0;
+        this.friends=new ArrayList<>();
+        this.requestSent=new ArrayList<>();
+        this.requestRecieved=new ArrayList<>();
+        this.gameRequestSent=new ArrayList<>();
+        this.gameRequestRecieved=new ArrayList<>();
+        this.gameState=false;
+        this.turno=false;
+        this.tablero=null;
     }
 
-    // Constructor con parámetros para crear un nuevo usuario con nombre de usuario y contraseña
+
     public User(String user, String password) {
         this.user = user;
         this.password = password;
-        this.puntaje = 0;
-        this.friends = new ArrayList<>();
-        this.requestSent = new ArrayList<>();
-        this.requestRecieved = new ArrayList<>();
-        this.gameRequestSent = new ArrayList<>();
-        this.gameRequestRecieved = new ArrayList<>();
-        this.gameState = false;
-        this.turno = false;
-        this.tablero = null;
+         this.puntaje=0;
+        this.friends=new ArrayList<>();
+        this.requestSent=new ArrayList<>();
+        this.requestRecieved=new ArrayList<>();
+        this.gameRequestSent=new ArrayList<>();
+        this.gameRequestRecieved=new ArrayList<>();
+        this.gameState=false;
+        this.turno=false;
+        this.tablero=null;
     }
-
-    // Métodos para obtener y establecer los atributos del usuario
-
-    // ...
-    // (Métodos getters y setters para los atributos)
-    
-
-   
-
-
+        
     public String getUser() {
         return user;
     }
@@ -168,6 +160,14 @@ public class User implements Serializable {
 
     public void setTablero(int[][] tablero) {
         this.tablero = tablero;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
     
     @Override

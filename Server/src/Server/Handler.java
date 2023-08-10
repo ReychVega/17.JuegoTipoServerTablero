@@ -297,7 +297,6 @@ public class Handler extends Thread {
                            request.setJuego(
                                    utility.getJuego(request.getUser(),request.getEnemy().getUser()));
                         }
-                        
                         sendRequest(request);
                     }
                 //Caso 18. valida movimiento de juego 
@@ -307,7 +306,9 @@ public class Handler extends Thread {
                         request.setJuego(null);
                     }
                 }
-
+              
+                
+                
                 //actualizamos
                 file.actualizaLista();
 
