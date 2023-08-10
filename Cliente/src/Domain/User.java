@@ -16,6 +16,7 @@ public class User implements Serializable{
    private boolean gameState;
    private User enemy;
    private String action;
+   private String imageBase64;
    //profile data
    private int puntaje;
    //friendship
@@ -159,6 +160,14 @@ public class User implements Serializable{
 
     public void setTablero(int[][] tablero) {
         this.tablero = tablero;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
     
     @Override

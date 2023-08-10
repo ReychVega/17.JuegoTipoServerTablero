@@ -8,11 +8,16 @@ import Client.Client;
 import static GUI.MainJFrame.clientSocket;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /*
@@ -59,38 +64,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.friendRequest = false;
         this.start = true;
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
-        imageJLabel = new JLabel();
-
-        GenericClass gC = new GenericClass();
-
-        if (gC.verificarExistenciaArchivo("usuarios.txt")) {
-            List<UserIMG> usuarios = gC.leerUsuariosDesdeArchivo();
-            ImageIcon imageIcon = gC.obtenerBase64ImagenPorNombreUsuario(usuarios, user.getUser());
-
-            if (imageIcon != null) {
-                imageJLabel.setIcon(imageIcon);
-                Dimension size = imageJLabel.getPreferredSize();
-//                imageJLabel.setBounds(20, 30, size.width, size.height);
-                int xPosition = 7;  // Ajusta la posición X según tus necesidades
-                int yPosition = 60;  // Coloca la imagen debajo del lblUser con un espacio de 10
-                imageJLabel.setBounds(xPosition, yPosition, size.width, size.height);
-
-                // Agregar el JLabel al jDesktopPane2
-                jDesktopPane2.add(imageJLabel);
-
-                // Se asegura de que jDesktopPane2 sea visible
-                jDesktopPane2.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuario no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            File archivo = new File("usuarios.txt");
-            archivo.createNewFile();
-
-            // Configura el ícono en null para no mostrar ninguna imagen por defecto
-            imageJLabel.setIcon(null);
-            jDesktopPane2.add(imageJLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 100, 100));
-        }
+        imageJLabel = new JLabel();        
+        //carga imagen de usuario
+        getUserImage();
     }
 
     public Thread getThread() {
@@ -631,8 +607,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             //mostramos
             showData(this.user);
 
+            //verifica el estado del juego
             getGameValidation();
-
+            
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("error de coneccion");
         }
@@ -669,6 +646,36 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         }
 
     }
+
+      //mostramos la imagen del usuario
+private void getUserImage() {
+    GenericClass gC = new GenericClass();
+    String base64Imagen = this.user.getImageBase64();
+    BufferedImage imagen = gC.decodeBase64ToImage(base64Imagen);
+    
+    if (imagen != null) {
+        ImageIcon imageIcon = new ImageIcon(imagen);
+        
+        // Redimensiona la imagen al tamaño deseado (150x150)
+        Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        
+        // Configura el JLabel con la imagen redimensionada
+        imageJLabel.setIcon(scaledIcon);
+        Dimension size = imageJLabel.getPreferredSize();
+        int xPosition = 7;  // Ajusta la posición X según tus necesidades
+        int yPosition = 60; // Coloca la imagen debajo del lblUser con un espacio de 10
+        imageJLabel.setBounds(xPosition, yPosition, 150, 150); // Tamaño fijo de 150x150
+        imageJLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageJLabel.setVerticalAlignment(SwingConstants.CENTER);
+        
+        // Agregar el JLabel al jDesktopPane2
+        jDesktopPane2.add(imageJLabel);
+        
+        // Asegura que jDesktopPane2 sea visible
+        jDesktopPane2.setVisible(true);
+    }
+}
 
     //mostramos la info del usuario
     private void showData(User user) {
@@ -1069,6 +1076,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
     }
 
+    //inmoviliza los internal frames
     private void disableInternalFrameMove(GameVsComputerInternalFrame frame) {
         // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
         frame.setBorder(null);

@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 /*
  * La clase RegistrationJInternalFrame representa una interfaz gráfica para el registro de usuarios.
@@ -48,8 +49,8 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
 
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png", "gif"));
         imageLabel = new JLabel();//ojo x2
-
-        jDesktopPane2.add(imageLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 100, 100));
+        jDesktopPane2.add(imageLabel, 
+                new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 150, 150));
 
     }
 
@@ -191,19 +192,11 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
                             }
                             String base64Imagen = Base64.getEncoder().encodeToString(bytesImagen);
 
-                            GenericClass gC = new GenericClass();
-                            if (gC.verificarExistenciaArchivo("usuarios.txt") == true) {
-                                new GenericClass().guardarImagenEnArchivo(base64Imagen, txtUser.getText());
-                            } else {
-                                File archivo = new File("usuarios.txt");
-                                archivo.createNewFile();
-                                gC.guardarImagenEnArchivo("test", txtUser.getText());
-                            }
-
                             // Creamos una nueva instancia de User con los datos del formulario
                             user = new User(txtUser.getText(), txtPassword.getText());
                             user.setAction("registration");
-
+                            user.setImageBase64(base64Imagen);
+                            
                             if (clientSocket == null) {
                                 connectToServer();
                             }
@@ -258,18 +251,17 @@ public class RegistrationJInternalFrame extends javax.swing.JInternalFrame {
 
             // Cargar la imagen en el JLabel
             ImageIcon imageIcon = new ImageIcon(archivoImagen.getPath());
-            Image image = imageIcon.getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+            Image originalImage = imageIcon.getImage();
+            Image scaledImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 
-            imageLabel.setIcon(imageIcon);
+            imageLabel.setIcon(new ImageIcon(scaledImage));
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             // Habilitar el botón "Guardar" cuando se carga la imagen
             btnRegister.setEnabled(true);
-            imagenCargada = true;
-
-            //mainFrame.setSize(300, 150); // Tamaño del JFrame
-            // mainFrame.setLocationRelativeTo(null); // Centrar JFrame en la pantalla
-            //mainFrame.setVisible(true);
-            //imageLabel.setPreferredSize(new Dimension(300, 300));
+            imagenCargada = true;            
+           
         }
 
 

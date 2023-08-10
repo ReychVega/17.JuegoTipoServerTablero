@@ -113,7 +113,7 @@ public class GenericClass {
         return null;
     }
 
-    private BufferedImage decodeBase64ToImage(String base64Imagen) {
+    public BufferedImage decodeBase64ToImage(String base64Imagen) {
         try {
             byte[] imageBytes = Base64.getDecoder().decode(base64Imagen);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
