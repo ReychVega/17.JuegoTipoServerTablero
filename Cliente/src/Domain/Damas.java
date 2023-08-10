@@ -240,26 +240,49 @@ public class Damas implements Serializable {
                         }
                                           
                         
-                        // Comer fichas enemigas
+                        // Comer fichas enemigas a la izq
                         if (columnaOrigen - 3 >= 0 
                                 &&  (filaOrigen+3<juego.length)
                                 && (juego[filaOrigen + 2][columnaOrigen - 2] == 1
                                 || juego[filaOrigen + 2][columnaOrigen - 2] == 11)
                                 && (juego[filaOrigen + 3][columnaOrigen - 3] == 3 )) {
-                            Movimiento m=new Movimiento(filaOrigen+1, columnaOrigen-1, filaOrigen + 3, columnaOrigen - 3);
-                            m.setComeFicha(true);
-                            movimientosValidos.add(m);   
+                            Movimiento m = new Movimiento(filaOrigen + 1, columnaOrigen - 1, filaOrigen + 3, columnaOrigen - 3);
+                            int fila = filaOrigen;
+                            int col = columnaOrigen;
+                            while (fila < juego.length
+                                    && col > 0) {
+                                if (this.juego[fila][col] == 1) {
+                                    m.setComeFicha(true);
+                                }
+                                fila++;
+                                col--;
+                            }
+                            if (m.isComeFicha()==true){
+                                movimientosValidos.add(m);
+                            }
                         }
-                        
+
+                        //comer fichas enemigas a la derecha
                         if (columnaOrigen + 2 < juego[0].length
                                 &&  (filaOrigen+3<juego.length)
                                 && (juego[filaOrigen + 1][columnaOrigen + 1] == 1
                                 || juego[filaOrigen + 1][columnaOrigen + 1] == 11)
                                 && juego[filaOrigen + 2][columnaOrigen + 2] == 3 ) {
                             Movimiento m=new Movimiento(filaOrigen, columnaOrigen, filaOrigen + 2, columnaOrigen + 2);
-                            m.setComeFicha(true);
-                            movimientosValidos.add(m);
-                        
+                           int fila = filaOrigen;
+                            int col = columnaOrigen;
+                            while (fila < juego.length
+                                    && col <juego[0].length) {
+                                if (this.juego[fila][col] == 1) {
+                                    m.setComeFicha(true);
+                                }
+                                fila++;
+                                col++;
+                            }
+                            if (m.isComeFicha()==true){
+                                movimientosValidos.add(m);
+                            }
+                                                
                         }
                     }
 
@@ -353,12 +376,15 @@ public class Damas implements Serializable {
                 movimiento=movimientosValidos.get(i);
                 movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
                 move.add(movimiento);
+                System.out.println("peon come");
                 flag=true;
             }
         }
+
+        System.out.println(movimientosValidos.size());
         
         if (!movimientosValidos.isEmpty() && flag==false) {
-            //System.out.println("---");
+            System.out.println("mueve al azar");
             movimiento = seleccionarMovimientoAlAzar(movimientosValidos);
             move.add(movimiento);
             movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);

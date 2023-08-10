@@ -609,7 +609,11 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
             //verifica el estado del juego
             getGameValidation();
-            
+           
+            if (imageJLabel!=null) {
+               this.imageJLabel.setVisible(true);
+
+            }
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("error de coneccion");
         }
