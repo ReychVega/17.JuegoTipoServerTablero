@@ -11,7 +11,8 @@ public class Movimiento {
     int columnaOrigen; // Columna de origen del movimiento
     int nuevaFila; // Nueva fila del movimiento
     int nuevaColumna; // Nueva columna del movimiento
-
+    boolean comeFicha;
+    
     // Constructor para crear un objeto Movimiento con los valores de fila y columna de origen,
     // así como la nueva fila y columna del movimiento
     public Movimiento(int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
@@ -19,6 +20,8 @@ public class Movimiento {
         this.columnaOrigen = columnaOrigen;
         this.nuevaFila = nuevaFila;
         this.nuevaColumna = nuevaColumna;
+        this.comeFicha=false;
+
     }
 
     // Métodos para obtener y establecer la fila de origen del movimiento
@@ -57,6 +60,14 @@ public class Movimiento {
         this.nuevaColumna = nuevaColumna;
     }
 
+    public boolean isComeFicha() {
+        return comeFicha;
+    }
+
+    public void setComeFicha(boolean comeFicha) {
+        this.comeFicha = comeFicha;
+    }
+   
     // Método para representar el objeto Movimiento en formato de cadena
     @Override
     public String toString() {

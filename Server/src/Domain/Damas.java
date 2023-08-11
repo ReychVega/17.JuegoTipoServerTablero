@@ -15,6 +15,8 @@ import java.util.Random;
 public class Damas implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public int contadorFichasAzules;
+    public int contadorFichasRojas;
 
     // Matriz de juego (tablero)
     public int[][] juego = {
@@ -31,7 +33,10 @@ public class Damas implements Serializable {
     // Constructor de la clase
     public Damas() {
         // El tablero se inicializa con las posiciones de las fichas
+        contadorFichasAzules = 12;
+        contadorFichasRojas = 12;
     }
+     
 
     // Método para obtener el tablero de juego
     public int[][] getJuego() {
@@ -141,7 +146,7 @@ public class Damas implements Serializable {
             //Caso 1. abajo, derecha          
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
-               // System.out.println("yyy");
+                System.out.println("yyy");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
@@ -155,7 +160,7 @@ public class Damas implements Serializable {
             //caso 2. arriba, izq.
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
-                //System.out.println("xxx");
+                System.out.println("xxx");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
@@ -170,7 +175,7 @@ public class Damas implements Serializable {
             // Caso 3. abajo, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
-                //System.out.println("zzz");
+                System.out.println("zzz");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
@@ -185,7 +190,7 @@ public class Damas implements Serializable {
             // Caso 4. arriba, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
-                //System.out.println("www");
+                System.out.println("www");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
@@ -238,14 +243,51 @@ public class Damas implements Serializable {
                         if (columnaOrigen + 1 < juego[0].length && juego[filaOrigen + direccionMovimiento][columnaOrigen + 1] == 3) {
                             movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen + 1));
                         }
-                        // Comer fichas enemigas
-                        if (columnaOrigen - 2 >= 0 && juego[filaOrigen + direccionMovimiento][columnaOrigen - 2] == 3
-                                && (juego[filaOrigen + direccionMovimiento][columnaOrigen - 1] == 2 || juego[filaOrigen + direccionMovimiento][columnaOrigen - 1] == 22)) {
-                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen - 2));
+                                          
+                        
+                        // Comer fichas enemigas a la izq
+                        if (columnaOrigen - 3 >= 0 
+                                &&  (filaOrigen+3<juego.length)
+                                && (juego[filaOrigen + 2][columnaOrigen - 2] == 1
+                                || juego[filaOrigen + 2][columnaOrigen - 2] == 11)
+                                && (juego[filaOrigen + 3][columnaOrigen - 3] == 3 )) {
+                            Movimiento m = new Movimiento(filaOrigen + 1, columnaOrigen - 1, filaOrigen + 3, columnaOrigen - 3);
+                            int fila = filaOrigen;
+                            int col = columnaOrigen;
+                            while (fila < juego.length
+                                    && col > 0) {
+                                if (this.juego[fila][col] == 1) {
+                                    m.setComeFicha(true);
+                                }
+                                fila++;
+                                col--;
+                            }
+                            if (m.isComeFicha()==true){
+                                movimientosValidos.add(m);
+                            }
                         }
-                        if (columnaOrigen + 2 < juego[0].length && juego[filaOrigen + direccionMovimiento][columnaOrigen + 2] == 3
-                                && (juego[filaOrigen + direccionMovimiento][columnaOrigen + 1] == 2 || juego[filaOrigen + direccionMovimiento][columnaOrigen + 1] == 22)) {
-                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen + 2));
+
+                        //comer fichas enemigas a la derecha
+                        if (columnaOrigen + 2 < juego[0].length
+                                &&  (filaOrigen+3<juego.length)
+                                && (juego[filaOrigen + 1][columnaOrigen + 1] == 1
+                                || juego[filaOrigen + 1][columnaOrigen + 1] == 11)
+                                && juego[filaOrigen + 2][columnaOrigen + 2] == 3 ) {
+                            Movimiento m=new Movimiento(filaOrigen, columnaOrigen, filaOrigen + 2, columnaOrigen + 2);
+                           int fila = filaOrigen;
+                            int col = columnaOrigen;
+                            while (fila < juego.length
+                                    && col <juego[0].length) {
+                                if (this.juego[fila][col] == 1) {
+                                    m.setComeFicha(true);
+                                }
+                                fila++;
+                                col++;
+                            }
+                            if (m.isComeFicha()==true){
+                                movimientosValidos.add(m);
+                            }
+                                                
                         }
                     }
 
@@ -329,12 +371,30 @@ public class Damas implements Serializable {
         return movimientosValidos.get(index);
     }
 
-    public void moverComputadora() {
+    public ArrayList<Movimiento> moverComputadora() {
         ArrayList<Movimiento> movimientosValidos = obtenerMovimientosValidos(2); // Jugador 2: fichas rojas
-        if (!movimientosValidos.isEmpty()) {
-            Movimiento movimiento = seleccionarMovimientoAlAzar(movimientosValidos);
+        ArrayList<Movimiento> move=new ArrayList<>(); // Jugador 2: fichas rojas
+        Movimiento movimiento;
+        boolean flag=false;
+        for (int i = 0; i < movimientosValidos.size(); i++) {
+            if (movimientosValidos.get(i).isComeFicha()==true) {
+                movimiento=movimientosValidos.get(i);
+                movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
+                move.add(movimiento);
+                System.out.println("peon come");
+                flag=true;
+            }
+        }
+
+        System.out.println(movimientosValidos.size());
+        
+        if (!movimientosValidos.isEmpty() && flag==false) {
+            System.out.println("mueve al azar");
+            movimiento = seleccionarMovimientoAlAzar(movimientosValidos);
+            move.add(movimiento);
             movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
         }
+        return move;
     }
     
     //cuenta fichas azules

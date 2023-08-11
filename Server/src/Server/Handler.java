@@ -305,6 +305,17 @@ public class Handler extends Thread {
                         utility.setTurnos(request.getUser(),request.getEnemy().getUser());
                         request.setJuego(null);
                     }
+                     //Caso 19. Get DB user list
+                    if (request.getAction().equalsIgnoreCase("Get DB User List")) {
+                        request.setDBUsers(utility.obtenerData(file.getUsers()));
+                        sendRequest(request);
+                    }
+                    //case 20."El juego ha terminado"
+                    if (request.getAction().equalsIgnoreCase("El juego ha terminado")) {
+                        utility.removeEnemy(request.getUser());
+                        utility.removeEnemy(request.getEnemy().getUser());
+                        file.actualizarPuntaje(request.getEnemy().getUser(), request.getPuntaje());
+                    }
                 }
               
                 

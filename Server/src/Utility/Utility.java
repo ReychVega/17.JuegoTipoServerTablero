@@ -400,4 +400,13 @@ public class Utility implements Serializable{
         }
 
     }
+    
+     public ArrayList<User> obtenerData(ArrayList<User> usuarios ){
+        ArrayList<User> list = new ArrayList<>();
+        for (int i = 0; i < usuarios.size(); i++) {
+            list.add(usuarios.get(i));
+        }
+        return list;
+       
+    }
 }

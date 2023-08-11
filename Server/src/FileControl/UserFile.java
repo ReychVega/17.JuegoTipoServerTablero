@@ -296,6 +296,27 @@ public class UserFile implements FileControl{
         output.close();
 
     }
+    
+     public void actualizarPuntaje(String user, int puntaje)throws FileNotFoundException, IOException, ClassNotFoundException {
+        if (archivo.exists()) {
+            ObjectInputStream input = null;
+            input = new ObjectInputStream(new FileInputStream((archivo)));
+            Object aux = input.readObject();
+            this.users = ((ArrayList<User>) (List<User>) aux);
+            for (int i = 0; i < this.users.size(); i++) {
+                if (this.users.get(i).getUser().equalsIgnoreCase(user)) {
+                  this.users.get(i).setPuntaje(this.users.get(i).getPuntaje()+puntaje);
+                }
+            }
+   
+            
+            input.close();
+        }
+
+        ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream((fileName)));
+        output.writeUnshared(this.users);
+        output.close();
+    }
 
     
 }

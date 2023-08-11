@@ -21,6 +21,7 @@ public class ServerRequest implements Serializable {
     private FriendRequest request; // Solicitud de amistad recibida
     private GameRequest gameRequest; // Solicitud de juego recibida
     public int[][] juego; // Representa el tablero del juego
+   private int puntaje;
 
     // Listas para almacenar diferentes objetos relacionados con el usuario
     private ArrayList<User> onlineUsers; // Usuarios en línea
@@ -30,6 +31,7 @@ public class ServerRequest implements Serializable {
     private ArrayList<GameRequest> gameRequestRecieved; // Solicitud de juego recibida
     private ArrayList<FriendRequest> friendRequestSent; // Solicitud de amistad enviada
     private ArrayList<FriendRequest> friendRequestRecieved; // Solicitud de amistad recibida
+    private ArrayList<User>dbUsers;
 
     // Constructor para crear una solicitud del servidor con el nombre de usuario y acción específica
     public ServerRequest(String user, String action) {
@@ -38,6 +40,7 @@ public class ServerRequest implements Serializable {
         this.turno = false;
         this.gameState = false;
         this.friends = new ArrayList<>();
+        this.dbUsers = new ArrayList<>();
         this.onlineUsers = new ArrayList<>();
         this.foundUsers = new ArrayList<>();
         this.gameRequestSent = new ArrayList<>();
@@ -71,6 +74,15 @@ public class ServerRequest implements Serializable {
     public void setAction(String action) {
         this.action = action;
     }
+    
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+
 
     public int[][] getJuego() {
         return juego;
@@ -80,8 +92,14 @@ public class ServerRequest implements Serializable {
         this.juego = juego;
     }
     
-    
+    public ArrayList<User> getDbUsers() {
+        return dbUsers;
+    }
 
+    public void setDbUsers(ArrayList<User> dbUsers) {
+        this.dbUsers = dbUsers;
+    }
+    
     public ArrayList<User> getOnlineUsers() {
         return onlineUsers;
     }
@@ -146,6 +164,10 @@ public class ServerRequest implements Serializable {
         this.friend = friend;
     }
 
+    public void setDBUsers(ArrayList<User> dbUsers) {
+        this.dbUsers = dbUsers;
+    }
+    
     public GameRequest getGameRequest() {
         return gameRequest;
     }
