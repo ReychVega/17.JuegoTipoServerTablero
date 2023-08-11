@@ -413,6 +413,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     }
     
     private void verifyWinning(){
+        this.juego.contadorFichasAzules();
         if (this.juego.contadorFichasAzules <= 0) {
             newRequest = new ServerRequest(this.user, "El juego ha terminado");
             newRequest.setEnemy(new User(this.lblEnemyName.getText(),""));

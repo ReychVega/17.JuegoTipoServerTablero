@@ -139,14 +139,16 @@ public class Damas implements Serializable {
             int filaCaptura = filaOrigen + direccionMovimiento;
             int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
             if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
-                this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
+                if (filaCaptura<juego.length && columnaCaptura<juego.length) {
+                    this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
+                }
             }
 
             //reina propia come.
             //Caso 1. abajo, derecha          
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
-                System.out.println("yyy");
+                //System.out.println("yyy");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
@@ -160,7 +162,7 @@ public class Damas implements Serializable {
             //caso 2. arriba, izq.
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
-                System.out.println("xxx");
+                //System.out.println("xxx");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
@@ -175,7 +177,7 @@ public class Damas implements Serializable {
             // Caso 3. abajo, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
-                System.out.println("zzz");
+               // System.out.println("zzz");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
@@ -190,7 +192,7 @@ public class Damas implements Serializable {
             // Caso 4. arriba, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
-                System.out.println("www");
+                //System.out.println("www");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
