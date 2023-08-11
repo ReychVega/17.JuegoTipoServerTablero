@@ -1,9 +1,6 @@
 package GUI;
 
 import Domain.Damas;
-import Domain.ServerRequest;
-import Domain.User;
-import static GUI.MainJFrame.clientSocket;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -263,12 +260,29 @@ public class GameVsComputerInternalFrame extends javax.swing.JInternalFrame impl
      
     }     
         
-    //verifica cierre
+        
+    //verifica gane de jugador o compu, y cierra
     private void verifyCloseOperation(){
+        this.juego.contadorFichasAzules();
+        this.juego.contadorFichasRojas();
+        if (this.juego.contadorFichasAzules <= 0) {
+            this.lblTurno.setText("Computer wins !");
+            JOptionPane.showMessageDialog(this, "Computer wins !", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
+        if (this.juego.contadorFichasRojas <= 0) {
+            this.lblTurno.setText("Player 1 wins !");
+            JOptionPane.showMessageDialog(this, "congratulations!", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
+    }
+    
+    //verifica cierre
+   /* private void verifyCloseOperation(){
         if (this.juego.contadorFichasAzules()==true || this.juego.contadorFichasRojas()==true) {
             this.dispose();
         }  
-    }
+    }*/
     
     @Override
     public void actionPerformed(ActionEvent e) {

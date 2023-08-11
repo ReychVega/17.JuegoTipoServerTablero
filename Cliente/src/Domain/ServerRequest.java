@@ -7,38 +7,40 @@ import java.util.ArrayList;
  *
  * @author reych
  */
-// Clase que representa una solicitud del servidor y contiene información sobre el estado del juego y los usuarios
+// Clase que representa una solicitud del servidor
 public class ServerRequest implements Serializable {
-    // Identificador para la serialización
     private static final long serialVersionUID = 1L;
 
-    // Atributos que almacenan información sobre el estado del juego y los usuarios
-    private boolean turno;
-    private boolean gameState;
-    private String friend;
-    private String user;
-    private String action;
-    private User enemy;
-    private FriendRequest request;
-    private GameRequest gameRequest;
-    public int[][] juego;
+    // Atributos de la solicitud del servidor
+    private boolean turno; // Indica si es el turno del jugador
+    private boolean gameState; // Indica el estado del juego (si está en curso o no)
+    private String friend; // Almacena el nombre del amigo
+    private String user; // Almacena el nombre de usuario
+    private String action; // Almacena la acción que se debe realizar
+    private User enemy; // Representa al enemigo del usuario
+    private FriendRequest request; // Solicitud de amistad recibida
+    private GameRequest gameRequest; // Solicitud de juego recibida
+    public int[][] juego; // Representa el tablero del juego
+   private int puntaje;
 
-    // Listas para almacenar usuarios y solicitudes relacionadas al juego y amistad
-    private ArrayList<User> onlineUsers;
-    private ArrayList<User> foundUsers;
-    private ArrayList<User> friends;
-    private ArrayList<GameRequest> gameRequestSent;
-    private ArrayList<GameRequest> gameRequestRecieved;
-    private ArrayList<FriendRequest> friendRequestSent;
-    private ArrayList<FriendRequest> friendRequestRecieved;
+    // Listas para almacenar diferentes objetos relacionados con el usuario
+    private ArrayList<User> onlineUsers; // Usuarios en línea
+    private ArrayList<User> foundUsers; // Usuarios encontrados
+    private ArrayList<User> friends; // Lista de amigos del usuario
+    private ArrayList<GameRequest> gameRequestSent; // Solicitud de juego enviada
+    private ArrayList<GameRequest> gameRequestRecieved; // Solicitud de juego recibida
+    private ArrayList<FriendRequest> friendRequestSent; // Solicitud de amistad enviada
+    private ArrayList<FriendRequest> friendRequestRecieved; // Solicitud de amistad recibida
+    private ArrayList<User>dbUsers;
 
-    // Constructor que recibe el nombre de usuario y acción
+    // Constructor para crear una solicitud del servidor con el nombre de usuario y acción específica
     public ServerRequest(String user, String action) {
         this.user = user;
         this.action = action;
         this.turno = false;
         this.gameState = false;
         this.friends = new ArrayList<>();
+        this.dbUsers = new ArrayList<>();
         this.onlineUsers = new ArrayList<>();
         this.foundUsers = new ArrayList<>();
         this.gameRequestSent = new ArrayList<>();
@@ -49,7 +51,14 @@ public class ServerRequest implements Serializable {
         this.juego = null;
     }
 
-    // Métodos para acceder y modificar el nombre de usuario y acción
+    // Métodos para obtener y establecer los atributos de la solicitud del servidor
+
+    // ...
+    // (Métodos getters y setters para los atributos)
+    // ...
+
+
+
     public String getUser() {
         return user;
     }
@@ -65,17 +74,16 @@ public class ServerRequest implements Serializable {
     public void setAction(String action) {
         this.action = action;
     }
-
-    // Métodos para acceder y modificar el estado del juego
-    public boolean isGameState() {
-        return gameState;
+    
+    public int getPuntaje() {
+        return puntaje;
     }
 
-    public void setGameState(boolean gameState) {
-        this.gameState = gameState;
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
     }
 
-    // Métodos para acceder y modificar la matriz que representa el juego
+
     public int[][] getJuego() {
         return juego;
     }
@@ -83,8 +91,15 @@ public class ServerRequest implements Serializable {
     public void setJuego(int[][] juego) {
         this.juego = juego;
     }
+    
+    public ArrayList<User> getDbUsers() {
+        return dbUsers;
+    }
 
-    // Métodos para acceder y modificar la lista de usuarios en línea
+    public void setDbUsers(ArrayList<User> dbUsers) {
+        this.dbUsers = dbUsers;
+    }
+    
     public ArrayList<User> getOnlineUsers() {
         return onlineUsers;
     }
@@ -93,7 +108,6 @@ public class ServerRequest implements Serializable {
         this.onlineUsers = onlineUsers;
     }
 
-    // Métodos para acceder y modificar la lista de usuarios encontrados
     public ArrayList<User> getFoundUsers() {
         return foundUsers;
     }
@@ -102,7 +116,6 @@ public class ServerRequest implements Serializable {
         this.foundUsers = foundUsers;
     }
 
-    // Métodos para acceder y modificar el usuario enemigo
     public User getEnemy() {
         return enemy;
     }
@@ -110,8 +123,7 @@ public class ServerRequest implements Serializable {
     public void setEnemy(User enemy) {
         this.enemy = enemy;
     }
-
-    // Métodos para acceder y modificar la lista de solicitudes de juego enviadas
+    
     public ArrayList<GameRequest> getGameRequestSent() {
         return gameRequestSent;
     }
@@ -120,7 +132,6 @@ public class ServerRequest implements Serializable {
         this.gameRequestSent = gameRequestSent;
     }
 
-    // Métodos para acceder y modificar la lista de solicitudes de juego recibidas
     public ArrayList<GameRequest> getGameRequestRecieved() {
         return gameRequestRecieved;
     }
@@ -129,7 +140,14 @@ public class ServerRequest implements Serializable {
         this.gameRequestRecieved = gameRequestRecieved;
     }
 
-    // Métodos para acceder y modificar la solicitud de amistad
+    public boolean isGameState() {
+        return gameState;
+    }
+
+    public void setGameState(boolean gameState) {
+        this.gameState = gameState;
+    }
+    
     public FriendRequest getRequest() {
         return request;
     }
@@ -138,7 +156,6 @@ public class ServerRequest implements Serializable {
         this.request = request;
     }
 
-    // Métodos para acceder y modificar el nombre del amigo
     public String getFriend() {
         return friend;
     }
@@ -147,7 +164,10 @@ public class ServerRequest implements Serializable {
         this.friend = friend;
     }
 
-    // Métodos para acceder y modificar la solicitud de juego
+    public void setDBUsers(ArrayList<User> dbUsers) {
+        this.dbUsers = dbUsers;
+    }
+    
     public GameRequest getGameRequest() {
         return gameRequest;
     }
@@ -156,7 +176,6 @@ public class ServerRequest implements Serializable {
         this.gameRequest = gameRequest;
     }
 
-    // Métodos para acceder y modificar la lista de solicitudes de amistad enviadas
     public ArrayList<FriendRequest> getFriendRequestSent() {
         return friendRequestSent;
     }
@@ -165,7 +184,6 @@ public class ServerRequest implements Serializable {
         this.friendRequestSent = friendRequestSent;
     }
 
-    // Métodos para acceder y modificar la lista de solicitudes de amistad recibidas
     public ArrayList<FriendRequest> getFriendRequestRecieved() {
         return friendRequestRecieved;
     }
@@ -174,7 +192,6 @@ public class ServerRequest implements Serializable {
         this.friendRequestRecieved = friendRequestRecieved;
     }
 
-    // Métodos para acceder y modificar la lista de amigos
     public ArrayList<User> getFriends() {
         return friends;
     }
@@ -183,7 +200,6 @@ public class ServerRequest implements Serializable {
         this.friends = friends;
     }
 
-    // Métodos para acceder y modificar el estado del turno
     public boolean isTurno() {
         return turno;
     }
@@ -191,4 +207,6 @@ public class ServerRequest implements Serializable {
     public void setTurno(boolean turno) {
         this.turno = turno;
     }
+    
+    
 }

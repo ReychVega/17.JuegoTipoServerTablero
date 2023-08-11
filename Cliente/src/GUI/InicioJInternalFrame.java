@@ -11,13 +11,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.util.Base64;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /*
@@ -64,7 +59,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.friendRequest = false;
         this.start = true;
         this.mainFrame = mainFrame; // Inicializa la referencia a MainJFrame
-        imageJLabel = new JLabel();        
+        this.imageJLabel = new JLabel();        
         //carga imagen de usuario
         getUserImage();
     }
@@ -114,6 +109,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         this.gameVsComputer = gameVsComputer;
     }
 
+    public JLabel getImageJLabel() {
+        return imageJLabel;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -612,7 +611,6 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
            
             if (imageJLabel!=null) {
                this.imageJLabel.setVisible(true);
-
             }
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println("error de coneccion");
@@ -636,12 +634,13 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                     && newRequest.isGameState() == true) {
                 this.disableComponents();
                 this.menuBar.setVisible(false);
+                this.imageJLabel.setVisible(false);
+                this.jDesktopPane2.remove(this.imageJLabel);
                 this.start = false;
                 game = new GameJInternalFrame(this, this.user.getUser());
                 game.setVisible(true);
                 disableInternalFrameMove(game);
                 this.jDesktopPane2.add(game);
-                imageJLabel.setVisible(false);
 
             }
 
@@ -652,7 +651,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     }
 
       //mostramos la imagen del usuario
-private void getUserImage() {
+    private void getUserImage() {
     GenericClass gC = new GenericClass();
     String base64Imagen = this.user.getImageBase64();
     BufferedImage imagen = gC.decodeBase64ToImage(base64Imagen);

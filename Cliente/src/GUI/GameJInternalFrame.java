@@ -157,6 +157,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             elapse = System.nanoTime() - started;
             // ...   
             getCompleteData();
+            verifyWinning();
 
             //...
             if (this.espera < 0) {
@@ -211,8 +212,11 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
                 
                 // Remove game from the JDesktopPane.
                 this.mainInternalFrame.getjDesktopPane2().remove(mainInternalFrame.getGame());
+                this.mainInternalFrame.getjDesktopPane2().add(mainInternalFrame.getImageJLabel());
+                
                 //mostramos el usuario de nuevo
                 this.mainInternalFrame.getLblUser().setVisible(true);
+                this.mainInternalFrame.getImageJLabel().setVisible(true);
                 // Dispose of the game's internal resources.
                 this.setClosed(true);
                 this.dispose();
@@ -343,11 +347,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             }
             //Enviamos el obj. request al servidor a través del socket
             clientSocket.sendRequestToServer(newRequest);
-
-             //System.out.println("Cambio de ficha\n"+
-             //       this.juego.toString());
-            //System.out.println("envia=\n"+mostrarArray(newRequest.getJuego()));
-            
+     
             actualizarTablero();
         }
         return isValidMove;
@@ -410,6 +410,22 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         // System.out.println(s);
          this.actualizarTablero();
          iniciamosTablero();
+    }
+    
+    private void verifyWinning(){
+        if (this.juego.contadorFichasAzules <= 0) {
+            newRequest = new ServerRequest(this.user, "El juego ha terminado");
+            newRequest.setEnemy(new User(this.lblEnemyName.getText(),""));
+            newRequest.setPuntaje(100);
+            if (MainJFrame.clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            MainJFrame.clientSocket.sendRequestToServer(newRequest);
+            this.lblTurno.setText(this.lblEnemyName.getText()+" wins !");
+            JOptionPane.showMessageDialog(this, this.lblEnemyName.getText()+" wins !", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

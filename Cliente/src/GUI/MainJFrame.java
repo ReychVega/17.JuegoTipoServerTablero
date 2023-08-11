@@ -64,6 +64,7 @@ public class MainJFrame extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         lblUser = new javax.swing.JLabel();
         btnRegister = new java.awt.Button();
+        btnRanking = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Game");
@@ -80,7 +81,7 @@ public class MainJFrame extends javax.swing.JFrame {
         lblGame.setForeground(new java.awt.Color(0, 153, 153));
         lblGame.setText("GAME");
         jDesktopPanel.add(lblGame);
-        lblGame.setBounds(30, 20, 221, 40);
+        lblGame.setBounds(20, 20, 221, 40);
 
         lblPassword.setFont(new java.awt.Font("Castellar", 1, 18)); // NOI18N
         lblPassword.setText("Password:");
@@ -123,6 +124,19 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jDesktopPanel.add(btnRegister);
         btnRegister.setBounds(290, 270, 190, 30);
+
+        btnRanking.setActionCommand("Ranking");
+        btnRanking.setBackground(new java.awt.Color(0, 102, 102));
+        btnRanking.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnRanking.setForeground(new java.awt.Color(255, 255, 255));
+        btnRanking.setLabel("Ranking");
+        btnRanking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRankingActionPerformed(evt);
+            }
+        });
+        jDesktopPanel.add(btnRanking);
+        btnRanking.setBounds(290, 320, 190, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -198,6 +212,15 @@ public class MainJFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_newAccountMouseClicked
 
+    private void btnRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankingActionPerformed
+        /* Create and display the form */
+        disableComponents();
+        RankingJInternalFrame ranking = new RankingJInternalFrame(this);
+        ranking.setVisible(true);
+        disableInternalFrameMove(ranking);
+        this.jDesktopPanel.add(ranking);
+    }//GEN-LAST:event_btnRankingActionPerformed
+
     private void disableInternalFrameMove(JInternalFrame frame) {
         // Deshabilitar el comportamiento de arrastrar y mover para el RegistrationJInternalFrame
         frame.setBorder(null);
@@ -233,6 +256,8 @@ public class MainJFrame extends javax.swing.JFrame {
         txtPassword.setVisible(false);
         lblUser.setVisible(false);
         btnRegister.setVisible(false);
+        btnRanking.setVisible(false);
+
     }
 
     // Método para mostrar los componentes ocultos
@@ -245,11 +270,15 @@ public class MainJFrame extends javax.swing.JFrame {
         txtPassword.setText("");
         txtPassword.setVisible(true);
         lblUser.setVisible(true);
-        btnRegister.setVisible(true);
+        btnRegister.setVisible(true);     
+        btnRanking.setVisible(true);
+
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button btnLogin;
+    private java.awt.Button btnRanking;
     private java.awt.Button btnRegister;
     private javax.swing.JDesktopPane jDesktopPanel;
     private javax.swing.JLabel lblGame;

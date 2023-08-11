@@ -15,6 +15,8 @@ import java.util.Random;
 public class Damas implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public int contadorFichasAzules;
+    public int contadorFichasRojas;
 
     // Matriz de juego (tablero)
     public int[][] juego = {
@@ -31,7 +33,10 @@ public class Damas implements Serializable {
     // Constructor de la clase
     public Damas() {
         // El tablero se inicializa con las posiciones de las fichas
+        contadorFichasAzules = 12;
+        contadorFichasRojas = 12;
     }
+     
 
     // Método para obtener el tablero de juego
     public int[][] getJuego() {
@@ -232,6 +237,7 @@ public class Damas implements Serializable {
                 if (juego[filaOrigen][columnaOrigen] == jugador) {
                     // Movimientos válidos para fichas normales
                     if ((filaOrigen + direccionMovimiento >= 0) && (filaOrigen + direccionMovimiento < juego.length)) {
+                        
                         if (columnaOrigen - 1 >= 0 && juego[filaOrigen + direccionMovimiento][columnaOrigen - 1] == 3) {
                             movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen - 1));
                         }
@@ -372,23 +378,22 @@ public class Damas implements Serializable {
         Movimiento movimiento;
         boolean flag=false;
         for (int i = 0; i < movimientosValidos.size(); i++) {
-            if (movimientosValidos.get(i).isComeFicha()==true) {
+            if (movimientosValidos.get(i).isComeFicha()==true && flag==false) {
                 movimiento=movimientosValidos.get(i);
                 movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
                 move.add(movimiento);
-                System.out.println("peon come");
+            //    System.out.println("*peon come");
                 flag=true;
             }
         }
-
-        System.out.println(movimientosValidos.size());
         
         if (!movimientosValidos.isEmpty() && flag==false) {
-            System.out.println("mueve al azar");
+           // System.out.println("mueve al azar");
             movimiento = seleccionarMovimientoAlAzar(movimientosValidos);
             move.add(movimiento);
             movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
         }
+        System.out.println("");
         return move;
     }
     
@@ -401,6 +406,8 @@ public class Damas implements Serializable {
             }
           // System.out.println(juego[i/8][i%8]);
         }
+        
+        contadorFichasAzules=counter;
        // System.out.println(counter);
         if (counter>0) {
             return false;
@@ -418,6 +425,8 @@ public class Damas implements Serializable {
              counter+=1;   
             }
         }
+        
+        contadorFichasRojas=counter;
         if (counter>0) {
             return false;
         }else{
