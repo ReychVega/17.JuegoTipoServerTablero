@@ -4,27 +4,42 @@ package Domain;
  *
  * @author reych
  */
-// Clase que representa un movimiento en el juego
 public class Movimiento {
-    // Atributos para almacenar información sobre el movimiento
-    int filaOrigen; // Fila de origen del movimiento
-    int columnaOrigen; // Columna de origen del movimiento
-    int nuevaFila; // Nueva fila del movimiento
-    int nuevaColumna; // Nueva columna del movimiento
-    boolean comeFicha;
+    int filaOrigen;
+    int columnaOrigen;
+    int nuevaFila;
+    int nuevaColumna;
+    boolean peonCome;
+    boolean reinaCome;
     
-    // Constructor para crear un objeto Movimiento con los valores de fila y columna de origen,
-    // así como la nueva fila y columna del movimiento
     public Movimiento(int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
         this.filaOrigen = filaOrigen;
         this.columnaOrigen = columnaOrigen;
         this.nuevaFila = nuevaFila;
         this.nuevaColumna = nuevaColumna;
-        this.comeFicha=false;
-
+        this.peonCome=false;
+        this.reinaCome=false;
+        
     }
 
-    // Métodos para obtener y establecer la fila de origen del movimiento
+    public boolean isPeonCome() {
+        return peonCome;
+    }
+
+    public void setPeonCome(boolean peonCome) {
+        this.peonCome = peonCome;
+    }
+
+    public boolean isReinaCome() {
+        return reinaCome;
+    }
+
+    public void setReinaCome(boolean reinaCome) {
+        this.reinaCome = reinaCome;
+    }
+
+    
+    
     public int getFilaOrigen() {
         return filaOrigen;
     }
@@ -33,7 +48,6 @@ public class Movimiento {
         this.filaOrigen = filaOrigen;
     }
 
-    // Métodos para obtener y establecer la columna de origen del movimiento
     public int getColumnaOrigen() {
         return columnaOrigen;
     }
@@ -42,7 +56,6 @@ public class Movimiento {
         this.columnaOrigen = columnaOrigen;
     }
 
-    // Métodos para obtener y establecer la nueva fila del movimiento
     public int getNuevaFila() {
         return nuevaFila;
     }
@@ -51,7 +64,6 @@ public class Movimiento {
         this.nuevaFila = nuevaFila;
     }
 
-    // Métodos para obtener y establecer la nueva columna del movimiento
     public int getNuevaColumna() {
         return nuevaColumna;
     }
@@ -59,18 +71,11 @@ public class Movimiento {
     public void setNuevaColumna(int nuevaColumna) {
         this.nuevaColumna = nuevaColumna;
     }
-
-    public boolean isComeFicha() {
-        return comeFicha;
-    }
-
-    public void setComeFicha(boolean comeFicha) {
-        this.comeFicha = comeFicha;
-    }
-   
-    // Método para representar el objeto Movimiento en formato de cadena
+    
     @Override
     public String toString() {
         return "Movimiento{" + "filaOrigen=" + filaOrigen + ", columnaOrigen=" + columnaOrigen + ", nuevaFila=" + nuevaFila + ", nuevaColumna=" + nuevaColumna + '}';
     }
+    
+    
 }

@@ -260,7 +260,6 @@ public class GameVsComputerInternalFrame extends javax.swing.JInternalFrame impl
      
     }     
         
-        
     //verifica gane de jugador o compu, y cierra
     private void verifyCloseOperation(){
         this.juego.contadorFichasAzules();

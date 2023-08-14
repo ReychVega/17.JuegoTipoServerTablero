@@ -133,6 +133,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
         list2 = new javax.swing.JList<>();
         menuBar = new javax.swing.JMenuBar();
         menuBtnInicio = new javax.swing.JMenu();
+        score = new javax.swing.JMenu();
         menuBtnFriendsOptions = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -276,7 +277,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
                 .addComponent(lblInstruccion3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contenedor3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jDesktopPane2);
@@ -289,6 +290,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             }
         });
         menuBar.add(menuBtnInicio);
+
+        score.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/butterfly-top-view.png"))); // NOI18N
+        score.setText("Score:");
+        menuBar.add(score);
 
         menuBtnFriendsOptions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/frameIcons/friends.png"))); // NOI18N
         menuBtnFriendsOptions.setText("Friends");
@@ -605,6 +610,8 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
             //mostramos
             showData(this.user);
+            
+            this.score.setText(this.user.getPuntaje()+"");
 
             //verifica el estado del juego
             getGameValidation();
@@ -1142,6 +1149,7 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBtnFriendsOptions;
     private javax.swing.JMenu menuBtnInicio;
+    private javax.swing.JMenu score;
     private javax.swing.JTextField txtUserToSearch;
     // End of variables declaration//GEN-END:variables
 

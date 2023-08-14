@@ -1,4 +1,4 @@
-package GUI;
+ package GUI;
 
 import Client.Client;
 import Domain.Damas;
@@ -24,6 +24,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     private final InicioJInternalFrame mainInternalFrame; 
     private ServerRequest newRequest;
     private String user;
+    private String enemy;
     //atributos necesarios para el hilo
     private boolean start;
     private long espera;
@@ -66,68 +67,111 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         lblEnemyName = new javax.swing.JLabel();
         lblTurno = new javax.swing.JLabel();
+        lblUserName = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Game");
         setMaximumSize(new java.awt.Dimension(700, 900));
         setPreferredSize(new java.awt.Dimension(700, 900));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         lblEnemyName.setBackground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         lblEnemyName.setForeground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setText("Oponente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 56, 0, 0);
+        getContentPane().add(lblEnemyName, gridBagConstraints);
 
         lblTurno.setBackground(new java.awt.Color(0, 51, 51));
         lblTurno.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         lblTurno.setForeground(new java.awt.Color(255, 0, 0));
         lblTurno.setText("Turno");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 220;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 232, 0, 44);
+        getContentPane().add(lblTurno, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addComponent(lblTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                .addComponent(lblEnemyName, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(lblTurno)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblEnemyName)
-                .addContainerGap(829, Short.MAX_VALUE))
-        );
+        lblUserName.setBackground(new java.awt.Color(0, 51, 51));
+        lblUserName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        lblUserName.setForeground(new java.awt.Color(0, 51, 51));
+        lblUserName.setText("Oponente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(794, 22, 6, 0);
+        getContentPane().add(lblUserName, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+ 
     //agregamos los componentes necesarios dell juego, de forma manual
     private void addComponents(){
-         
+        JButton btnSkip = new JButton();
+        JButton btnSurrender = new JButton();
         lblEnemyName.setBackground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         lblEnemyName.setForeground(new java.awt.Color(0, 51, 51));
         lblEnemyName.setText("Oponente");
-        lblEnemyName.setBounds(500, 10, 100, 30); // Set the position of the label
+        lblEnemyName.setBounds(40, 10, 200, 30); // Set the position of the label
+
+        lblUserName.setBackground(new java.awt.Color(0, 51, 51));
+        lblUserName.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
+        lblUserName.setForeground(new java.awt.Color(0, 51, 51));
+        lblUserName.setText(this.user);
+        lblUserName.setBounds(40, 700, 200, 30); // Set the position of the label
 
         lblTurno.setBackground(new java.awt.Color(0, 51, 51));
         lblTurno.setFont(new java.awt.Font("Segoe Print", 0, 16)); // NOI18N
         lblTurno.setForeground(new java.awt.Color(255, 0, 0));
         lblTurno.setText("Turno");
-        lblTurno.setBounds(40, 10, 200, 30); // Set the position of the label
+        lblTurno.setBounds(400, 10, 200, 30); // Set the position of the label
 
+        btnSkip.setBounds(400, 700, 100, 30);
+         btnSkip.setBackground(new java.awt.Color(0, 102, 102));
+        btnSkip.setForeground(new java.awt.Color(255, 255, 255));
+        btnSkip.setText("Skip");
+        btnSkip.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSkipMouseClicked(evt);
+            }
+        });
+        this.add(btnSkip);
+
+        btnSurrender.setBounds(550, 700, 100, 30);
+        btnSurrender.setBackground(new java.awt.Color(0, 102, 102));
+        btnSurrender.setForeground(new java.awt.Color(255, 255, 255));
+        btnSurrender.setText("Surrender");
+        btnSurrender.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSurrenderMouseClicked(evt);
+            }
+        });
+        
         getContentPane().add(lblEnemyName);
+        getContentPane().add(lblUserName);
         getContentPane().add(lblTurno);
+        getContentPane().add(btnSkip);
+        getContentPane().add(btnSurrender);
 
         p = new JPanel();
         juego = new Damas();
@@ -143,6 +187,37 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         
         this.add(p);
     }
+   
+    private void btnSurrenderMouseClicked(java.awt.event.MouseEvent evt) {                                          
+        newRequest = new ServerRequest(user, "surrender");
+        newRequest.setJuego(guardarTablero());
+        newRequest.setEnemy(new User(this.enemy, ""));
+        if (clientSocket == null) {
+            connectToServer();
+        }
+        //Enviamos el obj. request al servidor a través del socket
+        clientSocket.sendRequestToServer(newRequest);
+    }                                         
+
+    private void btnSkipMouseClicked(java.awt.event.MouseEvent evt) {                                     
+        if (permiteMover==true) {
+            permiteMover=false;
+            System.out.println("solicita pasar");
+            newRequest = new ServerRequest(user, "skipMove");
+            newRequest.setJuego(guardarTablero());
+            newRequest.setEnemy(new User(this.enemy, ""));
+            if (clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            clientSocket.sendRequestToServer(newRequest);
+
+        }else{
+            JOptionPane.showMessageDialog(this,
+                "It's not your turn", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }   
+    
     
      @Override
     public void run() {
@@ -232,12 +307,12 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
                 mainInternalFrame.setThread(new Thread(mainInternalFrame));
                 mainInternalFrame.getThread().start();
 
-                JOptionPane.showMessageDialog(this, "Game finished", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Disconnected user", "Process Status", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 
                 //validamos datos para la fisica del juego
-                this.lblEnemyName.setText(newRequest.getEnemy().getUser());
-                
+                this.lblEnemyName.setText("Friend:"+newRequest.getEnemy().getUser());
+                enemy=newRequest.getEnemy().getUser();
                 this.permiteMover=newRequest.isTurno();         
                 if (permiteMover==true) {
                     this.lblTurno.setText("It's your turn");
@@ -337,10 +412,9 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             this.juego.movimiento(rowFrom, colFrom, rowTo, colTo);
             //comunica con el server para enviar los datos al otro cliente
 
-            //validamos inicio de juego
             newRequest = new ServerRequest(user, "GameMove");
             newRequest.setJuego(guardarTablero());
-            newRequest.setEnemy(new User(this.lblEnemyName.getText(), ""));
+            newRequest.setEnemy(new User(this.enemy, ""));
 
             if (clientSocket == null) {
                 connectToServer();
@@ -430,7 +504,10 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFoto;
+    private javax.swing.JButton btnFoto1;
     private javax.swing.JLabel lblEnemyName;
     private javax.swing.JLabel lblTurno;
+    private javax.swing.JLabel lblUserName;
     // End of variables declaration//GEN-END:variables
 }

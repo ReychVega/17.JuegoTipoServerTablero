@@ -17,7 +17,7 @@ public class Damas implements Serializable {
     private static final long serialVersionUID = 1L;
     public int contadorFichasAzules;
     public int contadorFichasRojas;
-
+    
     // Matriz de juego (tablero)
     public int[][] juego = {
         {2, 0, 2, 0, 2, 0, 2, 0},
@@ -36,7 +36,6 @@ public class Damas implements Serializable {
         contadorFichasAzules = 12;
         contadorFichasRojas = 12;
     }
-     
 
     // Método para obtener el tablero de juego
     public int[][] getJuego() {
@@ -84,8 +83,6 @@ public class Damas implements Serializable {
                 // Verificar si la ficha comida es del oponente
                 if ((fichaOrigen == 1 && (fichaComida == 2 || fichaComida == 22))
                         || (fichaOrigen == 2 && (fichaComida == 1 || fichaComida == 11))) {
-                    // Comer la ficha
-                    //this.juego[filaComida][columnaComida] = 3;
                     return true;
                 }
             }
@@ -95,26 +92,164 @@ public class Damas implements Serializable {
         if (fichaOrigen == 11 || fichaOrigen == 22) {
             int filaDistancia = Math.abs(nuevaFila - filaOrigen);
             int columnaDistancia = Math.abs(nuevaColumna - columnaOrigen);
-            if (filaDistancia == columnaDistancia) {
-                return true;
-            }
+            int counter = 0;
+            int indice = 0;
+            if (filaDistancia-1>=0) {
+            
+                int[] filas = new int[filaDistancia-1];
+                int[] columnas = new int[columnaDistancia-1];
+                //reina propia come.
+                //Caso 1. abajo, derecha  
+                if ((this.juego[filaOrigen][columnaOrigen] == 11)
+                        && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
+                    int filaComida = filaOrigen+1;
+                    int columnaComida = columnaOrigen+1;
+                    while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 1
+                                || this.juego[filaComida][columnaComida] == 11) {
+                            counter++;
+                        }
+                        filaComida++;
+                        columnaComida++;
+                        indice++;
+                    }
 
-            // Verificar si puede comer ficha
-            if (filaDistancia == 2 && columnaDistancia == 2) {
-                int filaComida = (nuevaFila > filaOrigen) ? filaOrigen + 1 : filaOrigen - 1;
-                int columnaComida = (nuevaColumna > columnaOrigen) ? columnaOrigen + 1 : columnaOrigen - 1;
-                int fichaComida = this.juego[filaComida][columnaComida];
-
-                // Verificar si la ficha comida es del oponente
-                if ((fichaOrigen == 11 && (fichaComida == 2 || fichaComida == 22))
-                        || (fichaOrigen == 22 && (fichaComida == 1 || fichaComida == 11))) {
-                    // Comer la ficha
-                    //this.juego[filaComida][columnaComida] = 3;
-                    return true;
+                    //valida que coma solo una ficha
+                    return evaluaPosicion(filas, columnas, "Caso1", counter);
+                }
+            
+                //caso 2. arriba, izq.
+                if ((this.juego[filaOrigen][columnaOrigen] == 11)
+                        && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
+                    int filaComida = filaOrigen - 1; 
+                    int columnaComida = columnaOrigen - 1; 
+                    while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 1
+                              || this.juego[filaComida][columnaComida] == 11) {
+                            counter++;
+                        }
+                        filaComida--;
+                        columnaComida--;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso2", counter);
+                }
+                
+                // Caso 3. abajo, izquierda
+                if ((this.juego[filaOrigen][columnaOrigen] == 11)
+                        && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
+                    int filaComida = filaOrigen + 1; 
+                    int columnaComida = columnaOrigen - 1; 
+                    while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 1
+                                 || this.juego[filaComida][columnaComida] == 11) {
+                            counter++;
+                        }
+                        filaComida++;
+                        columnaComida--;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso3", counter);
+                }
+                //  Caso 4. arriba, derecha
+                if ((this.juego[filaOrigen][columnaOrigen] == 11)
+                        && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
+                    int filaComida = filaOrigen - 1;
+                    int columnaComida = columnaOrigen + 1;
+                    while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 1
+                                || this.juego[filaComida][columnaComida] == 11) {
+                            counter++;
+                        }
+                        filaComida--;
+                        columnaComida++;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso4", counter);    
+                }
+                  //Caso 5. abajo, derecha  
+                if ((this.juego[filaOrigen][columnaOrigen] == 22)
+                        && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
+                    int filaComida = filaOrigen+1;
+                    int columnaComida = columnaOrigen+1;
+                    while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 2
+                                || this.juego[filaComida][columnaComida] == 22) {
+                            counter++;
+                        }
+                        filaComida++;
+                        columnaComida++;
+                        indice++;
+                    }
+                    //valida que coma solo una ficha
+                    return evaluaPosicion(filas, columnas, "Caso5", counter);
+                }
+             //caso 6. arriba, izq.
+                if ((this.juego[filaOrigen][columnaOrigen] == 22)
+                        && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
+                    int filaComida = filaOrigen - 1; 
+                    int columnaComida = columnaOrigen - 1; 
+                    while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 2
+                              || this.juego[filaComida][columnaComida] == 22) {
+                            counter++;
+                        }
+                        filaComida--;
+                        columnaComida--;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso6", counter);
+                }
+                // Caso 7. abajo, izquierda
+                if ((this.juego[filaOrigen][columnaOrigen] == 22)
+                        && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
+                    int filaComida = filaOrigen + 1; 
+                    int columnaComida = columnaOrigen - 1; 
+                    while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 2
+                                 || this.juego[filaComida][columnaComida] == 22) {
+                            counter++;
+                        }
+                        filaComida++;
+                        columnaComida--;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso7", counter);
+                }
+                //  Caso 8. arriba, derecha
+                if ((this.juego[filaOrigen][columnaOrigen] == 22)
+                        && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
+                    int filaComida = filaOrigen - 1;
+                    int columnaComida = columnaOrigen + 1;
+                    while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
+                        filas[indice] = filaComida;
+                        columnas[indice] = columnaComida;
+                        if (this.juego[filaComida][columnaComida] == 2
+                                || this.juego[filaComida][columnaComida] == 22) {
+                            counter++;
+                        }
+                        filaComida--;
+                        columnaComida++;
+                        indice++;
+                    }
+                    return evaluaPosicion(filas, columnas, "Caso8", counter);    
                 }
             }
         }
-
         return false;
     }
 
@@ -131,16 +266,17 @@ public class Damas implements Serializable {
             int fichaOrigen = this.juego[filaOrigen][columnaOrigen];
             int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; // Dirección del movimiento de las
             // Realizar el movimiento
+            
             this.juego[nuevaFila][nuevaColumna] = fichaOrigen;
             this.juego[filaOrigen][columnaOrigen] = 3; // La posición de origen queda vacía
-
+            
             //Peon come.
             //Caso de captura (eliminar ficha enemiga)
             int filaCaptura = filaOrigen + direccionMovimiento;
             int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
             if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
-                if (filaCaptura<juego.length && columnaCaptura<juego.length) {
-                    this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
+                if (filaCaptura<juego.length && columnaCaptura<=juego.length) {
+                this.juego[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga                                    
                 }
             }
 
@@ -148,11 +284,11 @@ public class Damas implements Serializable {
             //Caso 1. abajo, derecha          
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
-                //System.out.println("yyy");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
-                    if (this.juego[filaComida][columnaComida] != 1) {
+                    if (this.juego[filaComida][columnaComida] != 1
+                            && this.juego[filaComida][columnaComida] != 11) {
                         this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
                     }
                     filaComida++;
@@ -162,11 +298,11 @@ public class Damas implements Serializable {
             //caso 2. arriba, izq.
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
-                //System.out.println("xxx");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
-                    if (this.juego[filaComida][columnaComida] != 1) {
+                    if (this.juego[filaComida][columnaComida] != 1
+                            && this.juego[filaComida][columnaComida] != 11) {
                         this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
                     }
 
@@ -177,11 +313,11 @@ public class Damas implements Serializable {
             // Caso 3. abajo, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
-               // System.out.println("zzz");
                 int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
-                    if (this.juego[filaComida][columnaComida] != 1) {
+                    if (this.juego[filaComida][columnaComida] != 1
+                            && this.juego[filaComida][columnaComida] != 11) {
                         this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
                     }
                     filaComida++;
@@ -192,11 +328,74 @@ public class Damas implements Serializable {
             // Caso 4. arriba, derecha
             if ((this.juego[nuevaFila][nuevaColumna] == 11)
                     && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
-                //System.out.println("www");
                 int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
                 int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
                 while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
-                    if (this.juego[filaComida][columnaComida] != 1) {
+                    if (this.juego[filaComida][columnaComida] != 1
+                            && this.juego[filaComida][columnaComida] != 11) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida--;
+                    columnaComida++;
+                }
+            }
+
+            //Caso 5. abajo, derecha          
+            if ((this.juego[nuevaFila][nuevaColumna] == 22)
+                    && nuevaFila > filaOrigen && nuevaColumna > columnaOrigen) {
+                System.out.println("caso 5");
+                int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida < nuevaFila && columnaComida < nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 2
+                            && this.juego[filaComida][columnaComida] != 22) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida++;
+                    columnaComida++;
+                }
+            }
+            //caso 6. arriba, izq.
+            if ((this.juego[nuevaFila][nuevaColumna] == 22)
+                    && nuevaFila < filaOrigen && nuevaColumna < columnaOrigen) {
+                System.out.println("caso 6");
+                int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida > nuevaFila && columnaComida > nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 2
+                            && this.juego[filaComida][columnaComida] != 22) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+
+                    filaComida--;
+                    columnaComida--;
+                }
+            }
+            // Caso 7. abajo, derecha
+            if ((this.juego[nuevaFila][nuevaColumna] == 22)
+                    && nuevaFila > filaOrigen && nuevaColumna < columnaOrigen) {
+                System.out.println("caso 7");
+                int filaComida = filaOrigen + 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen - 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida < nuevaFila && columnaComida > nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 2
+                            & this.juego[filaComida][columnaComida] != 22) {
+                        this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
+                    }
+                    filaComida++;
+                    columnaComida--;
+                }
+            }
+
+            // Caso 8. arriba, derecha
+            if ((this.juego[nuevaFila][nuevaColumna] == 22)
+                    && nuevaFila < filaOrigen && nuevaColumna > columnaOrigen) {
+                System.out.println("caso 8");
+                int filaComida = filaOrigen - 1; // Inicializamos la fila desde la que empezaremos a comer
+                int columnaComida = columnaOrigen + 1; // Inicializamos la columna desde la que empezaremos a comer
+                while (filaComida > nuevaFila && columnaComida < nuevaColumna) {
+                    if (this.juego[filaComida][columnaComida] != 2
+                            && this.juego[filaComida][columnaComida] != 22) {
                         this.juego[filaComida][columnaComida] = 3; // Comemos las fichas enemigas en línea recta
                     }
                     filaComida--;
@@ -230,142 +429,242 @@ public class Damas implements Serializable {
 
     //para jugar vs la computadora
     // Método para obtener movimientos válidos para la computadora
-    public ArrayList<Movimiento> obtenerMovimientosValidos(int jugador) {
+    public ArrayList<Movimiento> obtenerMovimientosValidos() {
         ArrayList<Movimiento> movimientosValidos = new ArrayList<>();
-        int direccionMovimiento = (jugador == 1) ? -1 : 1; // Dirección del movimiento de las fichas normales
-
+        Movimiento m;
+        //movimientos de peones
         for (int filaOrigen = 0; filaOrigen < juego.length; filaOrigen++) {
             for (int columnaOrigen = 0; columnaOrigen < juego[0].length; columnaOrigen++) {
-                if (juego[filaOrigen][columnaOrigen] == jugador) {
+                if (juego[filaOrigen][columnaOrigen] == 2) {
                     // Movimientos válidos para fichas normales
-                    if ((filaOrigen + direccionMovimiento >= 0) && (filaOrigen + direccionMovimiento < juego.length)) {
+                        //Movimiento de peones sin comer
+                        //Caso 1. izq
+                        if (columnaOrigen - 1 >= 0
+                                && juego[filaOrigen + 1][columnaOrigen - 1] == 3) {
+                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + 1, columnaOrigen - 1));
+                        }
+                        //Caso 2. derecha
+                        if (columnaOrigen + 1 < juego[0].length 
+                                && juego[filaOrigen + 1][columnaOrigen + 1] == 3) {
+                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + 1, columnaOrigen + 1));
+                        }
                         
-                        if (columnaOrigen - 1 >= 0 && juego[filaOrigen + direccionMovimiento][columnaOrigen - 1] == 3) {
-                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen - 1));
+                        // Movimiento de peones que comen
+                        //Caso 1. izq
+                        if (columnaOrigen - 2 >= 0
+                                && (filaOrigen + 2 < juego.length)
+                                && (juego[filaOrigen+1][columnaOrigen-1] == 1
+                                || juego[filaOrigen+1][columnaOrigen-1] == 11)
+                                && (juego[filaOrigen+2][columnaOrigen-2] == 3)) {
+                            m = new Movimiento(filaOrigen, columnaOrigen, filaOrigen+2, columnaOrigen-2);
+                            m.setPeonCome(true);
+                            movimientosValidos.add(m);
                         }
-                        if (columnaOrigen + 1 < juego[0].length && juego[filaOrigen + direccionMovimiento][columnaOrigen + 1] == 3) {
-                            movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + direccionMovimiento, columnaOrigen + 1));
-                        }
-                                          
-                        
-                        // Comer fichas enemigas a la izq
-                        if (columnaOrigen - 3 >= 0 
-                                &&  (filaOrigen+3<juego.length)
-                                && (juego[filaOrigen + 2][columnaOrigen - 2] == 1
-                                || juego[filaOrigen + 2][columnaOrigen - 2] == 11)
-                                && (juego[filaOrigen + 3][columnaOrigen - 3] == 3 )) {
-                            Movimiento m = new Movimiento(filaOrigen + 1, columnaOrigen - 1, filaOrigen + 3, columnaOrigen - 3);
-                            int fila = filaOrigen;
-                            int col = columnaOrigen;
-                            while (fila < juego.length
-                                    && col > 0) {
-                                if (this.juego[fila][col] == 1) {
-                                    m.setComeFicha(true);
-                                }
-                                fila++;
-                                col--;
-                            }
-                            if (m.isComeFicha()==true){
-                                movimientosValidos.add(m);
-                            }
-                        }
-
-                        //comer fichas enemigas a la derecha
+                        //Caso 2. derecha
                         if (columnaOrigen + 2 < juego[0].length
-                                &&  (filaOrigen+3<juego.length)
-                                && (juego[filaOrigen + 1][columnaOrigen + 1] == 1
-                                || juego[filaOrigen + 1][columnaOrigen + 1] == 11)
-                                && juego[filaOrigen + 2][columnaOrigen + 2] == 3 ) {
-                            Movimiento m=new Movimiento(filaOrigen, columnaOrigen, filaOrigen + 2, columnaOrigen + 2);
-                           int fila = filaOrigen;
-                            int col = columnaOrigen;
-                            while (fila < juego.length
-                                    && col <juego[0].length) {
-                                if (this.juego[fila][col] == 1) {
-                                    m.setComeFicha(true);
-                                }
-                                fila++;
-                                col++;
-                            }
-                            if (m.isComeFicha()==true){
-                                movimientosValidos.add(m);
-                            }
-                                                
+                                && (filaOrigen + 2 < juego.length)
+                                && (juego[filaOrigen+1][columnaOrigen+1] == 1
+                                || juego[filaOrigen+1][columnaOrigen+1] == 11)
+                                && juego[filaOrigen+2][columnaOrigen+2] == 3) {
+                            m = new Movimiento(filaOrigen, columnaOrigen, filaOrigen+2, columnaOrigen+2);
+                            m.setPeonCome(true);
+                            movimientosValidos.add(m);
                         }
+                        
                     }
 
-                    // Movimientos válidos para reinas (fichas coronadas)
-                    if (juego[filaOrigen][columnaOrigen] == 11 || juego[filaOrigen][columnaOrigen] == 22) {
-                        for (int distancia = 1; distancia < juego.length; distancia++) {
-                            if (filaOrigen - distancia >= 0 && columnaOrigen - distancia >= 0 && juego[filaOrigen - distancia][columnaOrigen - distancia] == 3) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen - distancia, columnaOrigen - distancia));
-                            }
-                            if (filaOrigen - distancia >= 0 && columnaOrigen + distancia < juego[0].length && juego[filaOrigen - distancia][columnaOrigen + distancia] == 3) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen - distancia, columnaOrigen + distancia));
-                            }
-                            if (filaOrigen + distancia < juego.length && columnaOrigen - distancia >= 0 && juego[filaOrigen + distancia][columnaOrigen - distancia] == 3) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + distancia, columnaOrigen - distancia));
-                            }
-                            if (filaOrigen + distancia < juego.length && columnaOrigen + distancia < juego[0].length && juego[filaOrigen + distancia][columnaOrigen + distancia] == 3) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + distancia, columnaOrigen + distancia));
-                            }
-                            // Comer fichas enemigas
-                            if (filaOrigen - distancia >= 0 && columnaOrigen - distancia >= 0 && juego[filaOrigen - distancia][columnaOrigen - distancia] == 3
-                                    && (juego[filaOrigen - distancia - 1][columnaOrigen - distancia - 1] == 2 || juego[filaOrigen - distancia - 1][columnaOrigen - distancia - 1] == 22)) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen - distancia, columnaOrigen - distancia));
-                            }
-                            if (filaOrigen - distancia >= 0 && columnaOrigen + distancia < juego[0].length && juego[filaOrigen - distancia][columnaOrigen + distancia] == 3
-                                    && (juego[filaOrigen - distancia - 1][columnaOrigen + distancia + 1] == 2 || juego[filaOrigen - distancia - 1][columnaOrigen + distancia + 1] == 22)) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen - distancia, columnaOrigen + distancia));
-                            }
-                            if (filaOrigen + distancia < juego.length && columnaOrigen - distancia >= 0 && juego[filaOrigen + distancia][columnaOrigen - distancia] == 3
-                                    && (juego[filaOrigen + distancia + 1][columnaOrigen - distancia - 1] == 2 || juego[filaOrigen + distancia + 1][columnaOrigen - distancia - 1] == 22)) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + distancia, columnaOrigen - distancia));
-                            }
-                            if (filaOrigen + distancia < juego.length && columnaOrigen + distancia < juego[0].length && juego[filaOrigen + distancia][columnaOrigen + distancia] == 3
-                                    && (juego[filaOrigen + distancia + 1][columnaOrigen + distancia + 1] == 2 || juego[filaOrigen + distancia + 1][columnaOrigen + distancia + 1] == 22)) {
-                                movimientosValidos.add(new Movimiento(filaOrigen, columnaOrigen, filaOrigen + distancia, columnaOrigen + distancia));
+                  // Movimientos válidos para reinas (fichas coronadas)
+                if (juego[filaOrigen][columnaOrigen] == 22) {
+                    for (int distancia = 1; distancia < juego.length; distancia++) {
+                        int[] filas = new int[distancia];
+                        int[] columnas = new int[distancia];
+                        int filaAux=filaOrigen;
+                        int columnaAux=columnaOrigen;
+                        int nuevaFila=filaAux + distancia;
+                        int nuevaColumna=columnaAux + distancia;
+                        int cuentaFichasPropias=0;
+                        int cuentaFichasEnemigas=0;
+                        int index=0;
+                        
+                        //Caso 1. Abajo++, derecha++
+                        if (nuevaFila < juego.length
+                                && nuevaColumna < juego.length
+                                    && this.juego[nuevaFila][nuevaColumna]==3) {
+                            filaAux++;
+                            columnaAux++;
+                           
+                            while (filaAux <= nuevaFila && columnaAux <= nuevaColumna) {
+                                filas[index] = filaAux;
+                                columnas[index] = columnaAux;
+                                if (this.juego[filaAux][columnaAux] == 2
+                                        || this.juego[filaAux][columnaAux] == 22) {
+                                    cuentaFichasPropias++;
+                                }
+                                if (this.juego[filaAux][columnaAux] == 1
+                                        || this.juego[filaAux][columnaAux] == 11) {
+                                    cuentaFichasEnemigas++;
+                                }
+                                filaAux++;
+                                columnaAux++;
+                                index++;
+                            } 
+                            if (juego[filaOrigen][columnaOrigen]==22 && cuentaFichasPropias==0
+                                     && evaluaPosicion(filas, columnas, "Caso5", cuentaFichasEnemigas)==true){
+                                if (cuentaFichasEnemigas==0){
+                                  m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                  movimientosValidos.add(m);
+                                }else if(cuentaFichasEnemigas>0){
+                                   m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                   m.setReinaCome(true);
+                                   movimientosValidos.add(m);
+                                }
+                                
                             }
                         }
+                        
+                        filaAux=filaOrigen;
+                        columnaAux=columnaOrigen;
+                        nuevaFila=filaAux - distancia;
+                        nuevaColumna=columnaAux - distancia;
+                        cuentaFichasEnemigas=0;
+                        cuentaFichasPropias=0;
+                        index=0;
+                       
+                        //Caso 2. arriba--, izquierda--
+                        if (nuevaFila >=0
+                                && nuevaColumna >=0
+                                    && this.juego[nuevaFila][nuevaColumna]==3) {
+                            
+                            filaAux--;
+                            columnaAux--;
+                           
+                            while (filaAux > nuevaFila && columnaAux > nuevaColumna) {
+                                filas[index] = filaAux;
+                                columnas[index] = columnaAux;
+                                if (this.juego[filaAux][columnaAux] == 2
+                                        || this.juego[filaAux][columnaAux] == 22) {
+                                    cuentaFichasPropias++;
+                                }
+                                if (this.juego[filaAux][columnaAux] == 1
+                                        || this.juego[filaAux][columnaAux] == 11) {
+                                    cuentaFichasEnemigas++;
+                                }
+                                filaAux--;
+                                columnaAux--;
+                                index++;
+                            } 
+                            if (juego[filaOrigen][columnaOrigen]==22 && cuentaFichasPropias==0
+                                     && evaluaPosicion(filas, columnas, "Caso6", cuentaFichasEnemigas)==true){
+                                if (cuentaFichasEnemigas==0){
+                                  m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                 //System.out.println("no come "+m.toString());
+                                  movimientosValidos.add(m);
+                                }else if(cuentaFichasEnemigas>0){
+                                   m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                   m.setReinaCome(true);
+                                   movimientosValidos.add(m);
+                                 //  System.out.println(" come= "+m.toString());
+                                }
+                                
+                            }
+                        }
+                        filaAux=filaOrigen;
+                        columnaAux=columnaOrigen;
+                        nuevaFila=filaAux - distancia;
+                        nuevaColumna=columnaAux + distancia;
+                        cuentaFichasEnemigas=0;
+                        cuentaFichasPropias=0;
+                        index=0;
+                       
+                        //Caso 3. arriba--, derecha++
+                        if (nuevaFila >=0
+                               && nuevaColumna < juego.length
+                                    && this.juego[nuevaFila][nuevaColumna]==3) {
+                            
+                            filaAux--;
+                            columnaAux++;
+                           
+                            while (filaAux > nuevaFila && columnaAux <= nuevaColumna) {
+                                filas[index] = filaAux;
+                                columnas[index] = columnaAux;
+                                if (this.juego[filaAux][columnaAux] == 2
+                                        || this.juego[filaAux][columnaAux] == 22) {
+                                    cuentaFichasPropias++;
+                                }
+                                if (this.juego[filaAux][columnaAux] == 1
+                                        || this.juego[filaAux][columnaAux] == 11) {
+                                    cuentaFichasEnemigas++;
+                                }
+                                filaAux--;
+                                columnaAux++;
+                                index++;
+                            } 
+                            if (juego[filaOrigen][columnaOrigen]==22 && cuentaFichasPropias==0
+                                     && evaluaPosicion(filas, columnas, "Caso7", cuentaFichasEnemigas)==true){
+                                if (cuentaFichasEnemigas==0){
+                                  m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                  movimientosValidos.add(m);
+                                }else if(cuentaFichasEnemigas>0){
+                                   m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                   m.setReinaCome(true);
+                                   movimientosValidos.add(m);
+                                }
+                                
+                            }
+                        }
+                        filaAux=filaOrigen;
+                        columnaAux=columnaOrigen;
+                        nuevaFila=filaAux+distancia;
+                        nuevaColumna=columnaAux-distancia;
+                        cuentaFichasEnemigas=0;
+                        cuentaFichasPropias=0;
+                        index=0;
+                       
+                        //Caso 4. abajo++, izquierda--
+                        if (nuevaColumna >=0
+                               && nuevaFila < juego.length
+                                    && this.juego[nuevaFila][nuevaColumna]==3) {
+                            
+                            filaAux++;
+                            columnaAux--;
+                           
+                            while (filaAux <= nuevaFila && columnaAux > nuevaColumna) {
+                                filas[index] = filaAux;
+                                columnas[index] = columnaAux;
+                                if (this.juego[filaAux][columnaAux] == 2
+                                        || this.juego[filaAux][columnaAux] == 22) {
+                                    cuentaFichasPropias++;
+                                }
+                                if (this.juego[filaAux][columnaAux] == 1
+                                        || this.juego[filaAux][columnaAux] == 11) {
+                                    cuentaFichasEnemigas++;
+                                }
+                                filaAux++;
+                                columnaAux--;
+                                index++;
+                            } 
+                            if (juego[filaOrigen][columnaOrigen]==22 && cuentaFichasPropias==0
+                                     && evaluaPosicion(filas, columnas, "Caso8", cuentaFichasEnemigas)==true){
+                                if (cuentaFichasEnemigas==0){
+                                  m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                  movimientosValidos.add(m);
+                                }else if(cuentaFichasEnemigas>0){
+                                   m = new Movimiento(filaOrigen, columnaOrigen, nuevaFila, nuevaColumna);
+                                   m.setReinaCome(true);
+                                   movimientosValidos.add(m);
+                                }
+                                
+                            }
+                        }
+                        cuentaFichasEnemigas=0;
+                        cuentaFichasPropias=0;
+                        index=0;
                     }
                 }
             }
         }
 
         return movimientosValidos;
-    }
-
-// Método para hacer un movimiento en un tablero temporal
-    public void hacerMovimientoEnTableroTemporal(int[][] tablero, int filaOrigen, int columnaOrigen, int nuevaFila, int nuevaColumna) {
-        int fichaOrigen = tablero[filaOrigen][columnaOrigen];
-        int direccionMovimiento = (fichaOrigen == 1) ? -1 : 1; // Dirección del movimiento de las fichas normales
-
-        // Realizar el movimiento en el tablero temporal
-        tablero[nuevaFila][nuevaColumna] = fichaOrigen;
-        tablero[filaOrigen][columnaOrigen] = 3; // La posición de origen queda vacía
-
-        // Caso de captura (eliminar ficha enemiga)
-        int filaCaptura = filaOrigen + direccionMovimiento;
-        int columnaCaptura = (nuevaColumna + columnaOrigen) / 2; // Columna donde está la ficha enemiga a capturar
-        if (Math.abs(nuevaFila - filaOrigen) == 2 && Math.abs(nuevaColumna - columnaOrigen) == 2) {
-            tablero[filaCaptura][columnaCaptura] = 3; // Eliminar ficha enemiga
-        }
-
-        // Caso de coronación (peón se convierte en reina)
-        if (fichaOrigen == 1 && nuevaFila == 0) {
-            tablero[nuevaFila][nuevaColumna] = 11; // Peón blanco se convierte en reina blanca
-        } else if (fichaOrigen == 2 && nuevaFila == 7) {
-            tablero[nuevaFila][nuevaColumna] = 22; // Peón negro se convierte en reina negra
-        }
-    }
-
-// Método para copiar el tablero
-    public int[][] copiarTablero(int[][] tablero) {
-        int[][] copia = new int[tablero.length][tablero[0].length];
-        for (int i = 0; i < tablero.length; i++) {
-            System.arraycopy(tablero[i], 0, copia[i], 0, tablero[0].length);
-        }
-        return copia;
     }
 
     private Movimiento seleccionarMovimientoAlAzar(ArrayList<Movimiento> movimientosValidos) {
@@ -375,31 +674,223 @@ public class Damas implements Serializable {
     }
 
     public ArrayList<Movimiento> moverComputadora() {
-        ArrayList<Movimiento> movimientosValidos = obtenerMovimientosValidos(2); // Jugador 2: fichas rojas
-        ArrayList<Movimiento> move=new ArrayList<>(); // Jugador 2: fichas rojas
+        ArrayList<Movimiento> movimientosValidos = obtenerMovimientosValidos(); // Jugador 2: fichas rojas
+        ArrayList<Movimiento> move = new ArrayList<>(); // Jugador 2: fichas rojas
         Movimiento movimiento;
-        boolean flag=false;
+        boolean flag = false;
+                
+        //priorizamos que coma 
         for (int i = 0; i < movimientosValidos.size(); i++) {
-            if (movimientosValidos.get(i).isComeFicha()==true && flag==false) {
-                movimiento=movimientosValidos.get(i);
+            if ((movimientosValidos.get(i).isPeonCome() == true
+                    || movimientosValidos.get(i).isReinaCome()==true)
+                    && flag == false) {
+                movimiento = movimientosValidos.get(i);
                 movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
                 move.add(movimiento);
-            //    System.out.println("*peon come");
-                flag=true;
+                flag = true;
             }
         }
-        
-        if (!movimientosValidos.isEmpty() && flag==false) {
-           // System.out.println("mueve al azar");
+
+        //si no hay casos para comer, elige de forma random
+        if (!movimientosValidos.isEmpty() && flag == false) {
             movimiento = seleccionarMovimientoAlAzar(movimientosValidos);
+           // System.out.println(movimiento.toString());
             move.add(movimiento);
             movimiento(movimiento.filaOrigen, movimiento.columnaOrigen, movimiento.nuevaFila, movimiento.nuevaColumna);
         }
-        System.out.println("");
         return move;
     }
+
+    private boolean evaluaPosicion(int[] filas, int[] columnas, String caso, int counter) {
+       int filaComida=-1;
+       int columnaComida=-1;
+        switch(caso){
+            //casos de la reina 11. 
+            
+            //Abajo++, derecha++
+            case "Caso1":
+                System.out.println(caso);
+                for (int i = 0; i < filas.length; i++) {
+                    if (juego[filas[i]][columnas[i]]==2
+                            || juego[filas[i]][columnas[i]]==22) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if ((filas[i]+1<juego.length 
+                            && columnas[i]+1<juego[0].length
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]+1][columnas[i]+1]==2
+                            ||juego[filas[i]+1][columnas[i]+1]==22 )) 
+                            || counter>0 ) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true;
+            //Arriba--, izquierda-- 
+            case "Caso2":
+               System.out.println(caso);
+               for (int i = 0; i < filas.length; i++) {
+                    if (juego[filas[i]][columnas[i]]==2
+                            || juego[filas[i]][columnas[i]]==22) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if ((filas[i]-1>=0
+                            && columnas[i]-1>=0
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]-1][columnas[i]-1]==2
+                            ||juego[filas[i]-1][columnas[i]-1]==22))
+                            || counter>0 ) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true;   
+          //abajo++, izquierda--      
+         case "Caso3":
+               System.out.println(caso);
+               for (int i = 0; i < filas.length; i++) {
+                    if (juego[filas[i]][columnas[i]]==2
+                            || juego[filas[i]][columnas[i]]==22) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if ((filas[i]+1<juego.length
+                            && columnas[i]-1>=0
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]+1][columnas[i]-1]==2
+                            || juego[filas[i]+1][columnas[i]-1]==22))
+                            || counter>0 ) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true;  
+         //Caso 4. arriba--, derecha++        
+         case "Caso4":
+               System.out.println(caso);
+               for (int i = 0; i < filas.length; i++) {
+                    if (juego[filas[i]][columnas[i]]==2
+                            || juego[filas[i]][columnas[i]]==22) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if ((filas[i]-1>=0
+                            && columnas[i]+1<juego[0].length
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]-1][columnas[i]+1]==2
+                            ||juego[filas[i]-1][columnas[i]+1]==22))
+                            || counter>0 ) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true; 
+                
+            //reinas 22    
+            //Caso 5. abajo++, derecha++ 
+            case "Caso5": 
+                for (int i = 0; i < filas.length; i++) {
+                    if (juego[filas[i]][columnas[i]]==1
+                            || juego[filas[i]][columnas[i]]==11) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                  
+                    if (filas[i]+1<juego.length 
+                            && columnas[i]+1<juego[0].length
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]+1][columnas[i]+1]==1
+                            || juego[filas[i]+1][columnas[i]+1]==11)) {
+                        return false;
+                    }
+                   
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true;
+            //Caso 6. arriba--, izquierda--     
+            case "Caso6":
+                 for (int i = 0; i < filas.length; i++) {
+                    
+                    if (juego[filas[i]][columnas[i]]==1
+                            || juego[filas[i]][columnas[i]]==11) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if (filas[i]+1<juego.length
+                            && columnas[i]+1<juego.length
+                            && filas[i]-1>=0
+                            && columnas[i]-1>=0
+                            && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]-1][columnas[i]-1]==1
+                            || juego[filas[i]-1][columnas[i]-1]==1)) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true; 
+           //Caso 7. arriba--, derecha++      
+            case "Caso7":
+                 for (int i = 0; i < filas.length; i++) {
+                    
+                    if (juego[filas[i]][columnas[i]]==1
+                            || juego[filas[i]][columnas[i]]==11) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if (filas[i]+1<juego.length
+                            && columnas[i]+1<juego.length
+                            && filas[i]-1>=0
+                           && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]-1][columnas[i]+1]==1
+                            || juego[filas[i]-1][columnas[i]+1]==1)) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true; 
+           //Caso 8. abajo++, izquierda++      
+            case "Caso8":
+                 for (int i = 0; i < filas.length; i++) {
+                    
+                    if (juego[filas[i]][columnas[i]]==1
+                            || juego[filas[i]][columnas[i]]==11) {
+                     filaComida=filas[i];
+                     columnaComida=columnas[i];
+                    }
+                    
+                    if (filas[i]+1<juego.length
+                            && columnas[i]+1<juego.length
+                            && columnas[i]-1>=0
+                           && filaComida!=-1 && columnaComida!=-1
+                            && (juego[filas[i]+1][columnas[i]-1]==1
+                            || juego[filas[i]+1][columnas[i]-1]==1)) {
+                        return false;
+                    }
+                    filaComida=-1;
+                    columnaComida=-1;
+                }
+                return true; 
+        }
+        return false;
+
+    }
     
-    //cuenta fichas azules
+       //cuenta fichas azules
     public boolean contadorFichasAzules(){
         int counter=0;
         for (int i = 0; i < 64; i++) {
