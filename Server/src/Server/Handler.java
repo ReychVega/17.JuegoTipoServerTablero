@@ -51,6 +51,7 @@ public class Handler extends Thread {
     private User user;
     private User userRegister;
     private ServerRequest request;
+    private boolean flag;
     
     /*El constructor recibe un objeto Socket como parámetro, que representa la conexión establecida con el cliente.
      *Inicializa las variables de instancia socket, send y receive con los objetos proporcionados por el socket.
@@ -62,6 +63,7 @@ public class Handler extends Thread {
         this.send = new PrintStream(this.socket.getOutputStream());
         this.receive = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.sesionIniciada = true;
+        flag=false;
         initInstances();
     } // constructor
 
@@ -166,9 +168,12 @@ public class Handler extends Thread {
                 //Caso 3. Log out
                     if (request.getAction().equalsIgnoreCase("log out")) {
                         utility.cleanGameRequest(new User(request.getUser(),""));
-                        utility.removeEnemy(request.getUser());
+                        
+                        flag=utility.removeEnemy(request.getUser());
                         utility.logOut(Server.onlineUsers, request.getUser());
-                     //   System.out.println("successful log out");
+                        if (flag==true) {
+                            file.actualizarPuntaje(lectura, 100);
+                        }
                     }
                 
                 //Caso 4. Search users, no envia usuarios que son amigos
@@ -316,13 +321,25 @@ public class Handler extends Thread {
                         utility.removeEnemy(request.getEnemy().getUser());
                         file.actualizarPuntaje(request.getEnemy().getUser(), request.getPuntaje());
                     }
+                    //case 21."no movemos"
+                    if (request.getAction().equalsIgnoreCase("skipMove")) {
+                        utility.setTablero(request.getUser(),request.getEnemy().getUser(), request.getJuego()); 
+                        utility.setTurnos(request.getUser(),request.getEnemy().getUser());
+                        request.setJuego(null);
+                        //System.out.println("-cambio de turno-"+request.getEnemy().getUser());
+                    }
+                    //case 21."surrender"
+                    if (request.getAction().equalsIgnoreCase("surrender")) {
+                        utility.removeEnemy(request.getUser());
+                        utility.removeEnemy(request.getEnemy().getUser());
+                        file.actualizarPuntaje(request.getEnemy().getUser(), 100);
+                        System.out.println("surrender");
+                    }
                 }
-              
-                
-                
+                           
                 //actualizamos
                 file.actualizaLista();
-
+                flag=false;
             }
             
             

@@ -365,14 +365,16 @@ public class Utility implements Serializable{
     }  
     
     //borramos el enemigo
-    public void removeEnemy(String enemy){
+    public boolean removeEnemy(String enemy){
         for (int i = 0; i < Server.onlineUsers.size(); i++) {
            if (Server.onlineUsers.get(i).getEnemy()!=null &&
                    Server.onlineUsers.get(i).getEnemy().getUser().equalsIgnoreCase(enemy)) {
                    Server.onlineUsers.get(i).setEnemy(null);
                    Server.onlineUsers.get(i).setGameState(false);
+                   return true;
             }
         }
+           return false;
     }
     
     //establecemos el tablero para el enemigo, de forma que se pueda actualizar
