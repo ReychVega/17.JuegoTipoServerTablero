@@ -532,9 +532,9 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
 
         while (start) {
             repaint();
-            started = System.nanoTime();
+           // started = System.nanoTime();
 
-            elapse = System.nanoTime() - started;
+           // elapse = System.nanoTime() - started;
             // ...   
             getCompleteData();
             // System.out.println("***\n");
@@ -608,11 +608,10 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
             Object receivedObject = clientSocket.getEntrada().readObject();
             this.user = (User) receivedObject;
 
+            
             //mostramos
             showData(this.user);
             
-            this.score.setText(this.user.getPuntaje()+"");
-
             //verifica el estado del juego
             getGameValidation();
            
@@ -687,12 +686,28 @@ public class InicioJInternalFrame extends JInternalFrame implements Runnable {
     }
 }
 
-    //mostramos la info del usuario
-    private void showData(User user) {
+    //mostramos la info del usuario//***mejorar
+    private void showData(User user) throws IOException, ClassNotFoundException {
         lblUser.setText(user.getUser().toUpperCase());
         this.menuBtnInicio.setText("Main page");
+        getScore();
+        score.revalidate();
     }
 
+    //actualiza el puntaje
+    private void getScore() throws IOException, ClassNotFoundException{
+          newRequest = new ServerRequest(user.getUser(), "GetScore");
+        if (clientSocket == null) {
+            connectToServer();
+        }
+        //Enviamos el obj. request al servidor a través del socket
+        clientSocket.sendRequestToServer(newRequest);
+        Object receivedObject = clientSocket.getEntrada().readObject();
+        newRequest = (ServerRequest) receivedObject;
+        score.setText("Score: " + newRequest.getPuntaje());
+       // System.out.println( newRequest.getPuntaje());
+    }
+    
     //rellenamos la lista con GameRequest del/para usuario
     private void getGameRequestData() throws IOException, ClassNotFoundException {
         newRequest = new ServerRequest(user.getUser(), "GetGameRequestData");

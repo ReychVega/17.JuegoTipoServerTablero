@@ -37,6 +37,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     private int lastSelectedButton = -1;
     //atributos necesarios para la comunicacion con el server
     private boolean permiteMover;
+    private boolean juegoTermina;
     
     /**
      * Creates new form GameJInternalFrame
@@ -45,6 +46,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
         this.user=user;
         this.start = true;
         this.permiteMover = false;
+        this.juegoTermina = false;
         this.mainInternalFrame = mainInternalFrame; // Inicializa la referencia a MainJFrame
         initComponents();
         addComponents();
@@ -202,7 +204,7 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     private void btnSkipMouseClicked(java.awt.event.MouseEvent evt) {                                     
         if (permiteMover==true) {
             permiteMover=false;
-            System.out.println("solicita pasar");
+            //System.out.println("solicita pasar");
             newRequest = new ServerRequest(user, "skipMove");
             newRequest.setJuego(guardarTablero());
             newRequest.setEnemy(new User(this.enemy, ""));
@@ -233,7 +235,6 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             // ...   
             getCompleteData();
             verifyWinning();
-
             //...
             if (this.espera < 0) {
                 this.espera = 10000;
@@ -488,10 +489,13 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
     
     private void verifyWinning(){
         this.juego.contadorFichasAzules();
-        if (this.juego.contadorFichasAzules <= 0) {
+        this.juego.contadorFichasRojas();
+        //pierde juego
+        if (this.juego.contadorFichasAzules == 0 && juegoTermina==false) {
+            this.juegoTermina=true;
             newRequest = new ServerRequest(this.user, "El juego ha terminado");
             newRequest.setEnemy(new User(this.lblEnemyName.getText(),""));
-            newRequest.setPuntaje(100);
+            newRequest.setPuntaje(0);
             if (MainJFrame.clientSocket == null) {
                 connectToServer();
             }
@@ -501,6 +505,34 @@ public class GameJInternalFrame extends JInternalFrame implements Runnable{
             JOptionPane.showMessageDialog(this, this.lblEnemyName.getText()+" wins !", "Process Status", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
         }
+        //gana juego
+        if (this.juego.contadorFichasRojas == 0 && juegoTermina==false) {
+            this.juegoTermina=true;
+            newRequest = new ServerRequest(this.user, "El juego ha terminado");
+            newRequest.setEnemy(new User(this.lblEnemyName.getText(),""));
+            newRequest.setPuntaje(100);
+            if (MainJFrame.clientSocket == null) {
+                connectToServer();
+            }
+            //Enviamos el obj. request al servidor a través del socket
+            MainJFrame.clientSocket.sendRequestToServer(newRequest);
+            this.lblTurno.setText("Victory!");
+            JOptionPane.showMessageDialog(this, "Victory!", "Process Status", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
+    }
+    
+    //solicitamos remover los enemigos
+     //cierre seguro
+    @Override
+    public void dispose() {
+        if (MainJFrame.clientSocket != null) {
+            // Envia el mensaje al servidor 
+            newRequest= new ServerRequest(this.user, "removeEnemyForGameClosed");
+            newRequest.setEnemy(new User(enemy,""));
+            MainJFrame.clientSocket.sendRequestToServer(newRequest);
+        }
+        super.dispose();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -403,7 +403,6 @@ public class Damas implements Serializable {
                 }
             }
 
-            //System.out.println(direccionMovimiento);
             // Comprobar si un peón alcanza el borde opuesto del tablero y convertirlo en reina
             if (fichaOrigen == 1 && nuevaFila == 0) {
                 this.juego[nuevaFila][nuevaColumna] = 11; // Peón blanco se convierte en reina blanca
@@ -902,7 +901,7 @@ public class Damas implements Serializable {
         
         contadorFichasAzules=counter;
        // System.out.println(counter);
-        if (counter>0) {
+        if (contadorFichasAzules>0) {
             return false;
         }else{
             return true;
@@ -920,7 +919,7 @@ public class Damas implements Serializable {
         }
         
         contadorFichasRojas=counter;
-        if (counter>0) {
+        if (contadorFichasRojas>0) {
             return false;
         }else{
             return true;
